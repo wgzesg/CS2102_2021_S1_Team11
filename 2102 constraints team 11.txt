@@ -1,0 +1,34 @@
+﻿Constraints:
+
+
+Every full time caretaker has to work 2 x 150 consecutive days a year
+
+
+Every Full time caretaker have a limit of up to 5 pets at any one time
+
+
+Every part time caretaker also has a limit of up to 5 pets at any one time
+
+
+Every part time caretaker cannot take care of more than 2 pets at one time unless they have a good rating
+
+
+A full time caretaker is taken as available until they take leave
+
+
+The base daily price for a full time caretaker increases with the rating but will never be below the base price
+
+
+Full time caretakers cannot apply for leave unless they have no pets under their care
+
+
+A full-time Caretaker will receive a salary of $3000 per month  for up to 60 pet-day. For any excess pet-day, they will receive 80% of their price as bonus. For part-time caretaker, the PCS will take 25% of their price as payment (caretaker receives 75% of stated price).
+
+
+User ISA relationship is overlapping and covering
+
+
+Care taker relationship is covering and not overlapping
+
+
+Availability days are only recorded up to 2 years.
