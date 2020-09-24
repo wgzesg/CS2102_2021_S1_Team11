@@ -3,7 +3,7 @@ const passport = require('passport');
 const bcrypt = require('bcrypt')
 
 // Postgre SQL Connection
-const { Pool } = require('pg');
+//const { Pool } = require('pg');
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
   //ssl: true
