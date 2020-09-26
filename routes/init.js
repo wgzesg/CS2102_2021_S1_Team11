@@ -1,7 +1,7 @@
+require('dotenv').config()
 const sql_query = require('../sql');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-DATABASE_URL = "postgres://rymjgqmiucferj:8e07c2a21509d15003f8cd12113219d602a59b1f6298da579e9e375b32da2c4c@ec2-3-231-16-122.compute-1.amazonaws.com:5432/df67v1kmbj2l9t";
 
 //Postgre SQL Connection
 const { Pool } = require('pg');
