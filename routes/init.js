@@ -78,12 +78,16 @@ function index(req, res, next) {
 		idx = req.query.p-1;
 	}
 	pool.query(sql_query.query.page_lims, [idx*10], (err, data) => {
+		console.log("inside query page_lims")
+		console.log(err)
+		console.log(data)
 		if(err || !data.rows || data.rows.length == 0) {
 			tbl = [];
 		} else {
 			tbl = data.rows;
 		}
 		pool.query(sql_query.query.ctx_games, (err, data) => {
+			console.log("inside query ctx_games")
 			if(err || !data.rows || data.rows.length == 0) {
 				ctx = 0;
 			} else {
