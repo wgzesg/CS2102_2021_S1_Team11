@@ -8,7 +8,7 @@ const logger = require('morgan');
 
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
-const session = require('express-session')
+var session = require('cookie-session')
 const passport = require('passport')
 
 const app = express();
