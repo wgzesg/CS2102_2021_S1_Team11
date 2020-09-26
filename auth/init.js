@@ -7,12 +7,12 @@ const LocalStrategy = require('passport-local').Strategy;
 const authMiddleware = require('./middleware');
 const antiMiddleware = require('./antimiddle');
 
-// Postgre SQL Connection
-//const { Pool } = require('pg');
-//const pool = new Pool({
-//  connectionString: process.env.DATABASE_URL,
-//  //ssl: true
-//});
+//Postgre SQL Connection
+const { Pool } = require('pg');
+const pool = new Pool({
+ connectionString: process.env.DATABASE_URL,
+ //ssl: true
+});
 
 function findUser (username, callback) {
 	pool.query(sql_query.query.userpass, [username], (err, data) => {
