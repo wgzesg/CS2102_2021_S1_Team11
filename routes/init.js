@@ -71,6 +71,7 @@ function msg(req, fld, pass, fail) {
 
 // GET
 function index(req, res, next) {
+	console.log("index started");
 	var ctx = 0, idx = 0, tbl, total;
 	if(Object.keys(req.query).length > 0 && req.query.p) {
 		idx = req.query.p-1;
@@ -96,6 +97,7 @@ function index(req, res, next) {
 			}
 		});
 	});
+	console.log("index ended");
 }
 function search(req, res, next) {
 	var ctx  = 0, avg = 0, tbl;
