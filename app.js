@@ -19,10 +19,12 @@ app.use(bodyParser.urlencoded({
 }));
 
 // Authentication Setup
-require('dotenv').load();
-require('./auth').init(app);
+require('dotenv').config()
+require('./auth').init(app)
+console.log(process.env.SECRET)
+console.log(process.env.DATABASE_URL)
 app.use(session({
-  secret: "haha",
+  secret: process.env.SECRET || "haha",
   resave: true,
   saveUninitialized: true
 }))
