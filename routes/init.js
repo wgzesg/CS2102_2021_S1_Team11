@@ -59,6 +59,7 @@ function basic(req, res, page, other) {
 			info[fld] = other[fld];
 		}
 	}
+	console.log("Inside basic");
 	res.render(page, info);
 }
 function query(req, fld) {
@@ -91,6 +92,7 @@ function index(req, res, next) {
 			total = ctx%10 == 0 ? ctx/10 : (ctx - (ctx%10))/10 + 1;
 			console.log(idx*10, idx*10+10, total);
 			if(!req.isAuthenticated()) {
+				console.log("Inside !isAuth");
 				res.render('index', { page: '', auth: false, tbl: tbl, ctx: ctx, p: idx+1, t: total });
 			} else {
 				basic(req, res, 'index', { page: '', auth: true, tbl: tbl, ctx: ctx, p: idx+1, t: total });
