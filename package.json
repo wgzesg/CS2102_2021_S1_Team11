@@ -2,7 +2,9 @@
   "name": "app",
   "version": "12.18.4",
   "private": true,
-  "engines" : { "node" : ">=4.5.0 <5 || >=5.10.0 <6" },
+  "engines": {
+    "node": ">=4.5.0 <5 || >=5.10.0 <6"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
