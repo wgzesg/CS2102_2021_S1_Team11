@@ -73,31 +73,31 @@ function msg(req, fld, pass, fail) {
 function index(req, res, next) {
 	console.log("index started");
 	res.send("inside index");
-	// var ctx = 0, idx = 0, tbl, total;
-	// if(Object.keys(req.query).length > 0 && req.query.p) {
-	// 	idx = req.query.p-1;
-	// }
-	// pool.query(sql_query.query.page_lims, [idx*10], (err, data) => {
-	// 	if(err || !data.rows || data.rows.length == 0) {
-	// 		tbl = [];
-	// 	} else {
-	// 		tbl = data.rows;
-	// 	}
-	// 	pool.query(sql_query.query.ctx_games, (err, data) => {
-	// 		if(err || !data.rows || data.rows.length == 0) {
-	// 			ctx = 0;
-	// 		} else {
-	// 			ctx = data.rows[0].count;
-	// 		}
-	// 		total = ctx%10 == 0 ? ctx/10 : (ctx - (ctx%10))/10 + 1;
-	// 		console.log(idx*10, idx*10+10, total);
-	// 		if(!req.isAuthenticated()) {
-	// 			res.render('index', { page: '', auth: false, tbl: tbl, ctx: ctx, p: idx+1, t: total });
-	// 		} else {
-	// 			basic(req, res, 'index', { page: '', auth: true, tbl: tbl, ctx: ctx, p: idx+1, t: total });
-	// 		}
-	// 	});
-	// });
+	var ctx = 0, idx = 0, tbl, total;
+	if(Object.keys(req.query).length > 0 && req.query.p) {
+		idx = req.query.p-1;
+	}
+	pool.query(sql_query.query.page_lims, [idx*10], (err, data) => {
+		if(err || !data.rows || data.rows.length == 0) {
+			tbl = [];
+		} else {
+			tbl = data.rows;
+		}
+		pool.query(sql_query.query.ctx_games, (err, data) => {
+			if(err || !data.rows || data.rows.length == 0) {
+				ctx = 0;
+			} else {
+				ctx = data.rows[0].count;
+			}
+			total = ctx%10 == 0 ? ctx/10 : (ctx - (ctx%10))/10 + 1;
+			console.log(idx*10, idx*10+10, total);
+			if(!req.isAuthenticated()) {
+				res.render('index', { page: '', auth: false, tbl: tbl, ctx: ctx, p: idx+1, t: total });
+			} else {
+				basic(req, res, 'index', { page: '', auth: true, tbl: tbl, ctx: ctx, p: idx+1, t: total });
+			}
+		});
+	});
 	console.log("index ended");
 }
 function search(req, res, next) {

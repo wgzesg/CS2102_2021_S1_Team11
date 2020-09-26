@@ -22,6 +22,10 @@ app.use(bodyParser.urlencoded({
 require('dotenv').config()
 require('./auth').init(app)
 app.use(session({
+  cookie:{
+    secure: true,
+    maxAge:60000
+  },
   secret: process.env.SECRET || "haha",
   resave: true,
   saveUninitialized: true
