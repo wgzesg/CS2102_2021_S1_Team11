@@ -6,7 +6,6 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const authMiddleware = require('./middleware');
 const antiMiddleware = require('./antimiddle');
-
 require('dotenv').config()
 //Postgre SQL Connection
 const { Pool } = require('pg');

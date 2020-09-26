@@ -1,3 +1,4 @@
+console.log("inside play.js")
 $(function() {
 	$('#p1win').change(function() {
 		if($(this).is(':checked')) {
