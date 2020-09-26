@@ -16,7 +16,7 @@ const salt  = bcrypt.genSaltSync(round);
 function initRouter(app) {
 	/* GET */
 	app.get('/'      , function(req, res) {
-		res.send('Hello world!');
+		res.send('Hello inside get/!');
 	});
 	app.get('/search', search);
 	
