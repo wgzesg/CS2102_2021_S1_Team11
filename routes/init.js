@@ -71,7 +71,9 @@ function msg(req, fld, pass, fail) {
 
 // GET
 function index(req, res, next) {
-	res.send("inside index");
+	res.statusCode = 200;
+	res.setHeader('Content-Type', 'text/plain');
+	res.end('Hello World');
 	// var ctx = 0, idx = 0, tbl, total;
 	// if(Object.keys(req.query).length > 0 && req.query.p) {
 	// 	idx = req.query.p-1;
