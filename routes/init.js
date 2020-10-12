@@ -77,6 +77,7 @@ function index(req, res, next) {
 	if(Object.keys(req.query).length > 0 && req.query.p) {
 		idx = req.query.p-1;
 	}
+	console.log("about to enter query");
 	pool.query(sql_query.query.page_lims, [idx*10], (err, data) => {
 		console.log("inside query page_lims")
 		console.log(err)
