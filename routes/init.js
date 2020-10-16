@@ -22,8 +22,11 @@ function initRouter(app) {
 	app.get('/db', async (req, res) => {
 		try {
 		  const client = await pool.connect();
+		  console.log("connedted");
 		  const result = await client.query('SELECT * FROM test_table');
+		  console.log("queried");
 		  const results = { 'results': (result) ? result.rows : null};
+		  console.log("rendering");
 		  res.render('pages/db', results );
 		  client.release();
 		} catch (err) {
