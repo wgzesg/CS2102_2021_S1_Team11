@@ -1,4 +1,3 @@
-require('dotenv').config();
 // dotenv.load();
 const sql_query = require('../sql');
 const passport = require('passport');
@@ -12,8 +11,6 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 	//ssl: true
 });
-console.log("connection address")
-console.log(pool.connectionString)
 
 const round = 10;
 const salt  = bcrypt.genSaltSync(round);
@@ -22,6 +19,18 @@ function initRouter(app) {
 	/* GET */
 	app.get('/'      , index);
 	app.get('/search', search);
+	app.get('/db', async (req, res) => {
+		try {
+		  const client = await pool.connect();
+		  const result = await client.query('SELECT * FROM test_table');
+		  const results = { 'results': (result) ? result.rows : null};
+		  res.render('pages/db', results );
+		  client.release();
+		} catch (err) {
+		  console.error(err);
+		  res.send("Error " + err);
+		}
+	  })
 	
 	/* PROTECTED GET */
 	app.get('/dashboard', passport.authMiddleware(), dashboard);
