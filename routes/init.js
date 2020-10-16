@@ -20,7 +20,8 @@ function initRouter(app) {
 	app.get('/'      , index);
 	app.get('/search', search);
 	app.get('/db', async (req, res) => {
-		try {
+		try {	
+		  console.log("connedting");
 		  const client = await pool.connect();
 		  console.log("connedted");
 		  const result = await client.query('SELECT * FROM test_table');
