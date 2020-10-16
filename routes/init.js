@@ -1,14 +1,19 @@
-require('dotenv').config()
+require('dotenv').config();
+// dotenv.load();
 const sql_query = require('../sql');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 
+console.log("connection address")
+console.log(process.env.DATABASE_URL)
 //Postgre SQL Connection
 const { Pool } = require('pg');
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
+	connectionString: process.env.DATABASE_URL
 	//ssl: true
 });
+console.log("connection address")
+console.log(pool.connectionString)
 
 const round = 10;
 const salt  = bcrypt.genSaltSync(round);
@@ -80,29 +85,29 @@ function index(req, res, next) {
 	console.log("about to enter query");
 	pool.query(sql_query.query.page_lims, [idx*10], (err, data) => {
 		console.log("inside query page_lims")
-		console.log(err)
-		console.log(data)
 		if(err || !data.rows || data.rows.length == 0) {
 			tbl = [];
 		} else {
 			tbl = data.rows;
 		}
-		pool.query(sql_query.query.ctx_games, (err, data) => {
-			console.log("inside query ctx_games")
-			if(err || !data.rows || data.rows.length == 0) {
-				ctx = 0;
-			} else {
-				ctx = data.rows[0].count;
-			}
-			total = ctx%10 == 0 ? ctx/10 : (ctx - (ctx%10))/10 + 1;
-			console.log(idx*10, idx*10+10, total);
-			if(!req.isAuthenticated()) {
-				console.log("Inside !isAuth");
-				res.render('index', { page: '', auth: false, tbl: tbl, ctx: ctx, p: idx+1, t: total });
-			} else {
-				basic(req, res, 'index', { page: '', auth: true, tbl: tbl, ctx: ctx, p: idx+1, t: total });
-			}
-		});
+		res.render('index', { page: '', auth: false, tbl: [], ctx: 0, p: 1, t: 0 });
+
+	// 	pool.query(sql_query.query.ctx_games, (err, data) => {
+	// 		console.log("inside query ctx_games")
+	// 		if(err || !data.rows || data.rows.length == 0) {
+	// 			ctx = 0;
+	// 		} else {
+	// 			ctx = data.rows[0].count;
+	// 		}
+	// 		total = ctx%10 == 0 ? ctx/10 : (ctx - (ctx%10))/10 + 1;
+	// 		console.log(idx*10, idx*10+10, total);
+	// 		if(!req.isAuthenticated()) {
+	// 			console.log("Inside !isAuth");
+	// 			res.render('index', { page: '', auth: false, tbl: tbl, ctx: ctx, p: idx+1, t: total });
+	// 		} else {
+	// 			basic(req, res, 'index', { page: '', auth: true, tbl: tbl, ctx: ctx, p: idx+1, t: total });
+	// 		}
+	// 	});
 	});
 	console.log("index ended");
 }
