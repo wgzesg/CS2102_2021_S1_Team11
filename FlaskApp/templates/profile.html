@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link href="static/css/topbar.css" rel="stylesheet" media="all">
+    <link rel="stylesheet" type="text/css" href="../static/css/login-util.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/login-main.css">
+</head>
+
+<body>
+    <div class="topbar">
+      <a href="https://cs2102project.herokuapp.com/owner">Home</a>
+      <a href="https://cs2102project.herokuapp.com/owner/pet">Pets</a>
+      <a href="https://cs2102project.herokuapp.com/owner/bid">Bid</a>
+      <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
+    </div>
+    <div>
+        <h1>
+            Hi this is {{ username }} <a href="admin/update" class="btn btn-outline-secondary btn-sm">Update</a>
+        </h1>
+        {{table}}
+    </div>
+
+</body>
+
+</html>

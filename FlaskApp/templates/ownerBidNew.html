@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>New Pet</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="url('https://cs2102project.herokuapp.com/static/images/icons/favicon.ico')" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/bootstrap/css/bootstrap.min.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/animate/animate.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/css-hamburgers/hamburgers.min.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css')">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/css/login-util.css')">
+    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/css/login-main.css')">
+    <!--===============================================================================================-->
+
+    <style>
+        #title {
+            display: block;
+            display: flex;
+        }
+
+        .container {
+            width: 400px;
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            margin: auto auto;
+            text-align: center;
+        }
+
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
+        }
+
+        #registerButton {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .formField {
+            padding: 10px 0;
+        }
+
+        h1 {
+            color: #111;
+            font-family: 'Open Sans Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 48px;
+            margin: 0 0 24px;
+            padding: 0 30px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="limiter">
+        <div class="container-login100" style="background-image: url('https://cs2102project.herokuapp.com/static/images/bg-01.jpg');">
+
+            <div class="container">
+                <form class="registrationForm login100-form">
+                    {{ form.hidden_tag() }}
+                    <h1 id="title">Bidding for {{ target }}</h1>
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.petname }} {% if form.petname.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.petname.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.startday }} {% if form.startday.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.startday.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.endday }} {% if form.endday.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.endday.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.paymentmode }} {% if form.paymentmode.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.paymentmode.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.deliverymode }} {% if form.deliverymode.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.deliverymode.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="buttonWrapper">
+                        <button class="login100-form-btn" formmethod="post">Add new bid</button>
+                    </div>
+                    <div>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

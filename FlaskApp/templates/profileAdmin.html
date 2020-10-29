@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link href="https://cs2102project.herokuapp.com/static/css/topbar.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="topbar">
+      <a href="https://cs2102project.herokuapp.com/owner">Home</a>
+      <a href="https://cs2102project.herokuapp.com/owner/pet">Pets</a>
+      <a href="https://cs2102project.herokuapp.com/owner/bid">Bid</a>
+      <a href="https://cs2102project.herokuapp.com/logout">Logout</a>
+    </div>
+    <div>
+        <h1>
+            Hello, {{ username }}! Update your profile <a href="/admin/profile/update" class="btn btn-outline-secondary btn-sm">HERE</a>
+        </h1>
+        {{table}}
+    </div>
+
+</body>
+
+</html>

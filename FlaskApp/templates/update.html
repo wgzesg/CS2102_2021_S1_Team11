@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Update profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="https://cs2102project.herokuapp.com/static/images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-util.css">
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-main.css">
+    <!--===============================================================================================-->
+
+    <style>
+        .container {
+            width: 390px;
+        }
+        
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
+        }
+        
+        #registerButton {
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .formField {
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="limiter">
+        <div class="container-login100" style="background-image: url('https://cs2102project.herokuapp.com/static/images/bg-01.jpg');">
+            <div class="container">
+                <form class="UserUpdateForm login100-form">
+                    {{ form.hidden_tag() }}
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.username }} {% if form.username.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.credit_card }} {% if form.credit_card.errors %}
+                        <span class="focus-input100" data-placeholder="&#xe82a;"></span>
+                        <div class="errorMessage">
+                            {% for error in form.credit_card.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.postal_code }} {% if form.postal_code.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.postal_code.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.password }} {% if form.password.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.password.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField wrap-input100 validate-input">
+                        {{ form.confirm_password }} {% if form.confirm_password.errors %}
+                        <div class="errorMessage">
+                            {% for error in form.confirm_password.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="formField" id="parttime_checkbox" style="display: none;">
+                        <div class="partTimeWrapper">
+                            <p id="partTimeOption">Are you a part-time caretaker? </p>
+                            <div class="checkbox"> {{ form.is_part_time }} </div>
+                        </div>
+                    </div>
+
+                    <div class="buttonWrapper">
+                        <button id="registerButton" class="login100-form-btn" formmethod="post">register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

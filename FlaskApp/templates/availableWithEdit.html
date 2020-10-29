@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Caretaker</title>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/topbar.css">
+    <style>
+        #logout{
+            float: right;
+        }
+        body{
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <a href="https://cs2102project.herokuapp.com/caretaker">Home</a>
+        <a href="https://cs2102project.herokuapp.com/caretaker/profile">Profile</a>
+        <a href="https://cs2102project.herokuapp.com/caretaker/cantakecare">Categories</a>
+        <a href="https://cs2102project.herokuapp.com/caretaker/biddings">Biddings</a>
+        <a href="https://cs2102project.herokuapp.com/caretaker/available">Availability</a>
+        <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
+    </div>
+    <div>
+        <p>Add a available slot <a href="https://cs2102project.herokuapp.com/caretaker/available/new">here</a></p>
+        <p>Here is the list of your available slots:</p>
+        {{ table }}
+    </div>
+
+</body>
+</html>
