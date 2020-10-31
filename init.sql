@@ -5,7 +5,6 @@ CREATE TABLE categories (
     category VARCHAR PRIMARY KEY NOT NULL
 );
 
-
 CREATE TABLE users (
     username VARCHAR NOT NULL,
     contact BIGINT PRIMARY KEY NOT NULL,
@@ -30,7 +29,8 @@ CREATE TABLE user_roles (
 CREATE TABLE canparttime (
     ccontact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact),
     isparttime BOOLEAN NOT NULL,
-    avgrating INTEGER NOT NULL
+    avgrating INTEGER NOT NULL,
+    salary INTEGER NOT NULL
 );
 
 CREATE TABLE dailyprice (
