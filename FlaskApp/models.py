@@ -97,9 +97,10 @@ class Users(db.Model, UserMixin):
     def get_id(self):
         return self.contact
     
-class CanPartTime(db.Model):
+class Canparttime(db.Model):
     ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True)
     isparttime = db.Column(db.Boolean, nullable=False)
+    salary = db.Column(db.Integer, nullable=False, default=0)
     
 class Role(db.Model):
     
@@ -190,7 +191,7 @@ class Reviews(db.Model, UserMixin):
     def get_key(self):
         return (self.startdate, self.enddate, self.ccontact, self.petname, self.pcontact, self.rating, self.review)
     
-class CanTakeCare(db.Model, UserMixin):
+class Cantakecare(db.Model, UserMixin):
     ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True, nullable=False)
     category = db.Column(db.String, db.ForeignKey('categories.category', ondelete='CASCADE'), primary_key=True, nullable=False)
     dailyprice = db.Column(db.Integer, nullable=False)
