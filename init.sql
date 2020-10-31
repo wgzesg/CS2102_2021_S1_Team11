@@ -4,6 +4,21 @@ CREATE SCHEMA public;
 CREATE TABLE categories (
     category VARCHAR PRIMARY KEY NOT NULL
 );
+INSERT INTO categories VALUES ('bird');
+INSERT INTO categories VALUES ('cat');
+INSERT INTO categories VALUES ('dog');
+INSERT INTO categories VALUES ('hamster');
+INSERT INTO categories VALUES ('shark');
+INSERT INTO categories VALUES ('fish');
+INSERT INTO categories VALUES ('rabbit');
+INSERT INTO categories VALUES ('spider');
+INSERT INTO categories VALUES ('turtle');
+INSERT INTO categories VALUES ('insect');
+INSERT INTO categories VALUES ('horse');
+INSERT INTO categories VALUES ('duck');
+INSERT INTO categories VALUES ('hedgehog');
+INSERT INTO categories VALUES ('snake');
+INSERT INTO categories VALUES ('guinea pig');
 
 CREATE TABLE users (
     username VARCHAR NOT NULL,
