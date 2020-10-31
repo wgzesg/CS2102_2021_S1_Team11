@@ -238,6 +238,7 @@ def render_caretaker_update_profile():
             profile = Users.query.filter_by(contact=contact).first()
             profile.username = form.username.data
             profile.password = form.password.data
+            profile.card = form.credit_card.data
             profile.isparttime = form.is_part_time.data
             profile.postalcode = form.postal_code.data
             db.session.commit()
