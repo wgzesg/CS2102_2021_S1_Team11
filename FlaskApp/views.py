@@ -58,10 +58,10 @@ def render_registration_page():
         #query = "INSERT INTO user_roles(contact, usertype) VALUES ('{}', '{}')".format(contact, user_type)
         #db.session.execute(query)
         db.session.commit()
-        
-        canparttime1 = Canparttime(contact=contact, isparttime=is_part_time)
-        db.session.add(canparttime1)
-        db.session.commit()
+        if(user_type == 'caretaker'):
+            canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, salary=0)
+            db.session.add(canparttime1)
+            db.session.commit()
         #query = "INSERT INTO users(username, contact, card, password, usertype, isPartTime, postalcode) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')" \
         #    .format(username, contact, credit_card, hashed_password, user_type, is_part_time, postal_code)
         # print(query, flush=True)
