@@ -5,7 +5,6 @@ from flask_table import Table, Col
 # from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm, \
-    CanTakeCareDeleteForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
@@ -323,8 +322,8 @@ def render_caretaker_cantakecare_new():
     if request.method == 'POST' and form.validate_on_submit():
         category = form.category.data
         dailyprice = form.dailyprice.data
-        query = "INSERT INTO cantakecare(ccontact, category, dailyprice) VALUES ('{}', '{}', '{}')" \
-        .format(contact, category, dailyprice)
+        query = "INSERT INTO cantakecare(ccontact, category) VALUES ('{}', '{}')" \
+        .format(contact, category)
         db.session.execute(query)
         db.session.commit()
         return redirect(url_for('view.render_caretaker_cantakecare'))
