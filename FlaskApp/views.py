@@ -352,14 +352,15 @@ def render_caretaker_cantakecare_delete():
 def render_owner_page():
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
     caretakers = db.session.execute(caretakersquery)
+    countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
+    caretaker_counts = db.session.execute(countquery)
 
 #    PER_PAGE = 10
 #    total = caretakers.count()
     page = request.args.get(get_page_parameter(), type=int, default=1)
 #    start = (page-1)*PER_PAGE
 #    end = start + PER_PAGE
-    pagination = Pagination(bs_version=3, page=page, total=caretakers.count(), per_page=10, record_name='caretakers')
-    caretaker_pages = pagination.items
+    pagination = Pagination(bs_version=3, page=page, total=caretaker_counts, per_page=10, record_name='caretakers')
 
 #    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
