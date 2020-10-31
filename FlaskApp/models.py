@@ -195,9 +195,7 @@ class Reviews(db.Model, UserMixin):
 class Cantakecare(db.Model, UserMixin):
     ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True, nullable=False)
     category = db.Column(db.String, db.ForeignKey('categories.category', ondelete='CASCADE'), primary_key=True, nullable=False)
-    dailyprice = db.Column(db.Integer, nullable=False)
-    def get_dailyprice(self):
-        return self.dailyprice
+
     
     def get_key(self):
         return (self.ccontact, self.category)
