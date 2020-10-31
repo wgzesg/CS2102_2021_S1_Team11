@@ -7,17 +7,78 @@ def load_user(contact):
     us = Users.query.filter_by(contact=contact).first()
     return us
 
+
+# class Admins(db.Model, UserMixin):
+#     username = db.Column(db.String, nullable=False)
+#     password = db.Column(db.String, nullable=False)
+#     contact = db.Column(db.String, primary_key=True)
+#     card = db.Column(db.String, nullable=True)
+#     usertype = db.Column(db.String, nullable=True)
+    
+#     def is_authenticated(self):
+#         return True
+
+#     def is_active(self):
+#         return True
+
+#     def is_anonymous(self):
+#         return False
+
+#     def get_id(self):
+#         return self.contact
+
+# class Petowners(db.Model, UserMixin):
+#     username = db.Column(db.String, nullable=False)
+#     password = db.Column(db.String, nullable=False)
+#     contact = db.Column(db.String, primary_key=True)
+#     card = db.Column(db.String, nullable=True)
+#     usertype = db.Column(db.String, nullable=True)
+#     pet = db.relationship('Pets', backref='owner')
+#     postalcode = db.Column(db.Integer)
+    
+#     def is_authenticated(self):
+#         return True
+
+#     def is_active(self):
+#         return True
+
+#     def is_anonymous(self):
+#         return False
+
+#     def get_id(self):
+#         return self.contact
+    
+# class Caretakers(db.Model, UserMixin):
+#     username = db.Column(db.String, nullable=False)
+#     password = db.Column(db.String, nullable=False)
+#     contact = db.Column(db.String, primary_key=True)
+#     usertype = db.Column(db.String, nullable=True)
+#     isparttime = db.Column(db.Boolean, nullable=False)
+#     biddingccontact = db.relationship('Biddings', backref='contact')
+#     postalcode = db.Column(db.Integer)
+    
+#     def is_authenticated(self):
+#         return True
+
+#     def is_active(self):
+#         return True
+
+#     def is_anonymous(self):
+#         return False
+
+#     def get_id(self):
+#         return self.contact
+
 class Users(db.Model, UserMixin):
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
-    contact = db.Column(db.Integer, primary_key=True)
-    usertype = db.Column(db.String, nullable=True)
-    card = db.Column(db.String)
-    isparttime = db.Column(db.Boolean)
-    postalcode = db.Column(db.String)
+    contact = db.Column(db.Integer, primary_key=True, nullable=False)
+    usertype = db.Column(db.String, nullable=False)
+    card = db.Column(db.String, nullable=False)
+    postalcode = db.Column(db.Integer, nullable=False)
     
     biddingccontact = db.relationship('Biddings', backref='contact')
-    cantakecareccontact = db.relationship('Cantakecare', backref='contact')
+    cantakecareccontact = db.relationship('CanTakeCare', backref='contact')
     pet = db.relationship('Pets', backref='owner')
     
     # Relationships
@@ -35,6 +96,10 @@ class Users(db.Model, UserMixin):
 
     def get_id(self):
         return self.contact
+    
+class CanPartTime(db.Model):
+    ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True)
+    isparttime = db.Column(db.Boolean, nullable=False)
     
 class Role(db.Model):
     
@@ -54,7 +119,7 @@ class UserRoles(db.Model):
 class categories(db.Model, UserMixin):
     category = db.Column(db.String, primary_key=True, nullable=False)
     petcat = db.relationship('Pets', backref='type')
-    cantakecarecat = db.relationship('Cantakecare', backref='type')
+    cantakecarecat = db.relationship('CanTakeCare', backref='type')
     
 class Pets(db.Model, UserMixin):
     petname = db.Column(db.String, primary_key=True, nullable=False)
@@ -81,11 +146,11 @@ class Available(db.Model, UserMixin):
         return (self.startday, self.endday, self.ccontact)
 
 class Biddings(db.Model, UserMixin):
-    petname = db.Column(db.String, db.ForeignKey('pets.petname'), primary_key=True, nullable=False)
-    pcontact = db.Column(db.Integer, db.ForeignKey('pets.pcontact'), primary_key=True, nullable=False)
-    ccontact = db.Column(db.Integer, db.ForeignKey('users.contact'), primary_key=True, nullable=False)
-    startday = db.Column(db.Date, primary_key=True, nullable=False)
-    endday = db.Column(db.Date, primary_key=True, nullable=False)
+    petname = db.Column(db.String, db.ForeignKey('pets.petname', ondelete='CASCADE'), primary_key=True, nullable=False)
+    pcontact = db.Column(db.Integer, db.ForeignKey('pets.pcontact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    startdate = db.Column(db.Date, primary_key=True, nullable=False)
+    enddate = db.Column(db.Date, primary_key=True, nullable=False)
     paymentmode = db.Column(db.String, nullable=False)
     deliverymode = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
@@ -103,31 +168,31 @@ class Biddings(db.Model, UserMixin):
         return self.status
 
     def get_key(self):
-        return (self.startday, self.endday, self.ccontact, self.petname, self.pcontact)
+        return (self.startdate, self.enddate, self.ccontact, self.petname, self.pcontact)
     
 class Reviews(db.Model, UserMixin):
-    petname = db.Column(db.String, db.ForeignKey('biddings.petname'), primary_key=True, nullable=False)
-    pcontact = db.Column(db.Integer, db.ForeignKey('biddings.pcontact'), primary_key=True, nullable=False)
-    ccontact = db.Column(db.Integer, db.ForeignKey('biddings.ccontact'), primary_key=True, nullable=False)
-    startday = db.Column(db.Date, db.ForeignKey('biddings.startday'), primary_key=True, nullable=False)
-    endday = db.Column(db.Date, db.ForeignKey('biddings.endday'), primary_key=True, nullable=False)
+    petname = db.Column(db.String, db.ForeignKey('biddings.petname', ondelete='CASCADE'), primary_key=True, nullable=False)
+    pcontact = db.Column(db.Integer, db.ForeignKey('biddings.pcontact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    ccontact = db.Column(db.Integer, db.ForeignKey('biddings.ccontact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    startdate = db.Column(db.Date, db.ForeignKey('biddings.startdate', ondelete='CASCADE'), primary_key=True, nullable=False)
+    enddate = db.Column(db.Date, db.ForeignKey('biddings.enddate', ondelete='CASCADE'), primary_key=True, nullable=False)
     rating = db.Column(db.Integer, primary_key=True, nullable=False)
     review = db.Column(db.String, primary_key=True, nullable=False)
     
     reviewpetname = db.relationship('Biddings', foreign_keys=[petname])
     reviewpcontact = db.relationship('Biddings', foreign_keys=[pcontact])
     reviewccontact = db.relationship('Biddings', foreign_keys=[ccontact])
-    reviewstartdate = db.relationship('Biddings', foreign_keys=[startday])
-    reviewenddate = db.relationship('Biddings', foreign_keys=[endday])
+    reviewstartdate = db.relationship('Biddings', foreign_keys=[startdate])
+    reviewenddate = db.relationship('Biddings', foreign_keys=[enddate])
     def get_rating(self):
         return self.rating
  
     def get_key(self):
-        return (self.startday, self.endday, self.ccontact, self.petname, self.pcontact, self.rating, self.review)
+        return (self.startdate, self.enddate, self.ccontact, self.petname, self.pcontact, self.rating, self.review)
     
-class Cantakecare(db.Model, UserMixin):
-    ccontact = db.Column(db.Integer, db.ForeignKey('users.contact'), primary_key=True, nullable=False)
-    category = db.Column(db.String, db.ForeignKey('categories.category'), primary_key=True, nullable=False)
+class CanTakeCare(db.Model, UserMixin):
+    ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    category = db.Column(db.String, db.ForeignKey('categories.category', ondelete='CASCADE'), primary_key=True, nullable=False)
     dailyprice = db.Column(db.Integer, nullable=False)
     def get_dailyprice(self):
         return self.dailyprice

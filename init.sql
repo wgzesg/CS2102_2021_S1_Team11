@@ -12,8 +12,7 @@ CREATE TABLE users (
     card VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
     usertype VARCHAR NOT NULL,
-    isPartTime BOOLEAN,
-    postalcode VARCHAR
+    postalcode BIGINT NOT NULL
 );
 
 CREATE TABLE role (
@@ -28,11 +27,24 @@ CREATE TABLE user_roles (
     usertype VARCHAR NOT NULL REFERENCES public.role(name)
 );
 
+CREATE TABLE canparttime (
+    ccontact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact),
+    isparttime BOOLEAN NOT NULL,
+    avgrating INTEGER NOT NULL
+);
+
+CREATE TABLE dailyprice (
+    category VARCHAR NOT NULL REFERENCES public.categories(category),
+    rating INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    PRIMARY KEY (category, rating)
+);
+
 CREATE TABLE pets(
     petname VARCHAR NOT NULL,
     pcontact BIGINT NOT NULL REFERENCES public.users(contact),
     category VARCHAR NOT NULL REFERENCES public.categories(category),
-    age INTEGER,
+    age INTEGER NOT NULL,
     PRIMARY KEY (petName, pcontact)
 );
 
@@ -45,8 +57,7 @@ CREATE TABLE available (
 
 CREATE TABLE cantakecare (
     ccontact BIGINT NOT NULL REFERENCES public.users(contact),
-    category VARCHAR REFERENCES public.categories(category),
-    dailyprice INT NOT NULL,
+    category VARCHAR REFERENCES public.categories(category), 
     PRIMARY KEY (ccontact, category)
 );
 
@@ -78,7 +89,7 @@ CREATE TABLE reviews(
     endday DATE NOT NULL CHECK(endday - startday >= 0),
     rating INTEGER NOT NULL CHECK(rating <= 5 AND rating >= 0),
     review VARCHAR NOT NULL,
-    PRIMARY KEY (pcontact, ccontact, petname, rating, review),
+    PRIMARY KEY (pcontact, ccontact, petname, startday, endday),
     FOREIGN KEY (pcontact, ccontact, petname, startday, endday) REFERENCES public.biddings(pcontact, ccontact, petname, startday, endday)
 );
  

@@ -7,7 +7,7 @@ from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm, \
     CanTakeCareDeleteForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
-from models import Users, Role, Pets, Available, Biddings, Cantakecare
+from models import Users, Role, Pets, Available, Biddings, Cantakecare, CanPartTime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
 from datetime import timedelta
@@ -48,7 +48,7 @@ def render_registration_page():
         # db.session.execute(query)
         # db.session.commit()
 
-        user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, isparttime=is_part_time, postalcode=postal_code, password=hashed_password)
+        user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, postalcode=postal_code, password=hashed_password)
         role = Role.query.filter_by(name=user_type).first()
         user1.roles.append(role)
         db.session.add(user1)
@@ -59,6 +59,9 @@ def render_registration_page():
         #db.session.execute(query)
         db.session.commit()
         
+        canparttime1 = CanPartTime(contact=contact, isparttime=is_part_time)
+        db.session.add(canparttime1)
+        db.session.commit()
         #query = "INSERT INTO users(username, contact, card, password, usertype, isPartTime, postalcode) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')" \
         #    .format(username, contact, credit_card, hashed_password, user_type, is_part_time, postal_code)
         # print(query, flush=True)
