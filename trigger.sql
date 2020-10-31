@@ -17,17 +17,17 @@ $$
 CREATE OR REPLACE FUNCTION calculate_avg_rating() 
 RETURNS TRIGGER AS $$
 DECLARE
-  ratingsum INTEGER;
-  countsum INTEGER;
-  avgnum INTEGER;
+  ratingsum FLOAT;
+  countsum FLOAT;
+  avgnum FLOAT;
 BEGIN
   SELECT SUM(R.rating), COUNT(*) INTO ratingsum, countsum
   FROM reviews R
   WHERE R.ccontact = NEW.ccontact;
 
-  SELECT CEILING(ratingsum / countsum) INTO avgnum;
-  UPDATE canparttime C SET C.avgrating = avgnum
-    WHERE C.ccontact = NEW.ccontact;
+  SELECT CAST((ratingsum / countsum) AS FLOAT) INTO avgnum;
+  UPDATE canparttime  SET avgrating = avgnum
+    WHERE ccontact = NEW.ccontact;
 
   RETURN NULL;
 

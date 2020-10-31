@@ -19,3 +19,13 @@ INSERT INTO "caretakers" (username,contact,isPartTime,password) VALUES ('Hop',39
 DELETE FROM biddings WHERE ccontact = 4444;
 INSERT INTO "biddings" VALUES (3333, 4444,'qqq','2020-10-31', '2020-11-03', 'aa', 'zz', 'pending');
 UPDATE biddings SET status = 'successful' WHERE ccontact = 4444;
+
+DELETE FROM reviews WHERE ccontact = 4444;
+INSERT INTO "reviews" VALUES (3333, 4444,'qqq','2020-10-31', '2020-11-03', '4','LGTM' );
+
+SELECT * FROM canparttime;
+
+
+INSERT INTO "biddings" VALUES (3333, 4444,'qqq','2020-11-30', '2020-12-03', 'aa', 'zz', 'pending');
+UPDATE biddings SET status = 'successful' WHERE ccontact = 4444;
+INSERT INTO "reviews" VALUES (3333, 4444,'qqq','2020-11-30', '2020-12-03', '1','LGTM' );
