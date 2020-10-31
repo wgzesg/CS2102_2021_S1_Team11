@@ -21,6 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="96e361de-2dde-42f5-adcd-7f6b7e854353" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

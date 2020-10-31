@@ -67,7 +67,7 @@ class RegistrationForm(FlaskForm):
     )
     is_part_time = BooleanField(
         label='Is Part Time',
-        render_kw={'placeholder': 'Is Part Time', 'class': 'input100'}
+        render_kw={'placeholder': 'Is Part Time'}
     )
 
 class PetForm(FlaskForm):
