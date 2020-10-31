@@ -75,17 +75,6 @@
                         </div>
                         {% endif %}
                     </div>
-
-                    <div class="formField wrap-input100 validate-input">
-                        {{ form.dailyprice }} {% if form.dailyprice.errors %}
-                        <div class="errorMessage">
-                            {% for error in form.dailyprice.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
-
                     <div class="buttonWrapper">
                         <button id="addButton" class="login100-form-btn" formmethod="post">Add</button>
                     </div>
