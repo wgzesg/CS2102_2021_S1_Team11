@@ -7,10 +7,10 @@ SELECT DISTINCT {"this.username"} AS petowner, username AS caretaker
 
 -----------------------------------calculate salary
 CREATE OR REPLACE FUNCTION 
-calculate_salary(start DATE, end DATE, price INTEGER) 
-RETURN INT AS
-    'BEGIN RETURN price * (end - start)) + 3000;
-    END;'
+calcMoney(start DATE, endy DATE, price INTEGER) 
+RETURNS INTEGER AS $$
+    BEGIN RETURN price * (endy - start);
+    END; $$
 LANGUAGE plpgsql;
 
 CREAET VIEW salarylist (ccontact, salary) AS
@@ -30,3 +30,68 @@ GROUP BY ccontact
 
 -----------------------------------calculate working days
 
+
+CREATE OR REPLACE FUNCTION addSalary()
+RETURNS TRIGGER AS $$
+BEGIN 
+  UPDATE canparttime cp SET salary = salary + 
+  (
+    SELECT calcMoney(NEW.startday, NEW.endday, 
+      (SELECT price FROM dailyprice WHERE
+       category = (SELECT category FROM pets P
+       WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
+       AND
+       rating = (SELECT CEIL(avgrating) FROM canparttime cpt
+       WHERE NEW.ccontact = cpt.ccontact)
+      )
+     )
+  )
+  WHERE NEW.ccontact = cp.ccontact;
+  RETURN NULL;
+END;
+$$
+LANGUAGE PLPGSQL;
+
+
+DROP TRIGGER IF EXISTS 
+newSuccessBidding ON biddings;
+CREATE TRIGGER newSuccessBidding
+    AFTER UPDATE OF status
+    ON biddings
+    FOR EACH ROW
+    EXECUTE FUNCTION addSalary();
+
+/*
+SELECT price INTO dp FROM dailyprice WHERE
+category = (SELECT category FROM pets P
+            WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
+AND
+rating = (SELECT CEIL(avgrating) FROM canparttime cpt
+          WHERE NEW.ccontact = cpt.ccontact) 
+thisMoney = SELECT calcMoney(NEW.startday, NEW.endday, dp);
+UPDATE canparttime cp SET salary = salary + thisMoney
+WHERE NEW.ccontact = cp.ccontact
+*/
+
+
+CREATE OR REPLACE FUNCTION log_last_name_changes()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+  UPDATE canparttime cp SET salary = salary +
+  (
+    SELECT calcMoney(NEW.startday, NEW.endday, 
+      (SELECT price FROM dailyprice WHERE
+       category = (SELECT category FROM pets P
+       WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
+       AND
+       rating = (SELECT CEIL(avgrating) FROM canparttime cpt
+       WHERE NEW.ccontact = cpt.ccontact)
+      )
+    )
+  )
+  WHERE NEW.ccontact = cp.ccontact;
+END;
+$$
