@@ -353,15 +353,15 @@ def render_owner_page():
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
     caretakers = db.session.execute(caretakersquery)
 
-    PER_PAGE = 10
-    total = caretakers.count()
+#    PER_PAGE = 10
+#    total = caretakers.count()
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    start = (page-1)*PER_PAGE
-    end = start + PER_PAGE
-    pagination = caretakers.paginate(bs_version=3, page=page, total=total)
+#    start = (page-1)*PER_PAGE
+#    end = start + PER_PAGE
+    pagination = caretakers.paginate(bs_version=3, page=page, per_page=10)
     caretaker_pages = pagination.items
 
-    caretable = ownerHomePage(caretakers)
+#    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -391,7 +391,7 @@ def render_owner_page():
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, pagination=pagination, caretaker_pages=caretaker_pages, table=table, username=current_user.username + " owner")
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, pagination=pagination, caretaker_pages=caretaker_pages, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
