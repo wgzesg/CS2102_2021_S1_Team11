@@ -29,7 +29,7 @@ CREATE TABLE user_roles (
 CREATE TABLE canparttime (
     ccontact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact),
     isparttime BOOLEAN NOT NULL,
-    avgrating INTEGER NOT NULL,
+    avgrating FLOAT NOT NULL,
     salary INTEGER NOT NULL
 );
 

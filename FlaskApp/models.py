@@ -100,6 +100,7 @@ class Users(db.Model, UserMixin):
 class Canparttime(db.Model):
     ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True)
     isparttime = db.Column(db.Boolean, nullable=False)
+    avgrating = db.Column(db.Float, nullable=False)
     salary = db.Column(db.Integer, nullable=False, default=0)
     
 class Role(db.Model):
