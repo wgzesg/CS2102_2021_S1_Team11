@@ -358,12 +358,8 @@ def render_owner_page():
     page = request.args.get(get_page_parameter(), type=int, default=1)
     start = (page-1)*PER_PAGE
     end = start + PER_PAGE
-    pagination = Pagination(bs_version=3, page=page, total=total)
-    caretaker_pages = caretakers.slice(start, end)
-    context = {
-        'pagination': pagination,
-        'caretaker_pages': caretaker_pages
-    }
+    pagination = caretakers.paginate(bs_version=3, page=page, total=total)
+    caretaker_pages = pagination.items
 
     caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
@@ -395,7 +391,7 @@ def render_owner_page():
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, **context, table=table, username=current_user.username + " owner")
+    return render_template("owner.html", form=form, profile=profile, pagination=pagination, caretaker_pages=caretaker_pages, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
