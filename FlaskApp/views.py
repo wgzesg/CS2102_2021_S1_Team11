@@ -7,7 +7,7 @@ from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm, \
     CanTakeCareDeleteForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
-from models import Users, Role, Pets, Available, Biddings, Cantakecare, CanPartTime
+from models import Users, Role, Pets, Available, Biddings, CanTakeCare, CanPartTime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
 from datetime import timedelta
