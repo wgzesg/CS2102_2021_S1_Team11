@@ -322,7 +322,6 @@ def render_caretaker_cantakecare_new():
     form = CanTakeCareForm()
     if request.method == 'POST' and form.validate_on_submit():
         category = form.category.data
-        dailyprice = form.dailyprice.data
         query = "INSERT INTO cantakecare(ccontact, category) VALUES ('{}', '{}')" \
         .format(contact, category)
         db.session.execute(query)
