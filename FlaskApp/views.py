@@ -456,11 +456,16 @@ def render_owner_pet_new():
         petname = form.petname.data
         category = form.category.data
         age = form.age.data
+
         query = "INSERT INTO pets(petname, pcontact, age, category) VALUES ('{}', '{}', '{}', '{}')" \
         .format(petname, contact, age, category)
-        db.session.execute(query)
-        db.session.commit()
-        return redirect(url_for('view.render_owner_pet'))
+        try:
+            db.session.execute(query)
+            db.session.commit()
+            return redirect(url_for('view.render_owner_pet'))
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("You already have a pet with the same name!")
     return render_template("petNew.html", form=form, username=current_user.username + " owner")
 
 
