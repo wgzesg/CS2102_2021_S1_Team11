@@ -61,13 +61,13 @@ class RegistrationForm(FlaskForm):
         label='Credit Card',
         render_kw={'placeholder': 'Credit Card', 'class': 'input100'}
     )
-    is_part_time = BooleanField(
-        label='Is Part Time',
-        render_kw={'placeholder': 'Is Part Time'}
-    )
     postal_code = IntegerField(
         label='Postal Code',
-        render_kw={'placeholder': 'Postal Code', 'class': 'input6'}
+        render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
+    )
+    is_part_time = BooleanField(
+        label='Is Part Time',
+        render_kw={'placeholder': 'Is Part Time', 'class': 'input100'}
     )
 
 class PetForm(FlaskForm):
