@@ -352,15 +352,14 @@ def render_caretaker_cantakecare_delete():
 def render_owner_page():
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
     caretakers = db.session.execute(caretakersquery)
-    countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
-    caretaker_counts = db.session.execute(countquery)
 
-#    PER_PAGE = 10
+    PER_PAGE = 10
 #    total = caretakers.count()
     page = request.args.get(get_page_parameter(), type=int, default=1)
-#    start = (page-1)*PER_PAGE
-#    end = start + PER_PAGE
-    pagination = Pagination(bs_version=3, page=page, total=caretaker_counts, per_page=10, record_name='caretakers')
+    start = (page-1)*PER_PAGE
+    end = page * PER_PAGE if len(caretakers) > page * PER_PAGE else len(caretakers)
+    pagination = Pagination(bs_version=3, page=page, total=len(caretakers), per_page=10, record_name='caretakers')
+    caretaker_pages = db.session.execute(caretakersquery).slice(start, end)
 
 #    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
@@ -392,7 +391,7 @@ def render_owner_page():
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, caretable=caretable, pagination=pagination, caretaker_pages=caretaker, table=table, username=current_user.username + " owner")
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, pagination=pagination, caretaker_pages=caretaker_pages, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
