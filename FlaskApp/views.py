@@ -354,7 +354,7 @@ def render_owner_page():
     caretakers = db.session.execute(caretakersquery)
 
     PER_PAGE = 10
-    total = caretakers.scalar()
+    total = caretakers.rowcount()
     page = request.args.get(get_page_parameter(), type=int, default=1)
     start = (page-1)*PER_PAGE
     end = page * PER_PAGE
