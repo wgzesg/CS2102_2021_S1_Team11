@@ -55,6 +55,22 @@ CREATE TABLE dailyprice (
     PRIMARY KEY (category, rating)
 );
 
+INSERT INTO dailyprice VALUES ('dog', 1, 10);
+INSERT INTO dailyprice VALUES ('dog', 2, 20);
+INSERT INTO dailyprice VALUES ('dog', 3, 30);
+INSERT INTO dailyprice VALUES ('dog', 4, 40);
+INSERT INTO dailyprice VALUES ('dog', 5, 50);
+INSERT INTO dailyprice VALUES ('cat', 1, 11);
+INSERT INTO dailyprice VALUES ('cat', 2, 22);
+INSERT INTO dailyprice VALUES ('cat', 3, 33);
+INSERT INTO dailyprice VALUES ('cat', 4, 44);
+INSERT INTO dailyprice VALUES ('cat', 5, 55);
+INSERT INTO dailyprice VALUES ('bird', 1, 12);
+INSERT INTO dailyprice VALUES ('bird', 2, 24);
+INSERT INTO dailyprice VALUES ('bird', 3, 36);
+INSERT INTO dailyprice VALUES ('bird', 4, 48);
+INSERT INTO dailyprice VALUES ('bird', 5, 60);
+
 CREATE TABLE pets(
     petname VARCHAR NOT NULL,
     pcontact BIGINT NOT NULL REFERENCES public.users(contact),
