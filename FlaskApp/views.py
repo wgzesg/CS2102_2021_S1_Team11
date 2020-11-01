@@ -351,7 +351,7 @@ def render_caretaker_cantakecare_delete():
 @roles_required('petowner')
 def render_owner_page():
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    caretakers = db.session.execute(caretakersquery)
+    caretakers = db.session.query(Users).filter_by(usertype = 'caretaker')
     countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
     count = db.session.execute(countquery).fetchone()
 
@@ -361,7 +361,8 @@ def render_owner_page():
     start = (page-1)*PER_PAGE
     end = page * PER_PAGE
     pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
-    caretaker_pages = db.session.execute(caretakersquery).slice(start, end)
+    caretaker_pages = caretakers.slice(start, end)
+
 
 #    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
