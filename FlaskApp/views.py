@@ -357,7 +357,7 @@ def render_owner_page():
     total = caretakers.scalar()
     page = request.args.get(get_page_parameter(), type=int, default=1)
     start = (page-1)*PER_PAGE
-    end = page * PER_PAGE if total > page * PER_PAGE else total
+    end = page * PER_PAGE
     pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
     caretaker_pages = db.session.execute(caretakersquery).slice(start, end)
 
