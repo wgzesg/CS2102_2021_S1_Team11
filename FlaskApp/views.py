@@ -353,7 +353,7 @@ def render_owner_page():
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
     caretakers = db.session.execute(caretakersquery)
     countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
-    count = db.session.execute(countquery)
+    count = db.session.execute(countquery).fetchone()
 
     PER_PAGE = 10
     total = count
