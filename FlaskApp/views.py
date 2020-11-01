@@ -356,7 +356,7 @@ def render_owner_page():
     count = db.session.execute(countquery).fetchone()
 
     PER_PAGE = 10
-    total = count
+    total = count[0]
     page = request.args.get(get_page_parameter(), type=int, default=1)
     start = (page-1)*PER_PAGE
     end = page * PER_PAGE
