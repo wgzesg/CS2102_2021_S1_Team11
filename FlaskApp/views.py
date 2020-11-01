@@ -354,11 +354,11 @@ def render_owner_page():
     caretakers = db.session.execute(caretakersquery)
 
     PER_PAGE = 10
-#    total = caretakers.count() total=len(caretakers), 
+    total = caretakers.scalar()
     page = request.args.get(get_page_parameter(), type=int, default=1)
     start = (page-1)*PER_PAGE
-    end = page * PER_PAGE if len(caretakers) > page * PER_PAGE else len(caretakers)
-    pagination = Pagination(bs_version=3, page=page, per_page=10, record_name='caretakers')
+    end = page * PER_PAGE if total > page * PER_PAGE else total
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
     caretaker_pages = db.session.execute(caretakersquery).slice(start, end)
 
 #    caretable = ownerHomePage(caretakers)
