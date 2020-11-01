@@ -352,9 +352,11 @@ def render_caretaker_cantakecare_delete():
 def render_owner_page():
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
     caretakers = db.session.execute(caretakersquery)
+    countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
+    count = db.session.execute(countquery)
 
     PER_PAGE = 10
-    total = caretakers.rowcount()
+    total = count
     page = request.args.get(get_page_parameter(), type=int, default=1)
     start = (page-1)*PER_PAGE
     end = page * PER_PAGE
