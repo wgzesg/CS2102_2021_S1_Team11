@@ -15,3 +15,17 @@ INSERT INTO "caretakers" (username,contact,isPartTime,password) VALUES ('Adrian'
 INSERT INTO "caretakers" (username,contact,isPartTime,password) VALUES ('Cedric',54909,'False','Suspendisse'),('Lucy',10113,'True','Curabitur'),('Jordan',58060,'False','vitae,'),('Hall',49436,'False','pharetra,'),('Priscilla',10520,'False','Integer'),('Ivory',69007,'True','Cras'),('Elijah',41259,'True','dapibus'),('Howard',92997,'False','ultricies'),('Montana',25351,'True','lobortis.'),('Chaim',58549,'True','Nulla');
 INSERT INTO "caretakers" (username,contact,isPartTime,password) VALUES ('Lucian',87160,'True','Donec'),('Hashim',56380,'True','aliquam'),('Jordan',40647,'False','luctus,'),('Knox',16666,'True','malesuada'),('Alea',33823,'False','libero'),('George',85560,'True','pede,'),('Yardley',59108,'True','tempor'),('Arden',75874,'False','Morbi'),('Plato',25540,'False','pellentesque,'),('Ivan',91620,'True','Mauris');
 INSERT INTO "caretakers" (username,contact,isPartTime,password) VALUES ('Hop',39734,'True','eget,'),('Tobias',84022,'True','faucibus'),('Bruce',42246,'False','vitae'),('Keiko',73672,'True','Nam'),('Timothy',94383,'False','tempus'),('Timothy',79551,'True','congue'),('Virginia',78151,'True','massa.'),('Fallon',31328,'True','mi'),('Riley',88402,'False','Duis'),('Whilemina',61936,'False','magna.');
+
+DELETE FROM biddings WHERE ccontact = 4444;
+INSERT INTO "biddings" VALUES (3333, 4444,'qqq','2020-10-31', '2020-11-03', 'aa', 'zz', 'pending');
+UPDATE biddings SET status = 'successful' WHERE ccontact = 4444;
+
+DELETE FROM reviews WHERE ccontact = 4444;
+INSERT INTO "reviews" VALUES (3333, 4444,'qqq','2020-10-31', '2020-11-03', '4','LGTM' );
+
+SELECT * FROM canparttime;
+
+
+INSERT INTO "biddings" VALUES (3333, 4444,'qqq','2020-11-30', '2020-12-03', 'aa', 'zz', 'pending');
+UPDATE biddings SET status = 'successful' WHERE ccontact = 4444;
+INSERT INTO "reviews" VALUES (3333, 4444,'qqq','2020-11-30', '2020-12-03', '1','LGTM' );
