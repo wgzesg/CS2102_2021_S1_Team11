@@ -5,12 +5,48 @@
     <title>Caretaker</title>
 
     <link rel="stylesheet" type="text/css" href="../static/css/topbar.css">
+    <!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="https://cs2102project.herokuapp.com/static/images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-util.css">
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-main.css">
+    <!--===============================================================================================-->
     <style>
         #logout{
             float: right;
         }
         body{
             margin: 0;
+        }
+        .wrapper{
+            position: relative;
+        }
+        .content{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 900px;
+            height: 200px;
+            transform: translate(-28%,100%);
+        }
+        h1{
+            font-size: 20px;
         }
     </style>
 </head>
@@ -24,10 +60,13 @@
         <a href="https://cs2102project.herokuapp.com/caretaker/available">Availability</a>
         <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
     </div>
-    <div>
-        <p>Add a available slot <a href="https://cs2102project.herokuapp.com/caretaker/available/new">here</a></p>
-        <p>Here is the list of your available slots:</p>
-        {{ table }}
+    <div class="wrapper">
+        <div class="content">
+            <h1>
+                Add an available slot <a href="https://cs2102project.herokuapp.com/caretaker/available/new" class="btn btn-outline-secondary btn-sm">HERE</a>
+            </h1>
+            <div class="table">{{table}}</div>
+        </div>
     </div>
 
 </body>
