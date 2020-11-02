@@ -349,19 +349,26 @@ def render_caretaker_cantakecare_delete():
 @view.route("/owner", methods=["GET", "POST"])
 #@login_required
 @roles_required('petowner')
-def render_owner_page():
+def render_owner_page(page=1):
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    caretakers = db.session.query(Users).filter_by(usertype = 'caretaker')
+    caretakers = db.session.execute(caretakersquery)
     countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
     count = db.session.execute(countquery).fetchone()
-
-    PER_PAGE = 10
     total = count[0]
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    start = (page-1)*PER_PAGE
-    end = page * PER_PAGE
-    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
-    caretaker_pages = caretakers.slice(start, end)
+
+#    PER_PAGE = 10 
+#    page = request.args.get(get_page_parameter(), type=int, default=1)
+#    start = (page-1)*PER_PAGE
+#    end = page * PER_PAGE
+#    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = "SELECT * FROM users LIMIT '{}' OFFSET '{}'".format(page_display, page_offset)
+    else:
+        pagequery = "SELECT * FROM users LIMIT 10 OFFSET '{}'".format(page_offset)
+    caretaker_page = db.session.execute(pagequery)
 
 
 #    caretable = ownerHomePage(caretakers)
@@ -394,7 +401,7 @@ def render_owner_page():
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, caretable=caretable, pagination=pagination, caretaker_pages=caretaker_pages, table=table, username=current_user.username + " owner")
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, caretaker_page=caretaker_page, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
