@@ -24,14 +24,69 @@
 <!--===============================================================================================-->
     
     <style>
-        #logout{
+        .container {
+            width: 1000px;
+            text-align: center;
+        }
+
+        #addButton{
+            display: block;
+            margin: 0 auto;
+        }
+
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
+        }
+
+        #registerButton {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .formField {
+            padding: 10px 0;
+        }
+
+        #logout {
             float: right;
         }
-        body{
-            margin: 0;
+
+        .button_wrapper{
+            display: block;
+            width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            left: 0;
+            right: 0;
+            top: 30vh;
+            margin-left: 60px;
         }
-        .wrapper{
-            position: relative;
+        h3{
+            padding-top: 20px;
+        }
+        .result-row{
+            padding: 10px 0;
+        }
+
+        .edit{
+            display: inline;
+            opacity: 1;
+            width: 70px;
+            height: 35px;
+            margin-left: 20px;
+        }
+        .container-login100{
+            min-height: 94vh;
+        }
+
+        h1{
+            font-size: 20px;
+        }
+        .table{
+            font-size: 14px;
+            position: absolute;
+            margin-top: 30px;
         }
         .content{
             position: absolute;
@@ -41,14 +96,8 @@
             height: 200px;
             transform: translate(-28%,100%);
         }
-        h1{
-            font-size: 20px;
-        }
-        .table{
-            font-size: 14px;
-            position: absolute;
-            margin-top: 30px;
-            left: 23%;
+        .wrapper {
+            position: relative;
         }
     </style>
 </head>
