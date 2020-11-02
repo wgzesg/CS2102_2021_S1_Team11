@@ -53,19 +53,9 @@
             padding: 10px 0;
         }
 
-        .div-color {
-            background-color:rgba(212, 212, 212, 0.4)
-        }
         #logout {
             float: right;
         }
-
-        :root {
-            --light: #92DE34;
-            --dark: #69BC22;
-            --text: #025600;
-        }
-
 
         .button_wrapper{
             display: block;
@@ -76,48 +66,6 @@
             right: 0;
             top: 30vh;
             margin-left: 60px;
-        }
-
-        button {
-            display: block;
-            cursor: pointer;
-            outline: none;
-            border: none;
-            background-color: var(--light);
-            width: 400px;
-            height: 70px;
-            border-radius: 30px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text);
-            background-size: 100% 100%;
-            box-shadow: 0 0 0 7px var(--light) inset;
-            margin-bottom: 15px;
-        }
-
-        button:hover {
-            background-image: linear-gradient(145deg,
-                    transparent 10%,
-                    var(--dark) 10% 20%,
-                    transparent 20% 30%,
-                    var(--dark) 30% 40%,
-                    transparent 40% 50%,
-                    var(--dark) 50% 60%,
-                    transparent 60% 70%,
-                    var(--dark) 70% 80%,
-                    transparent 80% 90%,
-                    var(--dark) 90% 100%);
-            animation: background 3s linear infinite;
-        }
-
-        @keyframes background {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 400px 0;
-            }
         }
         h3{
             padding-top: 20px;
@@ -136,6 +84,27 @@
         .container-login100{
             min-height: 94vh;
         }
+
+        h1{
+            font-size: 20px;
+        }
+        .table{
+            font-size: 14px;
+            position: absolute;
+            margin-top: 30px;
+            left: 23%;
+        }
+        .content{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 900px;
+            height: 200px;
+            transform: translate(-28%,100%);
+        }
+        .wrapper {
+            position: relative;
+        }
     </style>
 </head>
 
@@ -146,24 +115,13 @@
       <a href="https://cs2102project.herokuapp.com/owner/bid">Bid</a>
       <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
     </div>
-    <div class="limiter">
-        <div class="container-login100" style="background-image: url('https://cs2102project.herokuapp.com/static/images/bg-01.jpg');">
-            <div class="container div-color">
-                <div>
-                    <h3>Here are the list of your pets:</h3>
-                    <div class="result-row">
-                        {{ table }} 
-                        <button onclick="location.href='https://cs2102project.herokuapp.com/owner/pet/new'" type="button" class="edit">
-                            <p>Add</p>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="button_wrapper">
-                <button onclick="location.href='https://cs2102project.herokuapp.com/owner/pet/new'" type="button">
-                    <p>Add a pet</p>
-                </button>
-            </div>
+    <div class="wrapper">
+        <div class="content">
+            <h1>
+                Add a pet <a href="https://cs2102project.herokuapp.com/owner/pet/new" class="btn btn-outline-secondary btn-sm">HERE</a>
+                <p>Here are a list of your pets.</p>
+            </h1>
+            <div class="table">{{table}}</div>
         </div>
     </div>
 </body>
