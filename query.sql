@@ -84,6 +84,14 @@ BEGIN
   WHERE NEW.ccontact = cp.ccontact;
 END;
 $$
+---------------------------------------------REVIEW TRIGGER
+CREATE TRIGGER generate_review
+AFTER UPDATE OF status
+    ON biddings
+    EXECUTE FUNCTION copy_bidding();
+    
+CREATE OR REPLACE PROCEDURE copy_bidding()
+
 
 ---------------------------------------------
 SELECT COUNT (*)

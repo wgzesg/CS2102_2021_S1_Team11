@@ -5,7 +5,7 @@ from flask_table import Table, Col
 from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
-from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
+from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewForm, ReviewUpdateForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
@@ -215,21 +215,23 @@ def render_caretaker_biddings_accept():
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
     flag = True
+    n = 0
     for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
         query = "SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 AND ccontact = '{}' AND status = 'success'".format(selected, selected, ct)
         count = db.session.execute(query).fetchone()
+        print("day " + n + " : " + count[0])
+        n = n + 1
         if count[0] > 5:
             flag = False
             break
     
+    if flag == False:
+        flash("You are not allowed to take more than five pets at the same time.")
+        return redirect(url_for('view.render_caretaker_biddings'))
     if bid:
-        if flag == False:
-            bid.status = "pending"
-            print("Bidding status cannot be updated", flush=True)
-        else:
-            bid.status = "success"
-            db.session.commit()
-            print("Bidding status has been updated", flush=True)
+        bid.status = "success"
+        db.session.commit()
+        print("Bidding status has been updated", flush=True)
     return redirect(url_for('view.render_caretaker_biddings'))
 
 
@@ -629,7 +631,33 @@ def render_owner_bid_delete():
     results = db.session.execute(query)
     return render_template("profile.html", results=results, username=current_user.username + " owner")
 
+@view.route("/owner/review", methods=["GET", "POST"])
+@roles_required('petowner')
+def render_owner_review():
+    pcontact = request.args.get(pcontact)
+    query = "SELECT * FROM Reviews WHERE pcontact = {}".format(pcontact)
+    results = db.session.execute(query)
+    return render_template("review.html", results=results, username=current_user.username + " owner")
 
+@view.route("/owner/review/update", methods=["GET", "POST"])
+@roles_required('petowner')
+def render_owner_review_update():
+    pc = current_user.contact
+    pn = request.args.get('petname')
+    cc = request.args.get('ccontact')
+    startday = request.args.get('startday')
+    endday = request.args.get('endday')
+    review = Reviews.query.filter_by(petname=pn, pcontact=pc, ccontact=cc, startday=startday, endday=endday).first()
+    if review:
+        form = ReviewUpdateForm(obj=review)
+        if request.method == 'POST' and form.validate_on_submit():
+            thisreview = Reviews.query.filter_by(petname=pn, pcontact=pc, ccontact=cc, startday=startday, endday=endday).first()
+            thisreview.review = form.review.data
+            thisreview.rating = int(form.rating.data)
+            db.session.commit()
+            return redirect(url_for('view.render_owner_review'))
+    
+    return render_template("profile.html", results=results, username=current_user.username + " owner")
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
 
