@@ -392,7 +392,7 @@ def render_owner_page(page=1):
                 (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
                 AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
-                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
+                         category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
