@@ -640,7 +640,7 @@ def render_owner_bid_delete():
 def render_owner_review():
     contact = current_user.contact
     #placeholder query
-    query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
+    query = "SELECT * FROM reviews WHERE pcontact= '{}'".format(contact)
     bidding = db.session.execute(query).fetchall()
     reviewTable = biddingTable(bidding)
     return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
