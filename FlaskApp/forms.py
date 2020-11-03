@@ -217,7 +217,7 @@ class BiddingForm(FlaskForm):
         validators=[InputRequired()],
         render_kw={'placeholder': 'endday', 'class': 'input100'}
     )
-    paymentmode = Sl(
+    paymentmode = SelectField(
         label='Paymentmode',
         validators=[InputRequired()],
         render_kw={'placeholder': 'Paymentmode', 'class': 'input100'}
