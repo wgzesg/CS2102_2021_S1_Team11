@@ -61,17 +61,6 @@ CREATE TRIGGER newSuccessBidding
     FOR EACH ROW
     EXECUTE FUNCTION addSalary();
 
-/*
-SELECT price INTO dp FROM dailyprice WHERE
-category = (SELECT category FROM pets P
-            WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
-AND
-rating = (SELECT CEIL(avgrating) FROM canparttime cpt
-          WHERE NEW.ccontact = cpt.ccontact) 
-thisMoney = SELECT calcMoney(NEW.startday, NEW.endday, dp);
-UPDATE canparttime cp SET salary = salary + thisMoney
-WHERE NEW.ccontact = cp.ccontact
-*/
 
 
 CREATE OR REPLACE FUNCTION log_last_name_changes()
