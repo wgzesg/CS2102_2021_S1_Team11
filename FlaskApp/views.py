@@ -112,7 +112,8 @@ def render_admin_summary_page():
     results = db.session.execute(query).fetchall()
     query1 = "SELECT ccontact, salary FROM canparttime"
     result_salary = db.session.execute(query1).fetchall()
-    return render_template("profile.html", results=results, result_salary=result_salary, username=current_user.username + " owner")
+    salaryTable = SalaryTable(result_salary)
+    return render_template("adminSummary.html", results=results, salaryTable=salaryTable, username=current_user.username + " owner")
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
