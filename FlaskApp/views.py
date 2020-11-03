@@ -9,7 +9,7 @@ from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, Searc
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
 
@@ -212,7 +212,7 @@ def render_caretaker_biddings_accept():
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
     
     flag = True
-    for selected in range(date.strptime(startday, '%y/%m/%d'), date.strptime(endday, '%y/%m/%d'), timedelta(1)):
+    for selected in range(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d'), timedelta(days=1)):
         query = "SELECT COUNT (*) FROM biddings WHERE {} - startday >= 0 AND endday - {} >= 0 AND ccontact = {} AND status = 'success'".format(selected, selected, ct)
         count = db.session.execute(query)
         if count > 5:
