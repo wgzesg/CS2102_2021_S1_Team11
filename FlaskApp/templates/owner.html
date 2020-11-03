@@ -85,7 +85,7 @@
             margin-bottom: 40px;
         }
 
-        .pagination {
+        /* .pagination {
             display: flex;
             justify-content: center;
             margin-bottom: 40px;
@@ -106,7 +106,7 @@
 
         .pagination a:hover:not(.active) {
             background-color: #ddd;
-        }
+        } */
 
         .caption {
             margin: 10px 0;
@@ -132,6 +132,7 @@
         <a href="https://cs2102project.herokuapp.com/owner">Home</a>
         <a href="https://cs2102project.herokuapp.com/owner/pet">Pets</a>
         <a href="https://cs2102project.herokuapp.com/owner/bid">Bid</a>
+        <a href="https://cs2102project.herokuapp.com/owner/review">Review</a>
         <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
     </div>
 
@@ -141,9 +142,6 @@
 
             <div class="caretable">
                 {{ caretable }}
-            </div>
-            <div class="pagination">
-                {{ pagination.links }}
             </div>
 
         </div>

@@ -368,24 +368,34 @@ def render_caretaker_cantakecare_delete():
 #@login_required
 @roles_required('petowner')
 def render_owner_page(page=1):
-    caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    caretakers = db.session.execute(caretakersquery)
-    countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
+    countquery = """SELECT COUNT(*) FROM users u WHERE u.usertype = 'caretaker'
+                         AND EXISTS (SELECT 1 FROM pets 
+                         WHERE pcontact = '{}' AND 
+                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))""".format(current_user.contact)
+    
     count = db.session.execute(countquery).fetchone()
     total = count[0]
 
-    PER_PAGE = 10 
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    start = (page-1)*PER_PAGE
-    end = page * PER_PAGE
-    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
+    # PER_PAGE = 10 
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    # pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
 
     page_offset = (page - 1) * 10
     if total < page * 10:
         page_display = total % 10
-        pagequery = "SELECT * FROM users LIMIT '{}' OFFSET '{}'".format(page_display, page_offset)
+        pagequery = """SELECT * FROM users u WHERE u.usertype = 'caretaker'
+                         AND EXISTS (SELECT 1 FROM pets 
+                         WHERE pcontact = '{}' AND 
+                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
+                         LIMIT '{}' OFFSET '{}'""".format(current_user.contact, page_display, page_offset)
     else:
-        pagequery = "SELECT * FROM users LIMIT 10 OFFSET '{}'".format(page_offset)
+        pagequery = """SELECT * FROM users u WHERE u.usertype = 'caretaker'
+                         AND EXISTS (SELECT 1 FROM pets 
+                         WHERE pcontact = '{}' AND 
+                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
+                         LIMIT 10 OFFSET '{}'""".format(current_user.contact, page_offset)
     caretaker_page = db.session.execute(pagequery)
     caretable = ownerHomePage(caretaker_page)
 
@@ -399,26 +409,28 @@ def render_owner_page(page=1):
         if postal_code == '':
             postal_code = None
         query = """
-            select *
-            from users
-            where
+            SELECT *
+            FROM users
+            WHERE
                 usertype = 'caretaker'
-                and
+                AND
                 (:cc is null or contact=:cc)
-                and
+                AND
                 (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
-        """
+                AND EXISTS (SELECT 1 FROM pets 
+                         WHERE pcontact = '{}' AND 
+                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
+        """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
         caretable = ownerHomePage(selectedCareTakers)
-        
 
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, caretable=caretable, table=table, username=current_user.username + " owner", pagination = pagination)
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
@@ -542,15 +554,21 @@ def render_owner_bid_new():
     cn = request.args.get('ccontact')
     contact = current_user.contact
     form = BiddingForm()
-    petNameQuery = """SELECT petname FROM pets WHERE pcontact = '1111' AND category in (SELECT category FROM cantakecare WHERE ccontact = '6666')"""
+    petNameQuery = """SELECT petname FROM pets 
+                      WHERE pcontact = '{}' AND 
+                      category in (SELECT category FROM cantakecare WHERE ccontact = '{}')""".format(contact, cn)
     petNames = db.session.execute(petNameQuery).fetchall()
-    form.petname.choice = [(petname, petname) for petname in petNames]
+    print(petNames, flush=True)
+    form.petname.choices = [(petname[0], petname[0]) for petname in petNames]
     form.ccontact.data = cn
 
     if request.method == 'POST' and form.validate_on_submit():
+        print(form.petname.data, flush=True)
+        print(form.petname.data[0], flush=True)
         petname = form.petname.data
         pcategory = Pets.query.filter_by(petname = petname).first()
         ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
+        print(pcategory, flush=True)
         flag = False
         for ccategory in ccategories:
             if ccategory.category == pcategory.category:
@@ -629,6 +647,25 @@ def render_owner_bid_delete():
     results = db.session.execute(query)
     return render_template("profile.html", results=results, username=current_user.username + " owner")
 
+@view.route("/owner/review", methods=["GET", "POST"])
+@roles_required('petowner')
+def render_owner_review():
+    contact = current_user.contact
+    #placeholder query
+    query = "SELECT * FROM reviews WHERE pcontact= '{}'".format(contact)
+    bidding = db.session.execute(query).fetchall()
+    reviewTable = biddingTable(bidding)
+    return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
+
+@view.route("/owner/review/update", methods=["GET", "POST"])
+@roles_required('petowner')
+def render_owner_review_update():
+    contact = current_user.contact
+    #placeholder query
+    query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
+    bidding = db.session.execute(query).fetchall()
+    reviewTable = biddingTable(bidding)
+    return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
