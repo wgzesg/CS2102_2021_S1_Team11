@@ -84,3 +84,7 @@ class ReviewTable(Table):
     rating = Col('rating')
     review = Col('review')
     edit = LinkCol('Edit ', 'view.render_owner_review_update', url_kwargs=dict(ccontact = 'ccontact', petname = 'petname', startday = 'startday', endday = 'endday'))
+
+class SalaryTable(Table):
+    ccontact = Col('ccontact')
+    salary = Col('salary')
