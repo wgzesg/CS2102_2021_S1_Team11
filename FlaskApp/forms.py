@@ -288,7 +288,7 @@ class ProfileForm(FlaskForm):
 class AvailableForm(FlaskForm):
     startday = DateField(
         label='startday',
-        validators=[InputRequired(), is_valid_startday],
+        validators=[InputRequired()],
         default=date.today(), 
         format='%Y-%m-%d',
         render_kw={'placeholder': 'startday', 'class': 'input100'}
@@ -314,7 +314,7 @@ class AvailableForm(FlaskForm):
 class AvailableUpdateForm(FlaskForm):
     startday = DateField(
         label='startday',
-        validators=[InputRequired(), is_valid_startday],
+        validators=[InputRequired()],
         default=date.today(), 
         format='%Y-%m-%d',
         render_kw={'placeholder': 'startday', 'class': 'input100'}
