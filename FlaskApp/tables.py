@@ -62,6 +62,11 @@ class profileTable(Table):
     card = Col('Card')
     postalcode = Col('Postal Code')
 
+class canparttimeTable(Table):
+    contact = Col('Contact')
+    avgrating = Col('Overall Rating')
+    salary = Col('Salary of the month')
+
 class CaretakersBidTable(Table):
     pcontact = Col('pcontact')
     petname = Col('petname')

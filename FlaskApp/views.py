@@ -6,7 +6,7 @@ from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewForm, ReviewUpdateForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
-    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable
+    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 
@@ -166,8 +166,12 @@ def render_caretaker_page():
         Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     print(results, flush=True)
-    table = CaretakersBidTable(results)
-    return render_template('caretaker.html', table=table, username=current_user.username + " caretaker")
+    table2 = CaretakersBidTable(results)
+
+    query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
+    results = canparttimeTable(db.session.execute(query))
+    table1 = canparttimeTable(results)
+    return render_template('caretaker.html', table1=table1, table2 = table2, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/biddings", methods=["GET", "POST"])
