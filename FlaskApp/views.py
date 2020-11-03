@@ -242,11 +242,15 @@ def render_caretaker_update_profile():
 @roles_required('caretaker')
 def render_caretaker_available():
     contact = current_user.contact
-    usertype = current_user.usertype
+    applicationType = "leave"
+    ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
+    isPt = db.session.execute(ptquery).fetchone()
+    if isPt:
+        applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
     table = editAvailableTable(availables)
-    return render_template('availableWithEdit.html', table=table, usertype=usertype, username=current_user.username + " caretaker")
+    return render_template('availableWithEdit.html', table=table, isPt=isPt, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/available/edit", methods=["GET", "POST"])
