@@ -35,25 +35,25 @@
         .container {
             width: 390px;
         }
-        
+
         .buttonWrapper {
             padding-bottom: 32px;
             padding-top: 30px;
         }
-        
+
         #registerButton {
             display: block;
             margin: 0 auto;
         }
-        
+
         .formField {
             padding: 10px 0;
         }
-        
+
         #logout {
             float: right;
         }
-        
+
         .content {
             display: flex;
             display: -webkit-flex;
@@ -61,28 +61,51 @@
             margin: auto auto;
             text-align: center;
         }
-        
+
         .table {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
         }
-        
+
         .caretable {
             display: flex;
             justify-content: center;
             margin-bottom: 40px;
         }
-        
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
         .caption {
             margin: 10px 0;
         }
-        
+
         .profiletable {
             display: flex;
             justify-content: center;
         }
-        
+
         .bid-button a {
             border-radius: 3px;
             padding: 5px 10px;
@@ -104,13 +127,14 @@
     <div class="content">
         <div class="table">
             <p class="caption">Here are the list of caretakers:</p>
-            
+
             <div class="caretable">
                 {{ caretable }}
+            </div>
+            <div class="pagination">
                 {{ pagination.links }}
             </div>
-            
-            
+
             <hi class="caption">Here is your profile!</hi>
             <div class="profiletable">
                 {{ table }}
