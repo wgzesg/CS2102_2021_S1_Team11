@@ -558,29 +558,17 @@ def render_owner_bid_new():
                       WHERE pcontact = '{}' AND 
                       category in (SELECT category FROM cantakecare WHERE ccontact = '{}')""".format(contact, cn)
     petNames = db.session.execute(petNameQuery).fetchall()
-    print(petNames, flush=True)
     form.petname.choices = [(petname[0], petname[0]) for petname in petNames]
     form.ccontact.data = cn
 
     if request.method == 'POST' and form.validate_on_submit():
-        print(form.petname.data, flush=True)
-        print(form.petname.data[0], flush=True)
         petname = form.petname.data
         pcategory = Pets.query.filter_by(petname = petname).first()
         ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
-        print(pcategory, flush=True)
-        flag = False
-        for ccategory in ccategories:
-            if ccategory.category == pcategory.category:
-                flag = True
         startday = form.startday.data
         endday = form.endday.data
         paymentmode = form.paymentmode.data
         deliverymode = form.deliverymode.data
-        if(not flag):
-            flash("This caretaker cannot take care of this type of pet.")
-            return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
-        
         isValidPeriod = True
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
         isPartTime = db.session.execute(fullTimeQuery).fetchone()
