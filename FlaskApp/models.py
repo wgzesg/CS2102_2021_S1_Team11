@@ -173,19 +173,27 @@ class Biddings(db.Model, UserMixin):
         return (self.startday, self.endday, self.ccontact, self.petname, self.pcontact)
     
 class Reviews(db.Model, UserMixin):
-    petname = db.Column(db.String, db.ForeignKey('biddings.petname', ondelete='CASCADE'), primary_key=True, nullable=False)
-    pcontact = db.Column(db.Integer, db.ForeignKey('biddings.pcontact', ondelete='CASCADE'), primary_key=True, nullable=False)
-    ccontact = db.Column(db.Integer, db.ForeignKey('biddings.ccontact', ondelete='CASCADE'), primary_key=True, nullable=False)
-    startday = db.Column(db.Date, db.ForeignKey('biddings.startday', ondelete='CASCADE'), primary_key=True, nullable=False)
-    endday = db.Column(db.Date, db.ForeignKey('biddings.endday', ondelete='CASCADE'), primary_key=True, nullable=False)
-    rating = db.Column(db.Integer, primary_key=True, nullable=False)
-    review = db.Column(db.String, primary_key=True, nullable=False)
+    # petname = db.Column(db.String, db.ForeignKey('biddings.petname', ondelete='CASCADE'), primary_key=True, nullable=False)
+    # pcontact = db.Column(db.Integer, db.ForeignKey('biddings.pcontact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    # ccontact = db.Column(db.Integer, db.ForeignKey('biddings.ccontact', ondelete='CASCADE'), primary_key=True, nullable=False)
+    # startday = db.Column(db.Date, db.ForeignKey('biddings.startday', ondelete='CASCADE'), primary_key=True, nullable=False)
+    # endday = db.Column(db.Date, db.ForeignKey('biddings.endday', ondelete='CASCADE'), primary_key=True, nullable=False)
+    # rating = db.Column(db.Integer, primary_key=True, nullable=False)
+    # review = db.Column(db.String, primary_key=True, nullable=False)
     
-    reviewpetname = db.relationship('Biddings', foreign_keys=[petname])
-    reviewpcontact = db.relationship('Biddings', foreign_keys=[pcontact])
-    reviewccontact = db.relationship('Biddings', foreign_keys=[ccontact])
-    reviewstartday = db.relationship('Biddings', foreign_keys=[startday])
-    reviewendday = db.relationship('Biddings', foreign_keys=[endday])
+    # reviewpetname = db.relationship('Biddings', foreign_keys=[petname])
+    # reviewpcontact = db.relationship('Biddings', foreign_keys=[pcontact])
+    # reviewccontact = db.relationship('Biddings', foreign_keys=[ccontact])
+    # reviewstartday = db.relationship('Biddings', foreign_keys=[startday])
+    # reviewendday = db.relationship('Biddings', foreign_keys=[endday])
+    
+    petname = db.Column(db.String, primary_key=True, nullable=False)
+    pcontact = db.Column(db.Integer, primary_key=True, nullable=False)
+    ccontact = db.Column(db.Integer, primary_key=True, nullable=False)
+    startday = db.Column(db.Date, primary_key=True, nullable=False)
+    endday = db.Column(db.Date, primary_key=True, nullable=False)
+    rating = db.Column(db.Integer, nullable=False, default=5)
+    review = db.Column(db.String, nullable=False, default="")
     def get_rating(self):
         return self.rating
  

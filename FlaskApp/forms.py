@@ -263,7 +263,19 @@ class ReviewForm(FlaskForm):
         render_kw={'placeholder': 'Petname', 'class': 'input100'}
     )
     rating = IntegerField(
-        label='Petname',
+        label='Rating',
+        validators=[InputRequired()],
+        render_kw={'placeholder': 'rating'}
+    )
+    review = StringField(
+        label='Review',
+        validators=[InputRequired()],
+        render_kw={'placeholder': 'Review', 'class': 'input200'}
+    )
+    
+class ReviewUpdateForm(FlaskForm):
+    rating = IntegerField(
+        label='Rating',
         validators=[InputRequired()],
         render_kw={'placeholder': 'rating'}
     )
