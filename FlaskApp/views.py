@@ -563,11 +563,15 @@ def render_owner_bid_new():
     form.ccontact.data = cn
 
     if request.method == 'POST' and form.validate_on_submit():
+        print(form.petname.data, flush=True)
+        print(form.petname.data[0], flush=True)
         petname = form.petname.data
         pcategory = Pets.query.filter_by(petname = petname).first()
         ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
+        print(pcategory, flush=True)
         flag = False
         for ccategory in ccategories:
+
             if ccategory.category == pcategory.category:
                 flag = True
         startday = form.startday.data
