@@ -590,7 +590,7 @@ def render_owner_bid_new():
             """.format(cn, startday, endday, startday, endday)
             hasFullOverage = db.session.execute(intersection).fetchone()
             print(hasFullOverage, flush=True)
-            if(not hasOverlap):
+            if(not hasFullOverage):
                 isValidPeriod = False
         if(isValidPeriod == False):
             flash("The caretaker is not available during this period")
