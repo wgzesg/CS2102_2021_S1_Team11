@@ -649,15 +649,6 @@ def render_owner_review():
     reviewTable = ReviewTable(bidding)
     return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
-@view.route("/owner/review/update", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_review_update():
-    contact = current_user.contact
-    #placeholder query
-    query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
-    bidding = db.session.execute(query).fetchall()
-    reviewTable = ReviewTable(bidding)
-    return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
 @view.route("/owner/review/update", methods=["GET", "POST"])
 @roles_required('petowner')
@@ -677,7 +668,7 @@ def render_owner_review_update():
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
     
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
+    return render_template("reviewReview.html", results=results, username=current_user.username + " owner")
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
 
