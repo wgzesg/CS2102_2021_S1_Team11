@@ -527,11 +527,17 @@ def render_owner_bid_new():
     form.ccontact.data = cn
     if request.method == 'POST' and form.validate_on_submit():
         petname = form.petname.data
+        pcategory = Pets.query.filter_by(petname = petname).first()
+        ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
+        flag = False
+        for ccategory in ccategories:
+            if ccategory.category == pcategory.cagetory:
+                flag = True
         startday = form.startday.data
         endday = form.endday.data
         paymentmode = form.paymentmode.data
         deliverymode = form.deliverymode.data
-        if(endday - startday >= timedelta(minutes=1)):
+        if(endday - startday >= timedelta(minutes=1) and flag):
             query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
             .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
             try:
