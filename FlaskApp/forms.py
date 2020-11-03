@@ -301,7 +301,7 @@ class AvailableForm(FlaskForm):
         render_kw={'placeholder': 'endday', 'class': 'input100'}
     )
     def validate_on_submit(self):
-        result = super(BiddingForm, self).validate()
+        result = super(AvailableForm, self).validate()
         if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
             flash("End date cannot be earlier than Start date.")
             return False
@@ -327,7 +327,7 @@ class AvailableUpdateForm(FlaskForm):
         render_kw={'placeholder': 'endday', 'class': 'input100'}
     )
     def validate_on_submit(self):
-        result = super(BiddingForm, self).validate()
+        result = super(AvailableUpdateForm, self).validate()
         if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
             flash("End date cannot be earlier than Start date.")
             return False
