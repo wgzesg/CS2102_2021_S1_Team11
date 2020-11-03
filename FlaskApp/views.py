@@ -552,43 +552,58 @@ def render_owner_bid_new():
         endday = form.endday.data
         paymentmode = form.paymentmode.data
         deliverymode = form.deliverymode.data
-        if(flag):
-            isValidPeriod = True
-            fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
-            isPartTime = db.session.execute(fullTimeQuery).fetchone()
-            print(isPartTime, flush=True)
-            if not isPartTime[0]:
-                print(startday, flush=True)
-                print(endday, flush = True)
-                overLapQuery = """
-                SELECT 1
-                FROM   (SELECT min(st) as st, max(en) as en
-                        FROM (SELECT st, en,
-                            max(new_start) OVER (ORDER BY st,en) AS left_edge
-                        FROM (SELECT st, en,
-                                CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
-                        FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) AS le FROM available WHERE ccontact = '{}') s1) s2) s3
-                        GROUP BY left_edge) AS f2
-                WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
-                """.format(cn, startday, endday)
-                hasOverlap = db.session.execute(overLapQuery).fetchone()
-                print(hasOverlap, flush=True)
-                if(hasOverlap):
-                    isValidPeriod = False
-            if(isValidPeriod == False):
-                flash("Contains invalid periods")
-                return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
-            query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
-            .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
-            try:
-                db.session.execute(query)
-                db.session.commit()
-                return redirect(url_for('view.render_owner_bid'))
-            except exc.IntegrityError:
-                db.session.rollback()
-                flash("Some of your input is not valid. Make sure your pet name is valid!")
-        else:
+        if(not flag):
             flash("This caretaker cannot take care of this type of pet.")
+            return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
+        
+        isValidPeriod = True
+        fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
+        isPartTime = db.session.execute(fullTimeQuery).fetchone()
+        print(isPartTime, flush=True)
+        if not isPartTime[0]:
+            overLapQuery = """
+            SELECT 1
+            FROM   (SELECT min(st) as st, max(en) as en
+                    FROM (SELECT st, en,
+                        max(new_start) OVER (ORDER BY st,en) AS left_edge
+                    FROM (SELECT st, en,
+                            CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
+                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) AS le FROM available WHERE ccontact = '{}') s1) s2) s3
+                    GROUP BY left_edge) AS f2
+            WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
+            """.format(cn, startday, endday)
+            hasOverlap = db.session.execute(overLapQuery).fetchone()
+            print(hasOverlap, flush=True)
+            if(hasOverlap):
+                isValidPeriod = False
+        else:
+            intersection = """
+            SELECT 1
+            FROM   (SELECT min(st) as st, max(en) as en
+                    FROM (SELECT st, en,
+                        max(new_start) OVER (ORDER BY st,en) AS left_edge
+                    FROM (SELECT st, en,
+                            CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
+                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) AS le FROM available WHERE ccontact = '{}') s1) s2) s3
+                    GROUP BY left_edge) AS f2
+            WHERE tsrange('{}', '{}', '[]') * tsrange(f2.st, f2.en, '[]') = tsrange('{}', '{}', '[]');
+            """.format(cn, startday, endday, startday, endday)
+            hasFullOverage = db.session.execute(intersection).fetchone()
+            print(hasFullOverage, flush=True)
+            if(not hasFullOverage):
+                isValidPeriod = False
+        if(isValidPeriod == False):
+            flash("The caretaker is not available during this period")
+            return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
+        query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
+        .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
+        try:
+            db.session.execute(query)
+            db.session.commit()
+            return redirect(url_for('view.render_owner_bid'))
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("Some of your input is not valid. Make sure your pet name is valid!")
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
 
 
@@ -615,18 +630,3 @@ def render_owner_bid_delete():
 @login_required
 def render_profile_page():
     return render_template('profile.html', username=current_user.username + "profile")
-
-
-# @view.route('/update/username', methods=['POST', 'GET'])
-# @login_required
-# def update(contact):
-#     user_to_update = Users.query.get_or_404(contact)
-#     if request.method == "POST" and form.validate_on_submit():
-#         user_to_update.username = request.form['username']
-#         try:
-#             db.session.commit()
-#             return redirect('/profile')
-#         except:
-#             return "There is a problem updating user"
-#     else:
-#         return render_template('update.html', user_to_update=user_to_update)
