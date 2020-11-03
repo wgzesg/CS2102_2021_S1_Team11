@@ -547,6 +547,8 @@ def render_owner_bid_new():
             except exc.IntegrityError:
                 db.session.rollback()
                 flash("Some of your input is not valid. Make sure your pet name is valid!")
+        else:
+            flash("wrong date input")
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
 
 

@@ -250,7 +250,7 @@ class BiddingForm(FlaskForm):
             #flash("End date cannot be earlier than Start date.")
             return False
         elif (date.today() - self.startday.data >= timedelta(minutes=1)):
-            flash("Start date cannot be earlier than current date.")
+            #flash("Start date cannot be earlier than current date.")
             return False
         else:
             return True
