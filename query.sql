@@ -30,7 +30,7 @@ GROUP BY ccontact
 
 -----------------------------------calculate working days
 
-
+--------------------------------------------- Salary trigger
 CREATE OR REPLACE FUNCTION addSalary()
 RETURNS TRIGGER AS $$
 BEGIN 
@@ -56,12 +56,12 @@ LANGUAGE PLPGSQL;
 DROP TRIGGER IF EXISTS 
 newSuccessBidding ON biddings;
 CREATE TRIGGER newSuccessBidding
-    AFTER UPDATE OF status
-    ON biddings
+    AFTER UPDATE OF status ON biddings
     FOR EACH ROW
-    EXECUTE FUNCTION addSalary();
+      WHEN (NEW.status = 'success')
+        EXECUTE FUNCTION addSalary();
 
-
+---------------------------------------------
 
 CREATE OR REPLACE FUNCTION log_last_name_changes()
   RETURNS TRIGGER 
@@ -84,6 +84,14 @@ BEGIN
   WHERE NEW.ccontact = cp.ccontact;
 END;
 $$
+---------------------------------------------REVIEW TRIGGER
+CREATE TRIGGER generate_review
+AFTER UPDATE OF status
+    ON biddings
+    EXECUTE FUNCTION copy_bidding();
+    
+CREATE OR REPLACE PROCEDURE copy_bidding()
+
 
 ---------------------------------------------
 SELECT COUNT (*)

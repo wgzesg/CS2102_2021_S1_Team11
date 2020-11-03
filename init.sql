@@ -121,6 +121,5 @@ CREATE TABLE reviews(
     rating INTEGER NOT NULL CHECK(rating <= 5 AND rating >= 0),
     review VARCHAR NOT NULL,
     PRIMARY KEY (pcontact, ccontact, petname, startday, endday),
-    FOREIGN KEY (pcontact, ccontact, petname, startday, endday) REFERENCES public.biddings(pcontact, ccontact, petname, startday, endday)
 );
  
