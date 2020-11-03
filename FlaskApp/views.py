@@ -8,7 +8,7 @@ from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
-    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable
+    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, SalaryTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
@@ -108,12 +108,10 @@ def render_admin_page():
 @view.route("/admin/summary", methods=["GET"])
 @roles_required('admin')
 def render_admin_summary_page():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query).fetchall()
     query1 = "SELECT ccontact, salary FROM canparttime"
     result_salary = db.session.execute(query1).fetchall()
     salaryTable = SalaryTable(result_salary)
-    return render_template("adminSummary.html", results=results, salaryTable=salaryTable, username=current_user.username + " owner")
+    return render_template("adminSummary.html", salaryTable=salaryTable, username=current_user.username + " owner")
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
