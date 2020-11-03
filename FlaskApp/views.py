@@ -557,7 +557,9 @@ def render_owner_bid_new():
                 print(hasOverlap, flush=True)
                 if(hasOverlap == 1):
                     isValidPeriod = False
-
+            if(isValidPeriod == False):
+                flash("Contains invalid periods")
+                return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
             query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
             .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
             try:
