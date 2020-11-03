@@ -38,7 +38,7 @@ class biddingTable(Table):
     paymentmode = Col('Payment mode')
     deliverymode = Col('Delivery mode')
     status = Col('Status')
-    Done = ButtonCol('Accept', 'view.render_owner_bid_update', url_kwargs=dict(ownerContact='pcontact', 
+    finish = ButtonCol('Done', 'view.render_caretaker_biddings_finish', url_kwargs=dict(ownerContact='pcontact', 
         ccontact='ccontact', petName='petname', startDay='startday', endDay='endday'))
 
 class biddingCaretakerTable(Table):

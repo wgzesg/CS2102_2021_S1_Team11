@@ -207,6 +207,26 @@ def render_caretaker_biddings_accept():
 
     return redirect(url_for('view.render_caretaker_biddings'))
 
+@view.route("/caretaker/biddings/finish", methods=["POST"])
+@roles_required('caretaker')
+def render_caretaker_biddings_finish():
+    contact = current_user.contact
+    startday = request.args.get('startDay')
+    endday = request.args.get('endDay')
+    ct = request.args.get('ccontact')
+         
+    bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
+        ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
+        startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
+    
+    if datetime.strptime(endday, '%Y-%m-%d') < date.today():
+        flash("You are not allowed to terminate the bidding before end date.")
+    elif bid:
+        bid.status = "end"
+        db.session.commit()
+
+    return redirect(url_for('view.render_caretaker_biddings'))
+
 @view.route("/caretaker/profile", methods=["GET"])
 @roles_required('caretaker')
 def render_caretaker_profile():
