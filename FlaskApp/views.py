@@ -219,7 +219,7 @@ def render_caretaker_biddings_accept():
     for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
         query = "SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 AND ccontact = '{}' AND status = 'success'".format(selected, selected, ct)
         count = db.session.execute(query).fetchone()
-        print("day " + n + " : " + str(count[0]))
+        print("day " + str(n) + " : " + str(count[0]))
         n = n + 1
         if count[0] > 5:
             flag = False
