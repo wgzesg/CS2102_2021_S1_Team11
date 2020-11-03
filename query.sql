@@ -56,10 +56,10 @@ LANGUAGE PLPGSQL;
 DROP TRIGGER IF EXISTS 
 newSuccessBidding ON biddings;
 CREATE TRIGGER newSuccessBidding
-    AFTER UPDATE OF status
-    ON biddings
+    AFTER UPDATE OF status ON biddings
     FOR EACH ROW
-    EXECUTE FUNCTION addSalary();
+      WHEN (NEW.status = 'success')
+        EXECUTE FUNCTION addSalary();
 
 
 

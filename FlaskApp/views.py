@@ -221,7 +221,6 @@ def render_caretaker_biddings_accept():
         if count[0] > 5:
             flag = False
             break
-    
     if bid:
         if flag == False:
             bid.status = "pending"
@@ -231,8 +230,6 @@ def render_caretaker_biddings_accept():
             db.session.commit()
             print("Bidding status has been updated", flush=True)
     return redirect(url_for('view.render_caretaker_biddings'))
-
-
 
 @view.route("/caretaker/profile", methods=["GET"])
 @roles_required('caretaker')
