@@ -550,6 +550,29 @@ def render_owner_bid_new():
         paymentmode = form.paymentmode.data
         deliverymode = form.deliverymode.data
         if(flag):
+            isValidPeriod = True
+            fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
+            isPartTime = db.session.execute(fullTimeQuery).fetchone()
+            print(isPartTime, flush=True)
+            if not isPartTime:
+                overLapQuery = """
+                SELECT 1
+                FROM   (SELECT min(st) as st, max(en) as en
+                        FROM (SELECT st, en,
+                            max(new_start) OVER (ORDER BY st,en) AS left_edge
+                        FROM (SELECT st, en,
+                                CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
+                        FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) AS le FROM available WHERE ccontact = '{}') s1) s2) s3
+                        GROUP BY left_edge) AS f2
+                WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
+                """.format(cn, startday, endday)
+                hasOverlap = db.session.execute(overLapQuery).fetchone()
+                print(hasOverlap, flush=True)
+                if(hasOverlap == 1):
+                    isValidPeriod = False
+            if(isValidPeriod == False):
+                flash("Contains invalid periods")
+                return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
             query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
             .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
             try:
