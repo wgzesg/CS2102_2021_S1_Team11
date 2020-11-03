@@ -370,7 +370,7 @@ def render_owner_page(page=1):
     caretaker_page = db.session.execute(pagequery)
 
 
-#    caretable = ownerHomePage(caretakers)
+    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -400,7 +400,7 @@ def render_owner_page(page=1):
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, caretaker_page=caretaker_page, table=table, username=current_user.username + " owner", pagination = pagination)
+    return render_template("owner.html", form=form, profile=profile, caretaker_page=caretaker_page, caretable=caretable, table=table, username=current_user.username + " owner", pagination = pagination)
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
