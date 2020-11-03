@@ -541,7 +541,9 @@ def render_owner_bid_new():
             fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
             isPartTime = db.session.execute(fullTimeQuery).fetchone()
             print(isPartTime, flush=True)
-            if not isPartTime:
+            if not isPartTime[0]:
+                print(startday, flush=True)
+                print(endday, flush = True)
                 overLapQuery = """
                 SELECT 1
                 FROM   (SELECT min(st) as st, max(en) as en
