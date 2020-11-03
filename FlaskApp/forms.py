@@ -329,7 +329,7 @@ class AvailableUpdateForm(FlaskForm):
     def validate_on_submit(self):
         result = super(AvailableUpdateForm, self).validate()
         if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
-            flash("End date cannot be earlier than Start date.")
+            raise ValidationError("End date cannot be earlier than Start date.")
             return False
         elif (date.today() - self.startday.data >= timedelta(minutes=1)):
             flash("Start date cannot be earlier than current date.")
