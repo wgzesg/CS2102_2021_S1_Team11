@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, flash, url_for, render_template, request
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_user import roles_required
 from flask_table import Table, Col
-# from flask_paginate import Pagination, get_page_parameter
+from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
@@ -348,23 +348,29 @@ def render_caretaker_cantakecare_delete():
 @view.route("/owner", methods=["GET", "POST"])
 #@login_required
 @roles_required('petowner')
-def render_owner_page():
+def render_owner_page(page=1):
     caretakersquery = "SELECT * FROM users WHERE usertype = 'caretaker'"
     caretakers = db.session.execute(caretakersquery)
+    countquery = "SELECT COUNT(*) FROM users WHERE usertype = 'caretaker'"
+    count = db.session.execute(countquery).fetchone()
+    total = count[0]
 
-#     PER_PAGE = 10
-#   total = caretakers.count()
+#    PER_PAGE = 10 
 #    page = request.args.get(get_page_parameter(), type=int, default=1)
 #    start = (page-1)*PER_PAGE
-#    end = start + PER_PAGE
-#    pagination = Pagination(bs_version=3, page=page, total=total)
-#    caretaker_pages = caretakers.slice(start, end)
-#    context = {
-#        'pagination': pagination,
-#        'caretaker_pages': caretaker_pages
-#    }
+#    end = page * PER_PAGE
+#    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
 
-    caretable = ownerHomePage(caretakers)
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = "SELECT * FROM users LIMIT '{}' OFFSET '{}'".format(page_display, page_offset)
+    else:
+        pagequery = "SELECT * FROM users LIMIT 10 OFFSET '{}'".format(page_offset)
+    caretaker_page = db.session.execute(pagequery)
+
+
+#    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -394,7 +400,7 @@ def render_owner_page():
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, caretable=caretable, profile=profile, caretakers=caretakers, table=table, username=current_user.username + " owner")
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, caretaker_page=caretaker_page, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
