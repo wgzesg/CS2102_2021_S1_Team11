@@ -623,7 +623,7 @@ def render_owner_review_update():
             thisreview.rating = int(form.rating.data)
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
-        return render_template("ownerReview.html", form=form, username=current_user.username + " owner")
+        return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
     return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
