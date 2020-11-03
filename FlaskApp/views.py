@@ -4,10 +4,9 @@ from flask_user import roles_required
 from flask_table import Table, Col
 from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
-from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm, \
-    CanTakeCareDeleteForm
+from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
-from models import Users, Role, Pets, Available, Biddings, CanTakeCare, CanPartTime
+from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
 from datetime import timedelta
@@ -58,10 +57,10 @@ def render_registration_page():
         #query = "INSERT INTO user_roles(contact, usertype) VALUES ('{}', '{}')".format(contact, user_type)
         #db.session.execute(query)
         db.session.commit()
-        
-        canparttime1 = CanPartTime(contact=contact, isparttime=is_part_time)
-        db.session.add(canparttime1)
-        db.session.commit()
+        if(user_type == 'caretaker'):
+            canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, salary=0)
+            db.session.add(canparttime1)
+            db.session.commit()
         #query = "INSERT INTO users(username, contact, card, password, usertype, isPartTime, postalcode) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')" \
         #    .format(username, contact, credit_card, hashed_password, user_type, is_part_time, postal_code)
         # print(query, flush=True)
@@ -199,7 +198,7 @@ def render_caretaker_biddings():
     query = "SELECT * FROM biddings WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query).fetchall()
     table = biddingCaretakerTable(results)
-    return render_template("caretakerBid.html", table=table, username=current_user.username + " owner")
+    return render_template("caretakerBid.html", table=table, username=current_user.username + " caretaker")
 
 @view.route("/caretaker/biddings/accept", methods=["POST"])
 @roles_required('caretaker')
@@ -238,6 +237,7 @@ def render_caretaker_update_profile():
             profile = Users.query.filter_by(contact=contact).first()
             profile.username = form.username.data
             profile.password = form.password.data
+            profile.card = form.credit_card.data
             profile.isparttime = form.is_part_time.data
             profile.postalcode = form.postal_code.data
             db.session.commit()
@@ -322,9 +322,8 @@ def render_caretaker_cantakecare_new():
     form = CanTakeCareForm()
     if request.method == 'POST' and form.validate_on_submit():
         category = form.category.data
-        dailyprice = form.dailyprice.data
-        query = "INSERT INTO cantakecare(ccontact, category, dailyprice) VALUES ('{}', '{}', '{}')" \
-        .format(contact, category, dailyprice)
+        query = "INSERT INTO cantakecare(ccontact, category) VALUES ('{}', '{}')" \
+        .format(contact, category)
         db.session.execute(query)
         db.session.commit()
         return redirect(url_for('view.render_caretaker_cantakecare'))
@@ -389,7 +388,7 @@ def render_owner_page(page=1):
                 and
                 (:cc is null or contact=:cc)
                 and
-                (:postal_code is null or LEFT(postalcode, 3) = LEFT(:postal_code, 3) )
+                (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
         """
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
@@ -462,11 +461,16 @@ def render_owner_pet_new():
         petname = form.petname.data
         category = form.category.data
         age = form.age.data
+
         query = "INSERT INTO pets(petname, pcontact, age, category) VALUES ('{}', '{}', '{}', '{}')" \
         .format(petname, contact, age, category)
-        db.session.execute(query)
-        db.session.commit()
-        return redirect(url_for('view.render_owner_pet'))
+        try:
+            db.session.execute(query)
+            db.session.commit()
+            return redirect(url_for('view.render_owner_pet'))
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("You already have a pet with the same name!")
     return render_template("petNew.html", form=form, username=current_user.username + " owner")
 
 

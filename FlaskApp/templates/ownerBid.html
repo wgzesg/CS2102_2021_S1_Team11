@@ -24,74 +24,80 @@
 <!--===============================================================================================-->
     
     <style>
-        #logout{
+        .container {
+            width: 1000px;
+            text-align: center;
+        }
+
+        #addButton{
+            display: block;
+            margin: 0 auto;
+        }
+
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
+        }
+
+        #registerButton {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .formField {
+            padding: 10px 0;
+        }
+
+        #logout {
             float: right;
         }
-        :root {
-            --light: #92DE34;
-            --dark: #69BC22;
-            --text: #025600;
-        }
 
-
-        .button_wrapper div {
-            display: inline;
+        .button_wrapper{
+            display: block;
             width: 400px;
-            margin: 0 auto 0 auto;
+            margin: 0 auto;
+            text-align: center;
             left: 0;
             right: 0;
             top: 30vh;
+            margin-left: 60px;
+        }
+        h3{
+            padding-top: 20px;
+        }
+        .result-row{
+            padding: 10px 0;
         }
 
-        button {
+        .edit{
             display: inline;
-            cursor: pointer;
-            outline: none;
-            border: none;
-            background-color: var(--light);
-            width: 400px;
-            height: 70px;
-            border-radius: 30px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text);
-            background-size: 100% 100%;
-            box-shadow: 0 0 0 7px var(--light) inset;
-            margin-bottom: 15px;
+            opacity: 1;
+            width: 70px;
+            height: 35px;
+            margin-left: 20px;
+        }
+        .container-login100{
+            min-height: 94vh;
         }
 
-        button:hover {
-            background-image: linear-gradient(145deg,
-                    transparent 10%,
-                    var(--dark) 10% 20%,
-                    transparent 20% 30%,
-                    var(--dark) 30% 40%,
-                    transparent 40% 50%,
-                    var(--dark) 50% 60%,
-                    transparent 60% 70%,
-                    var(--dark) 70% 80%,
-                    transparent 80% 90%,
-                    var(--dark) 90% 100%);
-            animation: background 3s linear infinite;
+        h1{
+            font-size: 20px;
         }
-
-        @keyframes background {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 400px 0;
-            }
+        .table{
+            font-size: 14px;
+            position: absolute;
+            margin-top: 30px;
         }
-        .column2{
-            width: 230px;
+        .content{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 900px;
+            height: 200px;
+            transform: translate(-28%,100%);
         }
-        .column4{
-            width: 130px;
-        }
-        .column5{
-            width: 130px;
+        .wrapper {
+            position: relative;
         }
     </style>
 </head>
@@ -105,22 +111,14 @@
     </div>
 
     <div>
-        
-
-        <div class="limiter">
-            <div class="container-table100">
-                <div class="wrap-table100">
-                    <div class="table100">
-                        <!--<div class="button_wrapper">
-                            <button onclick="location.href='https://cs2102project.herokuapp.com/owner/bid/new'" type="button">
-                                <p>Add a new bid</p>
-                            </button>
-                        </div>-->
-                        {{ table }}
-                    </div>
-                </div>
-            </div>
+    <div class="wrapper">
+        <div class="content">
+            <h1>
+                Here are a list of your bids.
+            </h1>
+            <div class="table">{{table}}</div>
         </div>
+    </div>
 
 
     <!--===============================================================================================-->	

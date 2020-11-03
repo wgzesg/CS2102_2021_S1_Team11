@@ -53,8 +53,7 @@ class biddingCaretakerTable(Table):
 
 class caretakerCantakecare(Table):
     category = Col('Category')
-    dailyprice = Col('Daily Price')
-    delete = ButtonCol('Delete', 'view.render_caretaker_cantakecare_delete', url_kwargs=dict(category='category', dailyprice='dailyprice'))
+    delete = ButtonCol('Delete', 'view.render_caretaker_cantakecare_delete', url_kwargs=dict(category='category'))
 
 class profileTable(Table):
     username = Col('Username')

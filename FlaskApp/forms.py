@@ -61,13 +61,13 @@ class RegistrationForm(FlaskForm):
         label='Credit Card',
         render_kw={'placeholder': 'Credit Card', 'class': 'input100'}
     )
+    postal_code = IntegerField(
+        label='Postal Code',
+        render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
+    )
     is_part_time = BooleanField(
         label='Is Part Time',
         render_kw={'placeholder': 'Is Part Time'}
-    )
-    postal_code = IntegerField(
-        label='Postal Code',
-        render_kw={'placeholder': 'Postal Code', 'class': 'input6'}
     )
 
 class PetForm(FlaskForm):
@@ -339,27 +339,5 @@ class CanTakeCareForm(FlaskForm):
         label='Category',	
         validators=[InputRequired()],	
         render_kw={'placeholder': 'Category', 'class': 'input100'}	
-    )	
-    dailyprice = IntegerField(	
-        label='Daily Price',	
-        validators=[InputRequired()],	
-        render_kw={'placeholder': 'Daily Price', 'class': 'input100'}	
-    )
-
-class CanTakeCareDeleteForm(FlaskForm):
-    ccontact = IntegerField(
-        label='Ccontact',
-        validators=[InputRequired()],
-        render_kw={'placeholder': 'Ccontact', 'class': 'input100'}
-    )
-    category = StringField(
-        label='Category',
-        validators=[InputRequired()],
-        render_kw={'placeholder': 'Category', 'class': 'input100'}
-    )
-    dailyprice = IntegerField(
-        label='Daily Price',
-        validators=[InputRequired()],
-        render_kw={'placeholder': 'Daily Price', 'class': 'input100'}
     )
 
