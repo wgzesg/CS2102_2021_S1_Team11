@@ -245,7 +245,7 @@ def render_caretaker_available():
     applicationType = "leave"
     ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
     isPt = db.session.execute(ptquery).fetchone()
-    if isPt == ("true",):
+    if isPt == (True,):
         applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
