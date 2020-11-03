@@ -68,3 +68,11 @@ class CaretakersBidTable(Table):
     category = Col('category')
     startday = Col('startday')
     endday = Col('enddays')
+
+class ReviewTable(Table):
+    ccontact = Col('pcontact')
+    petname = Col('petname')
+    startday = Col('startday')
+    endday = Col('endday')
+    rating = Col('rating')
+    review = Col('review')
