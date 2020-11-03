@@ -85,7 +85,14 @@ BEGIN
 END;
 $$
 
+---------------------------------------------
+SELECT COUNT (*)
+FROM reviews
+WHERE selected - startday >= 0 AND endday - selected >= 0 AND ccontact = ct
 
------ count number of pets alr taken cared by the same caretaker in the selected day
-CREATE OR REPLACE FUNCTION findpetnum(ccontact VARCHAR, selectedday DATE)
-RETURNS 
+CREATE OR REPLACE FUNCTION countPetOccurance(ct BIGINT, selected DATE) 
+RETURNS INTEGER AS $$
+  SELECT COUNT (*)
+  FROM reviews
+  WHERE selected - startday >= 0 AND endday - selected >= 0 AND ccontact = ct;
+$$ LANGUAGE SQL
