@@ -662,7 +662,7 @@ def render_owner_review_update():
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
     
-    return render_template("reviewReview.html", results=results, username=current_user.username + " owner")
+    return render_template("ownerReviewUpdate.html", results=results, username=current_user.username + " owner")
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
 
