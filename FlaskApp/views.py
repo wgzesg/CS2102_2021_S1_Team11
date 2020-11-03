@@ -638,18 +638,12 @@ def render_owner_bid_delete():
 @view.route("/owner/review", methods=["GET", "POST"])
 @roles_required('petowner')
 def render_owner_review():
-    pcontact = request.args.get(pcontact)
+    pcontact = current_user.contact
     query = "SELECT * FROM Reviews WHERE pcontact = {}".format(pcontact)
     results = db.session.execute(query)
-    return render_template("review.html", results=results, username=current_user.username + " owner")
-    contact = current_user.contact
-    #placeholder query
-    query = "SELECT * FROM reviews WHERE pcontact = '{}'".format(contact)
-    bidding = db.session.execute(query).fetchall()
-    reviewTable = ReviewTable(bidding)
+    reviewTable = ReviewTable(results)
     return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
-
-
+   
 @view.route("/owner/review/update", methods=["GET", "POST"])
 @roles_required('petowner')
 def render_owner_review_update():
