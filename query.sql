@@ -30,7 +30,7 @@ GROUP BY ccontact
 
 -----------------------------------calculate working days
 
-
+--------------------------------------------- Salary trigger
 CREATE OR REPLACE FUNCTION addSalary()
 RETURNS TRIGGER AS $$
 BEGIN 
@@ -61,7 +61,7 @@ CREATE TRIGGER newSuccessBidding
       WHEN (NEW.status = 'success')
         EXECUTE FUNCTION addSalary();
 
-
+---------------------------------------------
 
 CREATE OR REPLACE FUNCTION log_last_name_changes()
   RETURNS TRIGGER 
