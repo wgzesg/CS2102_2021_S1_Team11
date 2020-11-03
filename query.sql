@@ -57,7 +57,7 @@ newSuccessBidding ON biddings;
 CREATE TRIGGER newSuccessBidding
     AFTER UPDATE OF status ON biddings
     FOR EACH ROW
-      WHEN (NEW.status = 'success')
+      WHEN (NEW.status = 'end')
         EXECUTE FUNCTION addSalary();
 
 ---------------------------------------------
