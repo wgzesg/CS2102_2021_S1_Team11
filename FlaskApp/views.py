@@ -531,7 +531,7 @@ def render_owner_bid_new():
         ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
         flag = False
         for ccategory in ccategories:
-            if ccategory.category == pcategory.cagetory:
+            if ccategory.category == pcategory.category:
                 flag = True
         startday = form.startday.data
         endday = form.endday.data
