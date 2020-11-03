@@ -16,14 +16,13 @@
             margin: auto auto;
             text-align: center;
         }
-
+        
         .table {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-
         }
-
+        
         body {
             color: #222;
             font-family: 'Open Sans', sans-serif;
@@ -32,7 +31,7 @@
             line-height: 24px;
             margin: 0 0 14px;
         }
-
+        
         h1 {
             color: #222;
             font-family: 'Open Sans', sans-serif;
@@ -41,7 +40,7 @@
             line-height: 24px;
             margin: 0 0 14px;
         }
-
+        
         a.more-link {
             color: white;
             font-weight: bold;
@@ -52,6 +51,7 @@
             border-radius: 5px;
             float: right;
         }
+        
         a.more-link:hover {
             text-decoration: none;
             background-color: #666;
@@ -73,7 +73,7 @@
                 <h1>
                     Hello, {{ username }} ! Here is the summary data:
                 </h1>
-                {{ table }}
+                {{ salaryTable }}
             </div>
         </div>
     </div>
