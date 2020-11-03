@@ -8,7 +8,7 @@ from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
-    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
+    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
@@ -221,7 +221,6 @@ def render_caretaker_biddings_accept():
         if count[0] > 5:
             flag = False
             break
-    
     if bid:
         if flag == False:
             bid.status = "pending"
@@ -231,8 +230,6 @@ def render_caretaker_biddings_accept():
             db.session.commit()
             print("Bidding status has been updated", flush=True)
     return redirect(url_for('view.render_caretaker_biddings'))
-
-
 
 @view.route("/caretaker/profile", methods=["GET"])
 @roles_required('caretaker')
@@ -640,9 +637,9 @@ def render_owner_bid_delete():
 def render_owner_review():
     contact = current_user.contact
     #placeholder query
-    query = "SELECT * FROM reviews WHERE pcontact= '{}'".format(contact)
+    query = "SELECT * FROM reviews WHERE pcontact = '{}'".format(contact)
     bidding = db.session.execute(query).fetchall()
-    reviewTable = biddingTable(bidding)
+    reviewTable = ReviewTable(bidding)
     return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
 @view.route("/owner/review/update", methods=["GET", "POST"])
@@ -652,7 +649,7 @@ def render_owner_review_update():
     #placeholder query
     query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
     bidding = db.session.execute(query).fetchall()
-    reviewTable = biddingTable(bidding)
+    reviewTable = ReviewTable(bidding)
     return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
