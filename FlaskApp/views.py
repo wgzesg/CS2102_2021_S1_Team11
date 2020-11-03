@@ -644,6 +644,25 @@ def render_owner_bid_delete():
     results = db.session.execute(query)
     return render_template("profile.html", results=results, username=current_user.username + " owner")
 
+@view.route("/owner/review", methods=["GET", "POST"])
+@roles_required('petowner')
+def render_owner_review():
+    contact = current_user.contact
+    #placeholder query
+    query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
+    bidding = db.session.execute(query).fetchall()
+    reviewTable = biddingTable(bidding)
+    return render_template("ownerBid.html", reviewTable=reviewTable, username=current_user.username + " owner")
+
+@view.route("/owner/review/update", methods=["GET", "POST"])
+@roles_required('petowner')
+def render_owner_review_update():
+    contact = current_user.contact
+    #placeholder query
+    query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
+    bidding = db.session.execute(query).fetchall()
+    reviewTable = biddingTable(bidding)
+    return render_template("ownerBid.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
