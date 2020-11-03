@@ -102,7 +102,7 @@ def render_admin_page():
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
     results = profileTable(db.session.execute(query))
-    return render_template('admin.html', results=results, username=current_user.username + " admin")
+    return render_template('adminSummary.html', results=results, username=current_user.username + " admin")
 
 
 @view.route("/admin/summary", methods=["GET"])
