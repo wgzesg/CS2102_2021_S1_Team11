@@ -391,6 +391,7 @@ def render_owner_page(page=1):
         """
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
+        caretable = ownerHomePage(selectedCareTakers)
         
 
     contact = current_user.contact
