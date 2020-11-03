@@ -9,7 +9,7 @@ from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, Searc
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
 
@@ -206,16 +206,19 @@ def render_caretaker_biddings_accept():
     contact = current_user.contact
     startday = request.args.get('startDay')
     endday = request.args.get('endDay')
+    ct = request.args.get('ccontact')
      
     bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
-    
+    def daterange(startday, endday):
+        for n in range(int((endday - startday).days)):
+            yield startday + timedelta(n)
     flag = True
-    for selected in range(date.strptime(startday, '%y/%m/%d'), date.strptime(endday, '%y/%m/%d'), timedelta(1)):
-        query = "SELECT COUNT (*) FROM biddings WHERE {} - startday >= 0 AND endday - {} >= 0 AND ccontact = {} AND status = 'success'".format(selected, selected, ct)
-        count = db.session.execute(query)
-        if count > 5:
+    for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
+        query = "SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 AND ccontact = '{}' AND status = 'success'".format(selected, selected, ct)
+        count = db.session.execute(query).fetchone()
+        if count[0] > 5:
             flag = False
             break
     
@@ -539,7 +542,11 @@ def render_owner_bid_new():
     cn = request.args.get('ccontact')
     contact = current_user.contact
     form = BiddingForm()
+    petNameQuery = """SELECT petname FROM pets WHERE pcontact = '1111' AND category in (SELECT category FROM cantakecare WHERE ccontact = '6666')"""
+    petNames = db.session.execute(petNameQuery).fetchall()
+    form.petname.choice = [(petname, petname) for petname in petNames]
     form.ccontact.data = cn
+
     if request.method == 'POST' and form.validate_on_submit():
         petname = form.petname.data
         pcategory = Pets.query.filter_by(petname = petname).first()
