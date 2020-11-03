@@ -76,3 +76,4 @@ class ReviewTable(Table):
     endday = Col('endday')
     rating = Col('rating')
     review = Col('review')
+    edit = LinkCol('Edit ', 'view.render_owner_review_update', url_kwargs=dict(ccontact = 'ccontact', petname = 'petname', startday = 'startday', endday = 'endday'))
