@@ -573,7 +573,7 @@ def render_owner_bid_new():
                 """.format(cn, startday, endday)
                 hasOverlap = db.session.execute(overLapQuery).fetchone()
                 print(hasOverlap, flush=True)
-                if(hasOverlap == 1):
+                if(hasOverlap):
                     isValidPeriod = False
             if(isValidPeriod == False):
                 flash("Contains invalid periods")
