@@ -104,28 +104,12 @@
     <div class="content">
         <div class="table">
             <p class="caption">Here are the list of caretakers:</p>
-
-            <div class="profiletable">
+            
+            <div class="caretable">
                 {{ caretable }}
             </div>
-<<<<<<< HEAD
-            -->
-            
-                <div class="caretable">
-                    {{ caretable }}
-                </div>
-            
             {{ pagination.links }}
             
-=======
-
-            {% for caretaker_page in caretaker_pages %}
-            <div class="caretable">
-                {{ caretaker_page.contact }}
-            </div>
-            {% endfor %} {{ pagination.links }}
-
->>>>>>> 4027e06b6fb7e9e04e50738d1ac8a50896eb2939
             <hi class="caption">Here is your profile!</hi>
             <div class="profiletable">
                 {{ table }}
