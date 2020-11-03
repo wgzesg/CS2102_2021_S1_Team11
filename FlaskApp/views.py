@@ -392,10 +392,10 @@ def render_owner_page(page=1):
                 AND
                 (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
                 AND EXISTS (SELECT 1 FROM pets 
-                         WHERE pcontact = '{}' AND 
-                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
-        """.format(current_user.contact)
-        parameters = dict(cc = cc, postal_code = postal_code)
+                         WHERE pcontact = :pcontact AND 
+                         category in (SELECT category FROM cantakecare WHERE ccontact = :cc))
+        """
+        parameters = dict(cc = cc, postal_code = postal_code, pcontact = current_user.contact)
         selectedCareTakers = db.session.execute(query, parameters)
         caretable = ownerHomePage(selectedCareTakers)
 

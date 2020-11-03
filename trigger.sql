@@ -1,3 +1,4 @@
+--------------------------------------- Calculate rating trigger
 CREATE OR REPLACE FUNCTION log_new_successful_bidding()
   RETURNS TRIGGER 
   LANGUAGE PLPGSQL
@@ -44,14 +45,65 @@ CREATE TRIGGER calculate_avg_rating_trigger
   FOR EACH ROW
   EXECUTE FUNCTION calculate_avg_rating();
 
+--------------------------------------- End of calculate rating trigger
 
-  ------------------------------------------------------
-DROP TRIGGER IF EXISTS
-merge_days_trigger ON avaiable;
-CREATE TRIGGER merge_days_trigger
-  AFTER INSERT ON available 
-  FOR EACH ROW
-  WHERE ccontact = inserted.ccontact
-  EXECUTE PROCEDURE insert_new_available();
+--------------------------------------------- Salary trigger
+CREATE OR REPLACE FUNCTION addSalary()
+RETURNS TRIGGER AS $$
+BEGIN 
+  UPDATE canparttime cp SET salary = salary + 
+  (
+    SELECT calcMoney(NEW.startday, NEW.endday, 
+      (SELECT price FROM dailyprice WHERE
+       category = (SELECT category FROM pets P
+       WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
+       AND
+       rating = (SELECT CEIL(avgrating) FROM canparttime cpt
+       WHERE NEW.ccontact = cpt.ccontact)
+      )
+     )
+  )
+  WHERE NEW.ccontact = cp.ccontact;
+  RETURN NULL;
+END;
+$$
+LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE PROCEDURE
+DROP TRIGGER IF EXISTS 
+newSuccessBidding ON biddings;
+CREATE TRIGGER newSuccessBidding
+    AFTER UPDATE OF status ON biddings
+    FOR EACH ROW
+      WHEN (NEW.status = 'success')
+        EXECUTE FUNCTION addSalary();
+--------------------------------------------- End of salary trigger
+CREATE OR REPLACE FUNCTION moveToReview()
+RETURNS TRIGGER AS $$
+BEGIN 
+  INSERT Reviews rv SET salary = salary + 
+  (
+    SELECT calcMoney(NEW.startday, NEW.endday, 
+      (SELECT price FROM dailyprice WHERE
+       category = (SELECT category FROM pets P
+       WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
+       AND
+       rating = (SELECT CEIL(avgrating) FROM canparttime cpt
+       WHERE NEW.ccontact = cpt.ccontact)
+      )
+     )
+  )
+  WHERE NEW.ccontact = cp.ccontact;
+  RETURN NULL;
+END;
+$$
+LANGUAGE PLPGSQL;
+
+
+DROP TRIGGER IF EXISTS 
+finishedBidding ON biddings;
+CREATE TRIGGER finishedBidding
+    AFTER UPDATE OF status ON biddings
+    FOR EACH ROW
+      WHEN (NEW.status = 'end')
+        EXECUTE FUNCTION moveToReview();
+---------------------------------- Bid successTrigger
