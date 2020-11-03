@@ -43,3 +43,15 @@ CREATE TRIGGER calculate_avg_rating_trigger
   ON reviews
   FOR EACH ROW
   EXECUTE FUNCTION calculate_avg_rating();
+
+
+  ------------------------------------------------------
+DROP TRIGGER IF EXISTS
+merge_days_trigger ON avaiable;
+CREATE TRIGGER merge_days_trigger
+  AFTER INSERT ON available 
+  FOR EACH ROW
+  WHERE ccontact = inserted.ccontact
+  EXECUTE PROCEDURE insert_new_available();
+
+CREATE OR REPLACE PROCEDURE

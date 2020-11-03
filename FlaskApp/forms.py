@@ -3,8 +3,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.fields.html5 import DateField
 from wtforms.validators import InputRequired, ValidationError, EqualTo, Regexp, Optional
 from wtforms.widgets import HiddenInput
-from models import Users
-from datetime import date
+from models import Users, Cantakecare
+from datetime import date, datetime
 from _datetime import timedelta
 
 def is_valid_name(form, field):
@@ -200,6 +200,13 @@ class BiddingForm(FlaskForm):
         validators=[InputRequired()],
         render_kw={'placeholder': 'Ccontact', 'class': 'input100'}
     )   
+    
+    
+    # ccontact = SelectField(
+    #     u'Cantakecare',
+    #     coerce=int
+    # )
+    
     petname = StringField(
         label='Petname',
         validators=[InputRequired()],
@@ -225,9 +232,19 @@ class BiddingForm(FlaskForm):
         validators=[InputRequired()],
         render_kw={'placeholder': 'Deliverymode', 'class': 'input100'}
     )
+    # def edit_user(request, ccontact, petname):
+    #     caretaker = Cantakecare.query.get(ccontact)
+    #     category = Pets.query.filter_by(petname = petname.data)
+    #     form = BiddingForm(request.POST, obj=caretaker)
+    #     form.ccontact.choices = [(x.ccontact, x.ccontact) for x in Cantakecare.query.order_by('ccontact').filter_by(category=category)]
+    
     def validate_on_submit(self):
         result = super(BiddingForm, self).validate()
         if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
+            raise ValidationError("End date cannot be earlier than Start date.")
+            return False
+        elif (date.today() - self.startday.data >= timedelta(minutes=1)):
+            raise ValidationError("Start date cannot be earlier than current date.")
             return False
         else:
             return True
