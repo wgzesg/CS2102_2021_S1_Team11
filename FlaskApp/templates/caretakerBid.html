@@ -1,49 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Bid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="../static/css/topbar.css">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="https://cs2102project.herokuapp.com/static/table_style/images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/animate/animate.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/select2/select2.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/css/util.css">
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/css/main.css">
-<!--===============================================================================================-->
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="https://cs2102project.herokuapp.com/static/table_style/images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/css/util.css">
+    <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/css/main.css">
+    <!--===============================================================================================-->
 
     <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/topbar.css">
-    
+
     <style>
-        #logout{
+        #logout {
             float: right;
         }
-        body{
+        
+        body {
             margin: 0;
         }
-        .wrapper{
+        
+        .wrapper {
             position: relative;
         }
-        .content{
+        
+        .content {
             position: absolute;
             left: 50%;
             top: 50%;
             width: 900px;
             height: 200px;
-            transform: translate(-28%,100%);
+            transform: translate(-28%, 100%);
         }
-        h1{
+        
+        h1 {
             font-size: 20px;
         }
     </style>
@@ -66,18 +71,24 @@
             </h1>
             <div class="table">{{table}}</div>
         </div>
+        <div>
+            {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %} {% endif %} {% endwith %}
+        </div>
     </div>
 
 
-    <!--===============================================================================================-->	
-	    <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
-        <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/js/popper.js"></script>
-        <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
-        <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/select2/select2.min.js"></script>
+    <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/js/popper.js"></script>
+    <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/js/bootstrap.min.js"></script>
     <!--===============================================================================================-->
-        <script src="https://cs2102project.herokuapp.com/static/table_style/js/main.js"></script>
+    <script src="https://cs2102project.herokuapp.com/static/table_style/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="https://cs2102project.herokuapp.com/static/table_style/js/main.js"></script>
 
 </body>
+
 </html>
