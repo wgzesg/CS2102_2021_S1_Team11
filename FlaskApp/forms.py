@@ -245,33 +245,6 @@ class BiddingForm(FlaskForm):
             return False
         else:
             return True
-   
-class ReviewForm(FlaskForm):
-    pcontact = StringField(
-    label='Pcontact',
-    validators=[InputRequired()],
-    render_kw={'placeholder': 'Pcontact', 'class': 'input100'}
-    )
-    ccontact = IntegerField(
-        label='Ccontact',
-        validators=[InputRequired()],
-        render_kw={'placeholder': 'Ccontact', 'class': 'input100'}
-    )
-    petname = StringField(
-        label='Petname',
-        validator=[(InputRequired())],
-        render_kw={'placeholder': 'Petname', 'class': 'input100'}
-    )
-    rating = IntegerField(
-        label='Rating',
-        validators=[InputRequired()],
-        render_kw={'placeholder': 'rating'}
-    )
-    review = StringField(
-        label='Review',
-        validators=[InputRequired()],
-        render_kw={'placeholder': 'Review', 'class': 'input200'}
-    )
     
 class ReviewUpdateForm(FlaskForm):
     rating = IntegerField(

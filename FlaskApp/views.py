@@ -1,17 +1,19 @@
 from flask import Blueprint, redirect, flash, url_for, render_template, request
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_user import roles_required
+from flask_table import Table, Col
+from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
-from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewForm, ReviewUpdateForm
-from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
+from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm
+from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
+import sys
 
 view = Blueprint("view", __name__)
-
 
 @view.route("/", methods=["GET"])
 def render_dummy_page():
@@ -41,12 +43,6 @@ def render_registration_page():
             canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, salary=0)
             db.session.add(canparttime1)
             db.session.commit()
-        #query = "INSERT INTO users(username, contact, card, password, usertype, isPartTime, postalcode) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')" \
-        #    .format(username, contact, credit_card, hashed_password, user_type, is_part_time, postal_code)
-        # print(query, flush=True)
-        # db.session.execute(query)
-        # print("done", flush=True)
-        # db.session.commit()
         print("commited", flush=True)
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect("/login")
@@ -59,45 +55,33 @@ def render_login_page():
     if current_user.is_authenticated:
         next_page = request.args.get('next')
         if next_page:
-            print("nextpage", flush=True)
             return redirect(next_page)
         elif current_user.usertype == "admin":
-            print("admin", flush=True)
             return redirect("/admin")
         elif current_user.usertype == "petowner":
-            print("current", flush=True)
             return redirect("/owner")
         elif current_user.usertype == "caretaker":
-            print("caret", flush=True)
             return redirect("/caretaker")
         else:
-            print("nothing mtaches", flush=True)
             return redirect("/profile")
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
         user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            print("found", flush=True)
             login_user(user, remember=True)
             next_page = request.args.get('next')
             if next_page:
-                print("nextpage", flush=True)
                 return redirect(next_page)
             elif current_user.usertype == "admin":
-                print("admin", flush=True)
                 return redirect("/admin")
             elif current_user.usertype == "petowner":
-                print("current", flush=True)
                 return redirect("/owner")
             elif current_user.usertype == "caretaker":
-                print("caret", flush=True)
                 return redirect("/caretaker")
             else:
-                print("nothing matches", flush=True)
                 return redirect("/profile")
         else:
-            print("not found", flush=False)
             flash('Login unsuccessful. Please check your contact and password', 'danger')
     return render_template("realLogin.html", form=form)
 
@@ -198,13 +182,11 @@ def render_caretaker_biddings_accept():
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
+    
     flag = True
-    n = 0
     for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
         query = "SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 AND ccontact = '{}' AND status = 'success'".format(selected, selected, ct)
         count = db.session.execute(query).fetchone()
-        print("day " + n + " : " + count[0])
-        n = n + 1
         if count[0] > 5:
             flag = False
             break
@@ -215,7 +197,7 @@ def render_caretaker_biddings_accept():
     if bid:
         bid.status = "success"
         db.session.commit()
-        print("Bidding status has been updated", flush=True)
+
     return redirect(url_for('view.render_caretaker_biddings'))
 
 @view.route("/caretaker/profile", methods=["GET"])
@@ -359,6 +341,12 @@ def render_owner_page(page=1):
     
     count = db.session.execute(countquery).fetchone()
     total = count[0]
+
+    # PER_PAGE = 10 
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    # pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
 
     page_offset = (page - 1) * 10
     if total < page * 10:
@@ -616,18 +604,12 @@ def render_owner_bid_delete():
 @view.route("/owner/review", methods=["GET", "POST"])
 @roles_required('petowner')
 def render_owner_review():
-    pcontact = request.args.get(pcontact)
+    pcontact = current_user.contact
     query = "SELECT * FROM Reviews WHERE pcontact = {}".format(pcontact)
     results = db.session.execute(query)
-    return render_template("review.html", results=results, username=current_user.username + " owner")
-    contact = current_user.contact
-    #placeholder query
-    query = "SELECT * FROM reviews WHERE pcontact = '{}'".format(contact)
-    bidding = db.session.execute(query).fetchall()
-    reviewTable = ReviewTable(bidding)
+    reviewTable = ReviewTable(results)
     return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
-
-
+   
 @view.route("/owner/review/update", methods=["GET", "POST"])
 @roles_required('petowner')
 def render_owner_review_update():
@@ -645,8 +627,8 @@ def render_owner_review_update():
             thisreview.rating = int(form.rating.data)
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
-    
-    return render_template("reviewReview.html", results=results, username=current_user.username + " owner")
+        return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
+    return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
 

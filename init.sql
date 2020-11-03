@@ -120,6 +120,6 @@ CREATE TABLE reviews(
     endday DATE NOT NULL CHECK(endday - startday >= 0),
     rating INTEGER NOT NULL CHECK(rating <= 5 AND rating >= 0),
     review VARCHAR NOT NULL,
-    PRIMARY KEY (pcontact, ccontact, petname, startday, endday),
+    PRIMARY KEY (pcontact, ccontact, petname, startday, endday)
 );
  
