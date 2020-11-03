@@ -151,13 +151,17 @@
         <a href="https://cs2102project.herokuapp.com/caretaker/available">Availability</a>
         <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
     </div>
-    <div class="wrapper">
-        <div class="content">
-            <h1>
-                Add a new category <a href="https://cs2102project.herokuapp.com/caretaker/cantakecare/new" class="btn btn-outline-secondary btn-sm">HERE</a>
-            </h1>
-            <p>Here are a list of pets that you chose to be able to take care of:</p>
-            <div class="table">{{table}}</div>
+    <div class="limiter">
+        <div class="wrapper">
+            <div class="content">
+                <h1>
+                    Add a new category <a href="https://cs2102project.herokuapp.com/caretaker/cantakecare/new" class="btn btn-outline-secondary btn-sm">HERE</a>
+                </h1>
+                <div class="container-table100 wrap-table100 table100">
+                    <p>Here are a list of pets that you chose to be able to take care of:</p>
+                    <div class="table">{{table}}</div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
