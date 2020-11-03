@@ -250,7 +250,7 @@ def render_caretaker_available():
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
     table = editAvailableTable(availables)
-    return render_template('availableWithEdit.html', table=table, isPt=isPt, username=current_user.username + " caretaker")
+    return render_template('availableWithEdit.html', table=table, applicationType=applicationType, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/available/edit", methods=["GET", "POST"])
