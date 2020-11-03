@@ -20,6 +20,8 @@
 	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css">
     <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/perfect-scrollbar/perfect-scrollbar.css">
     <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css">
     <!--===============================================================================================-->
@@ -27,6 +29,18 @@
 	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-main.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/topbar.css">
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/css/util.css">
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/css/main.css">
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/table_style/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
     <style>
         .container {
             width: 390px;
@@ -152,12 +166,12 @@
         <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
     </div>
     <div class="limiter">
-        <div class="wrapper">
+        <div class="container-table100">
             <div class="content">
                 <h1>
                     Add a new category <a href="https://cs2102project.herokuapp.com/caretaker/cantakecare/new" class="btn btn-outline-secondary btn-sm">HERE</a>
                 </h1>
-                <div class="container-table100 wrap-table100 table100">
+                <div class="wrap-table100 table100">
                     <p>Here are a list of pets that you chose to be able to take care of:</p>
                     <div class="table">{{table}}</div>
                 </div>
