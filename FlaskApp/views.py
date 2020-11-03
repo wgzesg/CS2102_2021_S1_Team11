@@ -176,7 +176,8 @@ def render_caretaker_biddings_accept():
     startday = request.args.get('startDay')
     endday = request.args.get('endDay')
     ct = request.args.get('ccontact')
-     
+    parttime = Canparttime.query.filter_by(ccontact=contact).first()
+         
     bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
@@ -188,9 +189,14 @@ def render_caretaker_biddings_accept():
     for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
         query = "SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 AND ccontact = '{}' AND status = 'success'".format(selected, selected, ct)
         count = db.session.execute(query).fetchone()
-        if count[0] > 5:
-            flag = False
-            break
+        if parttime.isparttime == True and parttime.rating < 3:
+            if count[0] > 2:
+                flag = False
+                break
+        else:
+            if count[0] > 5:
+                flag = False
+                break
     
     if flag == False:
         flash("You are not allowed to take more than five pets at the same time.")
