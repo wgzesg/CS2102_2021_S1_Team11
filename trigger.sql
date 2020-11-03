@@ -79,20 +79,12 @@ CREATE TRIGGER newSuccessBidding
 --------------------------------------------- End of salary trigger
 CREATE OR REPLACE FUNCTION moveToReview()
 RETURNS TRIGGER AS $$
-BEGIN 
-  INSERT Reviews rv SET salary = salary + 
-  (
-    SELECT calcMoney(NEW.startday, NEW.endday, 
-      (SELECT price FROM dailyprice WHERE
-       category = (SELECT category FROM pets P
-       WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
-       AND
-       rating = (SELECT CEIL(avgrating) FROM canparttime cpt
-       WHERE NEW.ccontact = cpt.ccontact)
-      )
-     )
-  )
-  WHERE NEW.ccontact = cp.ccontact;
+BEGIN
+  INSERT INTO Reviews VALUES (
+        NEW.pcontact, NEW.ccontact, NEW.petname,
+        NEW.startday, NEW.endday, 5.0, '');
+  DELETE FROM biddings WHERE pcontact = NEW.pcontact and ccontact = NEW.ccontact and petname = NEW.petname
+    and startday = NEW.startday and endday = NEW.endday;
   RETURN NULL;
 END;
 $$
