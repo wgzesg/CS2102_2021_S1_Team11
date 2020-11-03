@@ -559,7 +559,7 @@ def render_owner_bid_new():
                       category in (SELECT category FROM cantakecare WHERE ccontact = '{}')""".format(contact, cn)
     petNames = db.session.execute(petNameQuery).fetchall()
     print(petNames, flush=True)
-    form.petname.choices = [(petname[0], petname[0]) for petname in petNames]
+    form.petname.choices = [(petname, petname) for petname in petNames]
     form.ccontact.data = cn
 
     if request.method == 'POST' and form.validate_on_submit():
