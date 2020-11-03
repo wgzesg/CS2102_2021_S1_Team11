@@ -76,3 +76,7 @@ class ReviewTable(Table):
     endday = Col('endday')
     rating = Col('rating')
     review = Col('review')
+    
+class SalaryTable(Table):
+    ccontact = Col('ccontact')
+    salary = Col('salary')

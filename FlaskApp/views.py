@@ -15,13 +15,6 @@ import sys
 
 view = Blueprint("view", __name__)
 
-# @login_manager.user_loader
-# def load_user(contact):
-#     contact = ((Admins.query.filter_by(contact=contact.data).first()) or
-#                 (Petowners.query.filter_by(contact=contact.data).first()) or
-#                 (Caretakers.query.filter_by(contact=contact.data).first()))
-#     return current_user or contact
-
 
 @view.route("/", methods=["GET"])
 def render_dummy_page():
@@ -146,7 +139,9 @@ def render_admin_page():
 def render_admin_summary_page():
     query = "SELECT * FROM users WHERE usertype = 'caretaker'"
     results = db.session.execute(query).fetchall()
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
+    query1 = "SELECT ccontact, salary FROM canparttime"
+    result_salary = db.session.execute(query1).fetchall()
+    return render_template("profile.html", results=results, result_salary=result_salary, username=current_user.username + " owner")
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
