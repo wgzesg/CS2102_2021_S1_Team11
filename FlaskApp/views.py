@@ -9,7 +9,7 @@ from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, Searc
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable
-from datetime import timedelta
+from datetime import timedelta, date
 from sqlalchemy import exc
 import sys
 
