@@ -544,9 +544,9 @@ def render_owner_bid_new():
     form = BiddingForm()
     petNameQuery = """SELECT petname FROM pets WHERE pcontact = '1111' AND category in (SELECT category FROM cantakecare WHERE ccontact = '6666')"""
     petNames = db.session.execute(petNameQuery).fetchall()
-    form.petname.choice = [(petname, petname) for pet in petNames]
+    form.petname.choice = [(petname, petname) for petname in petNames]
     form.ccontact.data = cn
-    
+
     if request.method == 'POST' and form.validate_on_submit():
         petname = form.petname.data
         pcategory = Pets.query.filter_by(petname = petname).first()
