@@ -665,7 +665,7 @@ def render_owner_review_update():
     query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
     bidding = db.session.execute(query).fetchall()
     reviewTable = biddingTable(bidding)
-    return render_template("ownerBid.html", reviewTable=reviewTable, username=current_user.username + " owner")
+    return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
 
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
