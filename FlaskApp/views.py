@@ -537,7 +537,7 @@ def render_owner_bid_new():
         endday = form.endday.data
         paymentmode = form.paymentmode.data
         deliverymode = form.deliverymode.data
-        if(endday - startday >= timedelta(minutes=1) and flag):
+        if(flag):
             query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
             .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
             try:
@@ -548,7 +548,7 @@ def render_owner_bid_new():
                 db.session.rollback()
                 flash("Some of your input is not valid. Make sure your pet name is valid!")
         else:
-            flash("wrong date input")
+            flash("This caretaker cannot take care of this type of pet.")
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
 
 
