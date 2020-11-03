@@ -207,10 +207,23 @@ def render_caretaker_biddings_accept():
     bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
+    
+    flag = True
+    for selected in range(startday, endday, timedelta(1)):
+        query = "SELECT COUNT (*) FROM biddings WHERE {} - startday >= 0 AND endday - {} >= 0 AND ccontact = {} AND status = 'success'".format(selected, selected, ct)
+        count = db.session.execute(query)
+        if count > 5:
+            flag = False
+            break
+    
     if bid:
-        bid.status = "success"
-        db.session.commit()
-        print("Owner profile has been updated", flush=True)
+        if flag == False:
+            bid.status = "pending"
+            print("Bidding status cannot be updated", flush=True)
+        else:
+            bid.status = "success"
+            db.session.commit()
+            print("Bidding status has been updated", flush=True)
     return redirect(url_for('view.render_caretaker_biddings'))
 
 
