@@ -8,7 +8,7 @@ from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
-    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable
+    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
@@ -110,7 +110,9 @@ def render_admin_page():
 def render_admin_summary_page():
     query = "SELECT * FROM users WHERE usertype = 'caretaker'"
     results = db.session.execute(query).fetchall()
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
+    query1 = "SELECT ccontact, salary FROM canparttime"
+    result_salary = db.session.execute(query1).fetchall()
+    return render_template("profile.html", results=results, result_salary=result_salary, username=current_user.username + " owner")
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
@@ -150,8 +152,12 @@ def render_caretaker_page():
         Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     print(results, flush=True)
-    table = CaretakersBidTable(results)
-    return render_template('caretaker.html', table=table, username=current_user.username + " caretaker")
+    table2 = CaretakersBidTable(results)
+
+    query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
+    results = db.session.execute(query)
+    table1 = canparttimeTable(results)
+    return render_template('caretaker.html', table1=table1, table2 = table2, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/biddings", methods=["GET", "POST"])
@@ -623,7 +629,7 @@ def render_owner_review_update():
             thisreview.rating = int(form.rating.data)
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
-        return render_template("ownerReview.html", form=form, username=current_user.username + " owner")
+        return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
     return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
 
