@@ -84,3 +84,15 @@ BEGIN
   WHERE NEW.ccontact = cp.ccontact;
 END;
 $$
+
+---------------------------------------------
+SELECT COUNT (*)
+FROM reviews
+WHERE selected - startday >= 0 AND endday - selected >= 0 AND ccontact = ct
+
+CREATE OR REPLACE FUNCTION countPetOccurance(ct BIGINT, selected DATE) 
+RETURNS INTEGER AS $$
+  SELECT COUNT (*)
+  FROM reviews
+  WHERE selected - startday >= 0 AND endday - selected >= 0 AND ccontact = ct;
+$$ LANGUAGE SQL
