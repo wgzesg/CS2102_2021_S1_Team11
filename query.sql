@@ -95,3 +95,8 @@ BEGIN
   WHERE NEW.ccontact = cp.ccontact;
 END;
 $$
+
+
+----- count number of pets alr taken cared by the same caretaker in the selected day
+CREATE OR REPLACE FUNCTION findpetnum(ccontact VARCHAR, selectedday DATE)
+RETURNS 
