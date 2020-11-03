@@ -341,10 +341,10 @@ def render_caretaker_cantakecare_delete():
 #@login_required
 @roles_required('petowner')
 def render_owner_page(page=1):
-    countquery = """SELECT COUNT(*) FROM users u WHERE u.usertype = 'caretaker'
+    countquery = """SELECT COUNT(*) FROM users WHERE users.usertype = 'caretaker'
                          AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
-                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))""".format(current_user.contact)
+                         category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))""".format(current_user.contact)
     
     count = db.session.execute(countquery).fetchone()
     total = count[0]
