@@ -3,77 +3,193 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
-    <link href="https://cs2102project.herokuapp.com/static/css/topbar.css" rel="stylesheet" media="all">
+    <title>Owner</title>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/topbar.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="https://cs2102project.herokuapp.com/static/images/icons/favicon.ico"/>
+    <link rel="icon" type="image/png" href="../static/images/icons/favicon.ico" />
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="../static/vendor/animate/animate.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/vendor/css-hamburgers/hamburgers.min.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/vendor/animsition/css/animsition.min.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/vendor/select2/select2.min.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="../static/vendor/daterangepicker/daterangepicker.css">
     <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-util.css">
-	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-main.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/login-util.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/login-main.css">
     <!--===============================================================================================-->
+
     <style>
-        #logout{
+        .container {
+            width: 390px;
+        }
+
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #registerButton {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .formField {
+            padding: 10px 0;
+        }
+
+        #logout {
             float: right;
         }
-        body{
-            margin: 0;
+
+        .content {
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            margin: auto auto;
+            text-align: center;
         }
-        .wrapper{
-            position: relative;
-        }
-        .content{
+
+        .table {
             position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 900px;
-            height: 200px;
-            transform: translate(-28%,100%);
+            left: 25%;
+            top: 70%;
+            transform: translateY(-50%);
         }
-        h1{
-            font-size: 20px;
-        }
-        .table{
-            font-size: 14px;
+
+        .table2 {
             position: absolute;
-            margin-top: 30px;
-            
+            right: 75%;
+            top: 70%;
+            transform: translateY(-50%);
+        }
+
+        .caretable {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
+        .caption {
+            margin: 10px 0;
+        }
+
+        .profiletable {
+            display: flex;
+            justify-content: center;
+        }
+
+        .bid-button a {
+            border-radius: 3px;
+            padding: 5px 10px;
+            background-color: #69BC22;
+            opacity: 0.7;
+            color: white !important;
         }
     </style>
 </head>
 
 <body>
     <div class="topbar">
-        <a href="https://cs2102project.herokuapp.com/caretaker">Home</a>
-        <a href="https://cs2102project.herokuapp.com/caretaker/profile">Profile</a>
-        <a href="https://cs2102project.herokuapp.com/caretaker/cantakecare">Categories</a>
-        <a href="https://cs2102project.herokuapp.com/caretaker/biddings">Biddings</a>
-        <a href="https://cs2102project.herokuapp.com/caretaker/available">Availability</a>
+        <a href="https://cs2102project.herokuapp.com/owner">Home</a>
+        <a href="https://cs2102project.herokuapp.com/owner/pet">Pets</a>
+        <a href="https://cs2102project.herokuapp.com/owner/bid">Bid</a>
         <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
     </div>
-    <div class="wrapper">
-        <div class="content">
-            <h1>
-                Hello, {{ username }}! Update your profile <a href="/caretaker/profile/update" class="btn btn-outline-secondary btn-sm">HERE</a>
-            </h1>
-            <div class="table">{{table}}</div>  
+
+    <div class="content">
+        <div class="table">
+            <p class="caption">Here are the list of caretakers:</p>
+
+            <div class="caretable">
+                {{ caretable }}
+            </div>
+            <div class="pagination">
+                {{ pagination.links }}
+            </div>
+
+        </div>
+        <div class="table2">
+            <hi class="caption">Here is your profile!</hi>
+            <div class="profiletable">
+                {{ table }}
+            </div>
         </div>
     </div>
+
+    <div class="content">
+        <form class="registrationForm login100-form">
+            {{ form.hidden_tag() }}
+            <div class="formField wrap-input100 validate-input">
+                {{ form.ccontact }} {% if form.ccontact.errors %}
+                <div class="errorMessage">
+                    {% for error in form.ccontact.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="formField wrap-input100 validate-input">
+                {{ form.postal_code }} {% if form.postal_code.errors %}
+                <div class="errorMessage">
+                    {% for error in form.postal_code.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="buttonWrapper">
+                <button class="login100-form-btn" formmethod="post">Search</button>
+            </div>
+            <div>
+                {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %} {% endif %} {% endwith %}
+            </div>
+        </form>
+
+    </div>
+
+
 </body>
 
 </html>

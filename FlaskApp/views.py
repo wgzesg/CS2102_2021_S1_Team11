@@ -390,7 +390,7 @@ def render_owner_page(page=1):
                 (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
         """
         parameters = dict(cc = cc, postal_code = postal_code)
-        selectedCareTakers = db.session.execute(query, parameters)        
+        selectedCareTakers = db.session.execute(query, parameters)
         
 
     contact = current_user.contact
