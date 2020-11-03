@@ -370,7 +370,7 @@ def render_owner_page(page=1):
     caretaker_page = db.session.execute(pagequery)
     caretable = ownerHomePage(caretaker_page)
 
-#    caretable = ownerHomePage(caretakers)
+    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
 
     if request.method == 'POST' and form.validate_on_submit():
