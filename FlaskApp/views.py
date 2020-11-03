@@ -368,9 +368,8 @@ def render_owner_page(page=1):
     else:
         pagequery = "SELECT * FROM users LIMIT 10 OFFSET '{}'".format(page_offset)
     caretaker_page = db.session.execute(pagequery)
+    caretable = ownerHomePage(caretaker_page)
 
-
-    caretable = ownerHomePage(caretakers)
     form = SearchCaretakerForm()
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -391,8 +390,7 @@ def render_owner_page(page=1):
                 (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
         """
         parameters = dict(cc = cc, postal_code = postal_code)
-        selectedCareTakers = db.session.execute(query, parameters)
-        caretable = ownerHomePage(selectedCareTakers)
+        selectedCareTakers = db.session.execute(query, parameters)        
         
 
     contact = current_user.contact
@@ -400,7 +398,7 @@ def render_owner_page(page=1):
     profile = db.session.execute(query)
     table = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, caretaker_page=caretaker_page, caretable=caretable, table=table, username=current_user.username + " owner", pagination = pagination)
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, table=table, username=current_user.username + " owner", pagination = pagination)
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
