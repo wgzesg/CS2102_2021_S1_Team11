@@ -219,12 +219,14 @@ class BiddingForm(FlaskForm):
     )
     paymentmode = SelectField(
         label='Paymentmode',
+        choices=[('creditcard', 'Credit Card'), ('cash', 'Cash')],
         validators=[InputRequired()],
         render_kw={'placeholder': 'Paymentmode', 'class': 'input100'}
     )
-    deliverymode = StringField(
+    deliverymode = SelectField(
         label='Deliverymode',
         validators=[InputRequired()],
+        choices=[('deliver', 'pet owner deliver'), ('pickup', 'pick up'), ('pcstransfer', 'transfer through PCS')],
         render_kw={'placeholder': 'Deliverymode', 'class': 'input100'}
     )
     # def edit_user(request, ccontact, petname):

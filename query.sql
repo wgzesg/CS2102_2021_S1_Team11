@@ -27,7 +27,6 @@ SELECT ccontact, SUM(salary)
 FROM salarylist 
 GROUP BY ccontact
 ;
-
 -----------------------------------calculate working days
 
 --------------------------------------------- Salary trigger
