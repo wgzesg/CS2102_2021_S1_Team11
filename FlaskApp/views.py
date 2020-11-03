@@ -539,9 +539,9 @@ def render_owner_bid_new():
         if(flag):
             isValidPeriod = True
             fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
-            isFullTime = db.session.execute(fullTimeQuery).fetchone()
-            print(isFullTime, flush=True)
-            if isFullTime:
+            isPartTime = db.session.execute(fullTimeQuery).fetchone()
+            print(isPartTime, flush=True)
+            if not isPartTime:
                 overLapQuery = """
                 SELECT 1
                 FROM   (SELECT min(st) as st, max(en) as en
