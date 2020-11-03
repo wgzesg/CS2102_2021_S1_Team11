@@ -355,11 +355,11 @@ def render_owner_page(page=1):
     count = db.session.execute(countquery).fetchone()
     total = count[0]
 
-#    PER_PAGE = 10 
-#    page = request.args.get(get_page_parameter(), type=int, default=1)
-#    start = (page-1)*PER_PAGE
-#    end = page * PER_PAGE
-#    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
+    PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    start = (page-1)*PER_PAGE
+    end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
 
     page_offset = (page - 1) * 10
     if total < page * 10:
