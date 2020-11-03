@@ -206,6 +206,7 @@ def render_caretaker_biddings_accept():
     contact = current_user.contact
     startday = request.args.get('startDay')
     endday = request.args.get('endDay')
+    ct = request.args.get('ccontact')
      
     bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
