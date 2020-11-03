@@ -1,8 +1,6 @@
 from flask import Blueprint, redirect, flash, url_for, render_template, request
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_user import roles_required
-from flask_table import Table, Col
-from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm
@@ -11,16 +9,8 @@ from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerT
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
-import sys
 
 view = Blueprint("view", __name__)
-
-# @login_manager.user_loader
-# def load_user(contact):
-#     contact = ((Admins.query.filter_by(contact=contact.data).first()) or
-#                 (Petowners.query.filter_by(contact=contact.data).first()) or
-#                 (Caretakers.query.filter_by(contact=contact.data).first()))
-#     return current_user or contact
 
 
 @view.route("/", methods=["GET"])
@@ -41,21 +31,11 @@ def render_registration_page():
         is_part_time = form.is_part_time.data
         postal_code = form.postal_code.data
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        
-        # query = "INSERT INTO users(username, contact, card, password, usertype, isPartTime, postalcode) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')" \
-        #     .format(username, contact, credit_card, hashed_password, user_type, is_part_time, postal_code)
-        # db.session.execute(query)
-        # db.session.commit()
 
         user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, postalcode=postal_code, password=hashed_password)
         role = Role.query.filter_by(name=user_type).first()
         user1.roles.append(role)
         db.session.add(user1)
-        
-        #query = "SELECT * FROM role WHERE name = '{}'".format(user_type)
-        #givenRole = db.session.execute(query).fetchone()
-        #query = "INSERT INTO user_roles(contact, usertype) VALUES ('{}', '{}')".format(contact, user_type)
-        #db.session.execute(query)
         db.session.commit()
         if(user_type == 'caretaker'):
             canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, salary=0)
@@ -375,12 +355,6 @@ def render_owner_page(page=1):
     
     count = db.session.execute(countquery).fetchone()
     total = count[0]
-
-    # PER_PAGE = 10 
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
-    # start = (page-1)*PER_PAGE
-    # end = page * PER_PAGE
-    # pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
 
     page_offset = (page - 1) * 10
     if total < page * 10:
