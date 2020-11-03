@@ -17,15 +17,10 @@ def is_valid_contact(self, contact):
         raise ValidationError('That contact is already being registered. Please choose a different one.')
 
 def is_valid_startday(self):
-    result = super(BiddingForm, self).validate()
     if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
         raise ValidationError("End date cannot be earlier than Start date.")
-        return False
     elif (date.today() - self.startday.data >= timedelta(minutes=1)):
         raise ValidationError("Start date cannot be earlier than current date.")
-        return False
-    else:
-        return True
 
 # def is_valid_number(form, field):
 #     if not all(map(lambda char: char.isnumber(), field.data)):
