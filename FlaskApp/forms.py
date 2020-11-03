@@ -17,12 +17,6 @@ def is_valid_contact(self, contact):
     if contact:
         raise ValidationError('That contact is already being registered. Please choose a different one.')
 
-def is_valid_startday(self):
-    if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
-        raise ValidationError("End date cannot be earlier than Start date.")
-    elif (date.today() - self.startday.data >= timedelta(minutes=1)):
-        raise ValidationError("Start date cannot be earlier than current date.")
-
 # def is_valid_number(form, field):
 #     if not all(map(lambda char: char.isnumber(), field.data)):
 #         raise ValidationError('This field should only contain numbers')
@@ -307,11 +301,15 @@ class AvailableForm(FlaskForm):
         render_kw={'placeholder': 'endday', 'class': 'input100'}
     )
     def validate_on_submit(self):
-        result = super(AvailableForm, self).validate()
-        if (self.startday.data - self.endday.data >= timedelta(minutes = 1)):
+        result = super(BiddingForm, self).validate()
+        if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
+            flash("End date cannot be earlier than Start date.")
+            return False
+        elif (date.today() - self.startday.data >= timedelta(minutes=1)):
+            flash("Start date cannot be earlier than current date.")
             return False
         else:
-            return result
+            return True
 
 class AvailableUpdateForm(FlaskForm):
     startday = DateField(
@@ -329,11 +327,15 @@ class AvailableUpdateForm(FlaskForm):
         render_kw={'placeholder': 'endday', 'class': 'input100'}
     )
     def validate_on_submit(self):
-        result = super(AvailableUpdateForm, self).validate()
-        if (self.startday.data - self.endday.data >= timedelta(minutes = 1)):
+        result = super(BiddingForm, self).validate()
+        if (self.startday.data - self.endday.data >= timedelta(minutes=1)):
+            flash("End date cannot be earlier than Start date.")
+            return False
+        elif (date.today() - self.startday.data >= timedelta(minutes=1)):
+            flash("Start date cannot be earlier than current date.")
             return False
         else:
-            return result
+            return True
 
 class SearchCaretakerForm(FlaskForm):
     ccontact = IntegerField(
