@@ -63,7 +63,7 @@ class profileTable(Table):
     postalcode = Col('Postal Code')
 
 class canparttimeTable(Table):
-    contact = Col('Contact')
+    ccontact = Col('Contact')
     avgrating = Col('Overall Rating')
     salary = Col('Salary of the month')
 
