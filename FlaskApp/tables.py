@@ -52,6 +52,8 @@ class biddingCaretakerTable(Table):
     status = Col('Status')
     accept = ButtonCol('Accept', 'view.render_caretaker_biddings_accept', url_kwargs=dict(ownerContact='pcontact', 
         ccontact='ccontact', petName='petname', startDay='startday', endDay='endday'))
+    finish = ButtonCol('Done', 'view.render_caretaker_biddings_finish', url_kwargs=dict(ownerContact='pcontact',
+        ccontact='ccontact', petName='petname', startDay='startday', endDay='endday'))
 
 class caretakerCantakecare(Table):
     category = Col('Category')
