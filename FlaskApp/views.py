@@ -223,7 +223,7 @@ def render_caretaker_biddings_finish():
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
     
     if bid:
-    #     datetime.strptime(endday, '%Y-%m-%d') < date.today():
+    #     datetime.strptime(endday, '%Y-%m-%d') < datetime.today():
     #     flash("You are not allowed to terminate the bidding before end date.")
     # elif bid:
         bid.status = "end"
