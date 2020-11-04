@@ -186,7 +186,8 @@ def render_caretaker_biddings_accept():
     
     flag = True
     for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
-        query = "SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 AND ccontact = '{}' AND status = 'success'".format(selected, selected, ct)
+        query = """SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 
+            AND ccontact = '{}' AND status = 'success'""".format(selected, selected, ct)
         count = db.session.execute(query).fetchone()
         if count[0] > 5:
             flag = False
@@ -548,7 +549,8 @@ def render_owner_bid_new():
                         max(new_start) OVER (ORDER BY st,en) AS left_edge
                     FROM (SELECT st, en,
                             CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
-                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) AS le FROM available WHERE ccontact = '{}') s1) s2) s3
+                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday)
+                         AS le FROM available WHERE ccontact = '{}') s1) s2) s3
                     GROUP BY left_edge) AS f2
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(cn, startday, endday)
@@ -564,7 +566,8 @@ def render_owner_bid_new():
                         max(new_start) OVER (ORDER BY st,en) AS left_edge
                     FROM (SELECT st, en,
                             CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
-                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) AS le FROM available WHERE ccontact = '{}') s1) s2) s3
+                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday) 
+                        AS le FROM available WHERE ccontact = '{}') s1) s2) s3
                     GROUP BY left_edge) AS f2
             WHERE tsrange('{}', '{}', '[]') * tsrange(f2.st, f2.en, '[]') = tsrange('{}', '{}', '[]');
             """.format(cn, startday, endday, startday, endday)
@@ -577,13 +580,9 @@ def render_owner_bid_new():
             return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
         query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
         .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
-        try:
-            db.session.execute(query)
-            db.session.commit()
-            return redirect(url_for('view.render_owner_bid'))
-        except exc.IntegrityError:
-            db.session.rollback()
-            flash("Some of your input is not valid. Make sure your pet name is valid!")
+        db.session.execute(query)
+        db.session.commit()
+        return redirect(url_for('view.render_owner_bid'))
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
 
 

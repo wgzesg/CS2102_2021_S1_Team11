@@ -48,6 +48,14 @@ CREATE TRIGGER calculate_avg_rating_trigger
 --------------------------------------- End of calculate rating trigger
 
 --------------------------------------------- Salary trigger
+
+CREATE OR REPLACE FUNCTION 
+calcMoney(start DATE, endy DATE, price INTEGER) 
+RETURNS INTEGER AS $$
+    BEGIN RETURN price * (endy - start);
+    END; $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION addSalary()
 RETURNS TRIGGER AS $$
 BEGIN 
@@ -77,6 +85,7 @@ CREATE TRIGGER newSuccessBidding
       WHEN (NEW.status = 'success')
         EXECUTE FUNCTION addSalary();
 --------------------------------------------- End of salary trigger
+---------------------------------- Bid end trigger
 CREATE OR REPLACE FUNCTION moveToReview()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -98,4 +107,4 @@ CREATE TRIGGER finishedBidding
     FOR EACH ROW
       WHEN (NEW.status = 'end')
         EXECUTE FUNCTION moveToReview();
----------------------------------- Bid successTrigger
+---------------------------------- End of bid end trigger
