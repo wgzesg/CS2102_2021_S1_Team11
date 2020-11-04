@@ -192,10 +192,12 @@ def render_caretaker_biddings_accept():
         if parttime.isparttime == True and parttime.avgrating < 3:
             if count[0] > 2:
                 flag = False
+                count[0] = 0
                 break
         else:
             if count[0] > 5:
                 flag = False
+                count[0] = 0
                 break
     
     if flag == False:
@@ -219,9 +221,10 @@ def render_caretaker_biddings_finish():
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
     
-    if datetime.strptime(endday, '%Y-%m-%d') < date.today():
-        flash("You are not allowed to terminate the bidding before end date.")
-    elif bid:
+    if bid:
+    #     datetime.strptime(endday, '%Y-%m-%d') < date.today():
+    #     flash("You are not allowed to terminate the bidding before end date.")
+    # elif bid:
         bid.status = "end"
         db.session.commit()
 
