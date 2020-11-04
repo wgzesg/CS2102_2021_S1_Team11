@@ -176,7 +176,8 @@ def render_caretaker_biddings_accept():
     startday = request.args.get('startDay')
     endday = request.args.get('endDay')
     ct = request.args.get('ccontact')
-     
+    parttime = Canparttime.query.filter_by(ccontact=contact).first()
+         
     bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
         startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
@@ -189,15 +190,40 @@ def render_caretaker_biddings_accept():
         query = """SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 
             AND ccontact = '{}' AND status = 'success'""".format(selected, selected, ct)
         count = db.session.execute(query).fetchone()
-        if count[0] > 5:
-            flag = False
-            break
+        if parttime.isparttime == True and parttime.avgrating < 3:
+            if count[0] > 2:
+                flag = False
+                break
+        else:
+            if count[0] > 5:
+                flag = False
+                break
     
     if flag == False:
         flash("You are not allowed to take more than five pets at the same time.")
         return redirect(url_for('view.render_caretaker_biddings'))
     if bid:
         bid.status = "success"
+        db.session.commit()
+
+    return redirect(url_for('view.render_caretaker_biddings'))
+
+@view.route("/caretaker/biddings/finish", methods=["POST"])
+@roles_required('caretaker')
+def render_caretaker_biddings_finish():
+    contact = current_user.contact
+    startday = request.args.get('startDay')
+    endday = request.args.get('endDay')
+    ct = request.args.get('ccontact')
+         
+    bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
+        ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
+        startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
+    
+    if datetime.strptime(endday, '%Y-%m-%d') < date.today():
+        flash("You are not allowed to terminate the bidding before end date.")
+    elif bid:
+        bid.status = "end"
         db.session.commit()
 
     return redirect(url_for('view.render_caretaker_biddings'))
@@ -237,10 +263,15 @@ def render_caretaker_update_profile():
 @roles_required('caretaker')
 def render_caretaker_available():
     contact = current_user.contact
+    applicationType = "leave"
+    ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
+    isPt = db.session.execute(ptquery).fetchone()
+    if isPt == (True,):
+        applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
     table = editAvailableTable(availables)
-    return render_template('availableWithEdit.html', table=table, username=current_user.username + " caretaker")
+    return render_template('availableWithEdit.html', table=table, applicationType=applicationType, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/available/edit", methods=["GET", "POST"])
@@ -336,10 +367,10 @@ def render_caretaker_cantakecare_delete():
 #@login_required
 @roles_required('petowner')
 def render_owner_page(page=1):
-    countquery = """SELECT COUNT(*) FROM users u WHERE u.usertype = 'caretaker'
+    countquery = """SELECT COUNT(*) FROM users WHERE users.usertype = 'caretaker'
                          AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
-                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))""".format(current_user.contact)
+                         category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))""".format(current_user.contact)
     
     count = db.session.execute(countquery).fetchone()
     total = count[0]
@@ -387,7 +418,7 @@ def render_owner_page(page=1):
                 (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
                 AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
-                         category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
+                         category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)

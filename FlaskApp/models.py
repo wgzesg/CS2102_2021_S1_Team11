@@ -7,68 +7,6 @@ def load_user(contact):
     us = Users.query.filter_by(contact=contact).first()
     return us
 
-
-# class Admins(db.Model, UserMixin):
-#     username = db.Column(db.String, nullable=False)
-#     password = db.Column(db.String, nullable=False)
-#     contact = db.Column(db.String, primary_key=True)
-#     card = db.Column(db.String, nullable=True)
-#     usertype = db.Column(db.String, nullable=True)
-    
-#     def is_authenticated(self):
-#         return True
-
-#     def is_active(self):
-#         return True
-
-#     def is_anonymous(self):
-#         return False
-
-#     def get_id(self):
-#         return self.contact
-
-# class Petowners(db.Model, UserMixin):
-#     username = db.Column(db.String, nullable=False)
-#     password = db.Column(db.String, nullable=False)
-#     contact = db.Column(db.String, primary_key=True)
-#     card = db.Column(db.String, nullable=True)
-#     usertype = db.Column(db.String, nullable=True)
-#     pet = db.relationship('Pets', backref='owner')
-#     postalcode = db.Column(db.Integer)
-    
-#     def is_authenticated(self):
-#         return True
-
-#     def is_active(self):
-#         return True
-
-#     def is_anonymous(self):
-#         return False
-
-#     def get_id(self):
-#         return self.contact
-    
-# class Caretakers(db.Model, UserMixin):
-#     username = db.Column(db.String, nullable=False)
-#     password = db.Column(db.String, nullable=False)
-#     contact = db.Column(db.String, primary_key=True)
-#     usertype = db.Column(db.String, nullable=True)
-#     isparttime = db.Column(db.Boolean, nullable=False)
-#     biddingccontact = db.relationship('Biddings', backref='contact')
-#     postalcode = db.Column(db.Integer)
-    
-#     def is_authenticated(self):
-#         return True
-
-#     def is_active(self):
-#         return True
-
-#     def is_anonymous(self):
-#         return False
-
-#     def get_id(self):
-#         return self.contact
-
 class Users(db.Model, UserMixin):
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
@@ -100,13 +38,12 @@ class Users(db.Model, UserMixin):
 class Canparttime(db.Model):
     ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True)
     isparttime = db.Column(db.Boolean, nullable=False)
-    avgrating = db.Column(db.Float, nullable=False)
+    avgrating = db.Column(db.Float, nullable=False, default=5)
     salary = db.Column(db.Integer, nullable=False, default=0)
     
 class Role(db.Model):
     
     name = db.Column(db.String, primary_key=True, nullable=False, unique=True)
-    #userrole = db.relationship('UserRoles', backref='userroletype')
     
     
 class UserRoles(db.Model):
@@ -128,8 +65,6 @@ class Pets(db.Model, UserMixin):
     pcontact = db.Column(db.Integer, db.ForeignKey('users.contact'), primary_key=True, nullable=False)
     category = db.Column(db.String, db.ForeignKey('categories.category'), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    # biddingpetname = db.relationship('Biddings', backref='pet')
-    # biddingpcontact = db.relationship('Biddings', primaryjoin="Pets.pcontact==Biddings.pcontact")
     def is_active(self):
         return True
 

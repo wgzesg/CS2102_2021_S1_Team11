@@ -70,6 +70,9 @@ INSERT INTO dailyprice VALUES ('bird', 2, 24);
 INSERT INTO dailyprice VALUES ('bird', 3, 36);
 INSERT INTO dailyprice VALUES ('bird', 4, 48);
 INSERT INTO dailyprice VALUES ('bird', 5, 60);
+INSERT INTO dailyprice VALUES ('dog', 0, 0);
+INSERT INTO dailyprice VALUES ('cat', 0, 5);
+INSERT INTO dailyprice VALUES ('bird', 0, 0);
 
 CREATE TABLE pets(
     petname VARCHAR NOT NULL,
