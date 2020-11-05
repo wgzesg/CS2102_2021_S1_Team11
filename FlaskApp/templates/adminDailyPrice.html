@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="https://cs2102project.herokuapp.com/static/images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-util.css">
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-main.css">
+    <!--===============================================================================================-->
+
+	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/topbar.css">
+    <style>
+        .container {
+            width: 1000px;
+            text-align: center;
+        }
+
+        #addButton{
+            display: block;
+            margin: 0 auto;
+        }
+
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
+        }
+
+        #registerButton {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .formField {
+            padding: 10px 0;
+        }
+
+        #logout {
+            float: right;
+        }
+
+        .button_wrapper{
+            display: block;
+            width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            left: 0;
+            right: 0;
+            top: 30vh;
+            margin-left: 60px;
+        }
+        h3{
+            padding-top: 20px;
+        }
+        .result-row{
+            padding: 10px 0;
+        }
+
+        .edit{
+            display: inline;
+            opacity: 1; 
+            width: 70px;
+            height: 35px;
+            margin-left: 20px;
+        }
+        .container-login100{
+            min-height: 94vh;
+        }
+
+        h1{
+            font-size: 20px;
+        }
+        .table{
+            font-size: 14px;
+            position: absolute;
+            margin-top: 30px;
+        }
+        .content{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 900px;
+            height: 200px;
+            transform: translate(-28%,100%);
+        }
+        .wrapper {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <a href="https://cs2102project.herokuapp.com/admin">Home</a>
+        <a href="https://cs2102project.herokuapp.com/admin/summary">Summary</a>
+        <a href="https://cs2102project.herokuapp.com/logout" id="logout">Logout</a>
+    </div>
+    <div class="wrapper">
+        <div class="content">
+            <h1>
+                <p>Here are a list of daily price rates.</p>
+            </h1>
+            <div class="table">{{table}}</div>
+        </div>
+    </div>
+</body>
+</html>
