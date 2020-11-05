@@ -45,43 +45,27 @@
             width: 50%;
         }
         
-        body {
-            color: #222;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 24px;
-            margin: 0 0 14px;
-        }
-        
-        h1 {
-            color: #222;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 24px;
-            margin: 0 0 14px;
-        }
-        
-        a.more-link {
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 3px 10px;
-            background-color: #ff6600;
-            border-radius: 5px;
-            float: right;
-        }
-        
-        a.more-link:hover {
-            text-decoration: none;
-            background-color: #666;
-            border-radius: 0px;
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
         }
 
-        #logout{
-            float: right;
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }
     </style>
 </head>
