@@ -348,3 +348,11 @@ class CanTakeCareForm(FlaskForm):
         render_kw={'placeholder': 'Category', 'class': 'input100'}	
     )
 
+class DailyPriceForm(FlaskForm):
+    dailyprice = IntegerField(
+        label='DailyPrice',
+        validators = [Optional()],
+        default=None,
+        render_kw={'placeholder': 'DailyPrice', 'class': 'input100'}
+    )
+

@@ -5,10 +5,10 @@ from flask_table import Table, Col
 from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
-from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm
-from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews
+from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm, DailyPriceForm
+from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews, DailyPrice
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
-    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, SalaryTable
+    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, SalaryTable, DailyPriceTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
@@ -174,6 +174,33 @@ def render_admin_update_profile():
             print("Admin profile has been updated", flush=True)
             return redirect(url_for('view.render_admin_profile'))
         return render_template("update.html", form=form, username=current_user.username + " admin")
+
+
+@view.route("/admin/dailyprice", methods=["GET", "POST"])
+@roles_required('admin')
+def render_admin_dailyprice():
+    query = "SELECT * FROM dailyprice"
+    dailyprices = db.session.execute(query)
+    print(dailyprices, flush=True)
+    table = DailyPriceTable(dailyprices)
+    return render_template("adminDailyPrice.html", table=table, username=current_user.username + " admin")
+
+@view.route("/admin/dailyprice/update", methods=["GET", "POST"])
+@roles_required('admin')
+def render_owner_pet_update():
+    cat = request.args.get('category')
+    rat= request.args.get('rating')
+    price = DailyPrice.query.filter_by(category=cat, rating=rat).first()
+    if price:
+        form = DailyPriceForm(obj=price)
+        if request.method == 'POST' and form.validate_on_submit():
+            thisprice = DailyPrice.query.filter_by(category=cat, rating=rat).first()
+            thisprice.price = int(form.age.data)
+            db.session.commit()
+            return redirect(url_for('view.render_admin_dailyprice'))
+        return render_template("dailyPriceUpdate.html", form=form, username=current_user.username + " admin")
+
+
 
 
 @view.route("/caretaker", methods=["GET"])
