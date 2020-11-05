@@ -188,7 +188,7 @@ def render_admin_dailyprice():
 
 @view.route("/admin/dailyprice/update", methods=["GET", "POST"])
 @roles_required('admin')
-def render_owner_pet_update():
+def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
     price = DailyPrice.query.filter_by(category=cat, rating=rat).first()
