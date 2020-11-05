@@ -40,7 +40,8 @@ def render_registration_page():
         db.session.add(user1)
         db.session.commit()
         if(user_type == 'caretaker'):
-            canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, salary=0)
+            salery = 0 if is_part_time else 3000
+            canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, petday= 0, salary=salery)
             db.session.add(canparttime1)
             db.session.commit()
         print("commited", flush=True)
@@ -353,6 +354,71 @@ def render_caretaker_available_new():
         startday = form.startday.data
         endday = form.endday.data
         ccontact = contact
+        fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(ccontact)
+        isPartTime = db.session.execute(fullTimeQuery).fetchone()
+        print(isPartTime, flush=True)
+        if not isPartTime[0]:
+            overlapQuery = """
+            SELECT 1
+            FROM   (SELECT min(st) as st, max(en) as en
+                    FROM (SELECT st, en,
+                        max(new_start) OVER (ORDER BY st,en) AS left_edge
+                    FROM (SELECT st, en,
+                            CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
+                    FROM (SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday, endday)
+                         AS le FROM biddings WHERE ccontact = '{}') s1) s2) s3
+                    GROUP BY left_edge) AS f2
+            WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
+            """.format(ccontact, startday, endday)
+            hasOverlap = db.session.execute(overLapQuery).fetchone()
+            print(hasOverlap, flush=True)
+            if(hasOverlap):
+                flash("You have work to do during that period")
+                return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
+            
+            checkContinuous = """
+            SELECT SUM(diff)
+            FROM
+            (
+            SELECT FLOOR(COALESCE(EXTRACT(DAY FROM (f2.st - date_trunc('year', f2.st))), 365) / 150) diff
+            from (
+            (SELECT startday AS st, endday AS en FROM available WHERE ccontact = :cc)
+            UNION (SELECT :startday, :endday)
+            ORDER BY st LIMIT 1
+            ) AS f2
+
+            UNION
+
+            SELECT FLOOR(COALESCE(f2.st - lag(f2.en) over (order by f2.st, f2.en), 0) / 150) diff
+            FROM (
+            SELECT min(st) as st, max(en) as en
+            FROM (SELECT st, en,
+                    max(new_start) OVER (ORDER BY st,en) AS left_edge
+                    FROM (SELECT st, en,
+                        CASE WHEN st < max(le) OVER (ORDER BY st,en) THEN null ELSE st END AS new_start
+                        FROM (
+                            ((SELECT startday AS st, endday AS en, lag(endday) OVER (ORDER BY startday,endday) AS le FROM available WHERE ccontact = :cc)
+                            UNION (SELECT :startday, :endday, :endday))) s1) s2) s3
+                    GROUP BY left_edge
+            LIMIT 1
+            ) AS f2
+
+            UNION
+
+            SELECT FLOOR(COALESCE(EXTRACT( DAY FROM (date_trunc('year',f2.en) + INTERVAL '1' YEAR) - f2.en), 365) / 150)
+            FROM (
+            (SELECT startday AS st, endday AS en
+            FROM available WHERE ccontact = :cc) UNION
+            (SELECT :startday, :endday)
+            ORDER BY en DESC LIMIT 1
+            ) AS f2) AS everything
+            """
+            parameters = dict(cc = ccontact, startday = startday, endday = endday)
+            numberOfperiods = db.session.execute(checkContinuous, parameters)
+            if numberOfperiods[0] < 2:
+                flash("You have not worked for 2 continuous 150 days")
+                return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
+            
         query = "INSERT INTO available(startday, endday, ccontact) VALUES ('{}', '{}', '{}')" \
         .format(startday, endday, ccontact)
         db.session.execute(query)

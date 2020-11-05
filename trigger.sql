@@ -59,18 +59,27 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION addSalary()
 RETURNS TRIGGER AS $$
 BEGIN 
-  UPDATE canparttime cp SET salary = salary + 
+  UPDATE canparttime cp SET petday = petday + NEW.endday - NEW.startday
+
+  UPDATE canparttime cp SET salary = salary + (
   (
-    SELECT calcMoney(NEW.startday, NEW.endday, 
-      (SELECT price FROM dailyprice WHERE
-       category = (SELECT category FROM pets P
-       WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
-       AND
-       rating = (SELECT CEIL(avgrating) FROM canparttime cpt
-       WHERE NEW.ccontact = cpt.ccontact)
-      )
+   SELECT calcMoney(NEW.startday, NEW.endday,
+     (SELECT price FROM dailyprice WHERE
+      category = (SELECT category FROM pets P
+      WHERE NEW.petname = P.petname AND NEW.pcontact = P.pcontact)
+      AND
+      rating = (SELECT CEIL(avgrating) FROM canparttime cpt
+      WHERE NEW.ccontact = cpt.ccontact)
      )
-  )
+    )
+ )) * (
+   CASE
+    WHEN isparttime THEN 0.75
+    WHEN petday >= 60 THEN 0.80
+    ELSE 0
+   END
+ )
+
   WHERE NEW.ccontact = cp.ccontact;
   RETURN NULL;
 END;

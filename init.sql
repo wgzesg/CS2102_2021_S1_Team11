@@ -45,6 +45,7 @@ CREATE TABLE canparttime (
     ccontact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact),
     isparttime BOOLEAN NOT NULL,
     avgrating FLOAT NOT NULL,
+    petday INT NOT NULL,
     salary INTEGER NOT NULL
 );
 
