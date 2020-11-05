@@ -2,7 +2,7 @@ from flask import flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField
 from wtforms.fields.html5 import DateField
-from wtforms.validators import InputRequired, ValidationError, EqualTo, Regexp, Optional
+from wtforms.validators import InputRequired, ValidationError, EqualTo, Regexp, Optional, NumberRange
 from wtforms.widgets import HiddenInput
 from models import Users, Cantakecare
 from datetime import date, datetime
@@ -64,6 +64,7 @@ class RegistrationForm(FlaskForm):
     )
     postal_code = IntegerField(
         label='Postal Code',
+        validators=[NumberRange(min=100000, max=999999)],
         render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
     )
     is_part_time = BooleanField(
@@ -126,6 +127,7 @@ class UserUpdateForm(FlaskForm):
     )
     postal_code = StringField(
         label='Postal Code',
+        validators=[NumberRange(min=100000, max=999999)],
         render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
     )
     password = PasswordField(
@@ -151,7 +153,7 @@ class PetUpdateForm(FlaskForm):
     )	
     age = IntegerField(	
         label='Age',	
-        validators=[InputRequired()],	
+        validators=[InputRequired(), NumberRange(min=0)],	
         render_kw={'placeholder': 'Age', 'class': 'input100'}	
     )
 
@@ -249,7 +251,7 @@ class BiddingForm(FlaskForm):
 class ReviewUpdateForm(FlaskForm):
     rating = IntegerField(
         label='Rating',
-        validators=[InputRequired()],
+        validators=[InputRequired(), NumberRange(min=1, max=5)],
         render_kw={'placeholder': 'rating'}
     )
     review = StringField(
