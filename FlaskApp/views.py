@@ -425,7 +425,7 @@ def render_owner_page(page=1):
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
-        caretable = ownerHomePage(selectedCareTakers)
+#        caretable = ownerHomePage(selectedCareTakers)
 
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
