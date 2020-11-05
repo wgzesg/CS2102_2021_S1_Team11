@@ -65,11 +65,7 @@ class RegistrationForm(FlaskForm):
     )
     postal_code = IntegerField(
         label='Postal Code',
-<<<<<<< HEAD
-        validators=[NumberRange(min=100000, max=999999)],
-=======
         validators=[NumberRange(100000, 999999, "Postal code has to be 6 digits long!")],
->>>>>>> e68861bba3df6e434a6d5cebdccf8a36993cafce
         render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
     )
     is_part_time = BooleanField(
@@ -158,11 +154,7 @@ class PetUpdateForm(FlaskForm):
     )	
     age = IntegerField(	
         label='Age',	
-<<<<<<< HEAD
-        validators=[InputRequired(), NumberRange(min=0)],	
-=======
         validators=[InputRequired(), NumberRange(0, 100, "Pet age cannot be negative or too old!")],
->>>>>>> e68861bba3df6e434a6d5cebdccf8a36993cafce
         render_kw={'placeholder': 'Age', 'class': 'input100'}	
     )
 
