@@ -17,6 +17,7 @@ def is_valid_contact(self, contact):
     if contact:
         raise ValidationError('That contact is already being registered. Please choose a different one.')
 
+
 # def is_valid_number(form, field):
 #     if not all(map(lambda char: char.isnumber(), field.data)):
 #         raise ValidationError('This field should only contain numbers')
@@ -64,7 +65,11 @@ class RegistrationForm(FlaskForm):
     )
     postal_code = IntegerField(
         label='Postal Code',
+<<<<<<< HEAD
         validators=[NumberRange(min=100000, max=999999)],
+=======
+        validators=[NumberRange(100000, 999999, "Postal code has to be 6 digits long!")],
+>>>>>>> e68861bba3df6e434a6d5cebdccf8a36993cafce
         render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
     )
     is_part_time = BooleanField(
@@ -85,7 +90,7 @@ class PetForm(FlaskForm):
     )
     age = IntegerField(
         label='Age',
-        validators=[InputRequired()],
+        validators=[InputRequired(), NumberRange(0, 100, "Pet age cannot be negative or too old!")],
         render_kw={'placeholder': 'Age', 'class': 'input100'}
     )
 
@@ -104,11 +109,11 @@ class PetUpdateForm(FlaskForm):
     category = StringField(
         label='Category',
         validators=[InputRequired()],
-        render_kw={'placeholder': 'Crredit Card', 'class': 'input100'}
+        render_kw={'placeholder': 'Credit Card', 'class': 'input100'}
     )
     age = IntegerField(
         label='Age',
-        validators=[InputRequired()],
+        validators=[InputRequired(), NumberRange(0, 100, "Pet age cannot be negative or too old!")],
         render_kw={'placeholder': 'Age', 'class': 'input100'}
     )
     
@@ -153,7 +158,11 @@ class PetUpdateForm(FlaskForm):
     )	
     age = IntegerField(	
         label='Age',	
+<<<<<<< HEAD
         validators=[InputRequired(), NumberRange(min=0)],	
+=======
+        validators=[InputRequired(), NumberRange(0, 100, "Pet age cannot be negative or too old!")],
+>>>>>>> e68861bba3df6e434a6d5cebdccf8a36993cafce
         render_kw={'placeholder': 'Age', 'class': 'input100'}	
     )
 
@@ -183,7 +192,7 @@ class CaretakerForm(FlaskForm):
     )
         postalcode = StringField(
         label='PostalCode',
-        validators=[InputRequired()],
+        validators=[InputRequired(), NumberRange(100000, 999999, "Postal code has to be 6 digits long!")],
         render_kw={'placeholder': 'PostalCode', 'class': 'input100'}
     )
 
