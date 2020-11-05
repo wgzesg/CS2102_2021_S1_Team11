@@ -441,7 +441,7 @@ def render_caretaker_available_new():
             ) AS f2) AS everything
             """
             parameters = dict(cc = ccontact, startday = startday, endday = endday)
-            numberOfperiods = db.session.execute(checkContinuous, parameters)
+            numberOfperiods = db.session.execute(checkContinuous, parameters).fetchone()
             if numberOfperiods[0] < 2:
                 flash("You have not worked for 2 continuous 150 days")
                 return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
