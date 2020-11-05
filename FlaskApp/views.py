@@ -41,7 +41,7 @@ def render_registration_page():
         db.session.commit()
         if(user_type == 'caretaker'):
             salery = 0 if is_part_time else 3000
-            canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=0, petday= 0, salary=salery)
+            canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=5.0, petday= 0, salary=salery)
             db.session.add(canparttime1)
             db.session.commit()
         print("commited", flush=True)
