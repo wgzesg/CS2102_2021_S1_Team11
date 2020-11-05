@@ -60,7 +60,7 @@ class categories(db.Model, UserMixin):
     category = db.Column(db.String, primary_key=True, nullable=False)
     petcat = db.relationship('Pets', backref='type')
     cantakecarecat = db.relationship('Cantakecare', backref='type')
-    dailypricecat = db.relationship('DailyPrice', backref='type')
+    dailypricecat = db.relationship('DailyPrice', backref='typeFromCat')
     
 class Pets(db.Model, UserMixin):
     petname = db.Column(db.String, primary_key=True, nullable=False)
