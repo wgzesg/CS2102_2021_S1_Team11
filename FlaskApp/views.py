@@ -97,12 +97,30 @@ def logout():
 
 @view.route("/admin", methods=["GET"])
 @roles_required('admin')
-def render_admin_page():
+def render_admin_page(page=1):
     print(current_user, flush=True)
     contact = current_user.contact
-    query = "SELECT * FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
-    results = profileTable(db.session.execute(query))
-    return render_template('adminSummary.html', results=results, username=current_user.username + " admin")
+    countquery = "SELECT COUNT(*) FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
+    count = db.session.execute(countquery).fetchone()
+    total = count[0]
+
+    # PER_PAGE = 10 
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='admin')
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = """SELECT * FROM users WHERE contact = '{}' AND usertype = 'admin'
+                         LIMIT '{}' OFFSET '{}'""".format(contact, page_display, page_offset)
+    else:
+        pagequery = """SELECT * FROM users WHERE contact = '{}' AND usertype = 'admin'
+                         LIMIT 10 OFFSET '{}'""".format(contact, page_offset)
+
+    results = profileTable(db.session.execute(pagequery))
+    return render_template('adminSummary.html', results=results, pagination=pagination, username=current_user.username + " admin")
 
 
 @view.route("/admin/summary", methods=["GET"])
