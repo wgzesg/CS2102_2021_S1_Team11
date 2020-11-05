@@ -397,7 +397,7 @@ def render_caretaker_available_new():
                     GROUP BY left_edge) AS f2
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(ccontact, startday, endday)
-            hasOverlap = db.session.execute(overLapQuery).fetchone()
+            hasOverlap = db.session.execute(overlapQuery).fetchone()
             print(hasOverlap, flush=True)
             if(hasOverlap):
                 flash("You have work to do during that period")
