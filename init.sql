@@ -7,7 +7,7 @@ CREATE TABLE categories (
 INSERT INTO categories VALUES ('bird');
 INSERT INTO categories VALUES ('cat');
 INSERT INTO categories VALUES ('dog');
-/*INSERT INTO categories VALUES ('hamster');
+INSERT INTO categories VALUES ('hamster');
 INSERT INTO categories VALUES ('shark');
 INSERT INTO categories VALUES ('fish');
 INSERT INTO categories VALUES ('rabbit');
@@ -18,7 +18,7 @@ INSERT INTO categories VALUES ('horse');
 INSERT INTO categories VALUES ('duck');
 INSERT INTO categories VALUES ('hedgehog');
 INSERT INTO categories VALUES ('snake');
-INSERT INTO categories VALUES ('guinea pig');*/
+INSERT INTO categories VALUES ('guinea pig');
 
 CREATE TABLE users (
     username VARCHAR NOT NULL,
@@ -71,9 +71,66 @@ INSERT INTO dailyprice VALUES ('bird', 2, 24);
 INSERT INTO dailyprice VALUES ('bird', 3, 36);
 INSERT INTO dailyprice VALUES ('bird', 4, 48);
 INSERT INTO dailyprice VALUES ('bird', 5, 60);
-INSERT INTO dailyprice VALUES ('dog', 0, 0);
-INSERT INTO dailyprice VALUES ('cat', 0, 5);
-INSERT INTO dailyprice VALUES ('bird', 0, 0);
+INSERT INTO dailyprice VALUES ('shark', 1, 10);
+INSERT INTO dailyprice VALUES ('shark', 2, 20);
+INSERT INTO dailyprice VALUES ('shark', 3, 30);
+INSERT INTO dailyprice VALUES ('shark', 4, 40);
+INSERT INTO dailyprice VALUES ('shark', 5, 50);
+INSERT INTO dailyprice VALUES ('hamster', 1, 10);
+INSERT INTO dailyprice VALUES ('hamster', 2, 20);
+INSERT INTO dailyprice VALUES ('hamster', 3, 30);
+INSERT INTO dailyprice VALUES ('hamster', 4, 40);
+INSERT INTO dailyprice VALUES ('hamster', 5, 50);
+INSERT INTO dailyprice VALUES ('fish', 1, 10);
+INSERT INTO dailyprice VALUES ('fish', 2, 20);
+INSERT INTO dailyprice VALUES ('fish', 3, 30);
+INSERT INTO dailyprice VALUES ('fish', 4, 40);
+INSERT INTO dailyprice VALUES ('fish', 5, 50);
+INSERT INTO dailyprice VALUES ('rabbit', 1, 10);
+INSERT INTO dailyprice VALUES ('rabbit', 2, 20);
+INSERT INTO dailyprice VALUES ('rabbit', 3, 30);
+INSERT INTO dailyprice VALUES ('rabbit', 4, 40);
+INSERT INTO dailyprice VALUES ('rabbit', 5, 50);
+INSERT INTO dailyprice VALUES ('spider', 1, 10);
+INSERT INTO dailyprice VALUES ('spider', 2, 20);
+INSERT INTO dailyprice VALUES ('spider', 3, 30);
+INSERT INTO dailyprice VALUES ('spider', 4, 40);
+INSERT INTO dailyprice VALUES ('spider', 5, 50);
+INSERT INTO dailyprice VALUES ('turtle', 1, 10);
+INSERT INTO dailyprice VALUES ('turtle', 2, 20);
+INSERT INTO dailyprice VALUES ('turtle', 3, 30);
+INSERT INTO dailyprice VALUES ('turtle', 4, 40);
+INSERT INTO dailyprice VALUES ('turtle', 5, 50);
+INSERT INTO dailyprice VALUES ('insect', 1, 10);
+INSERT INTO dailyprice VALUES ('insect', 2, 20);
+INSERT INTO dailyprice VALUES ('insect', 3, 30);
+INSERT INTO dailyprice VALUES ('insect', 4, 40);
+INSERT INTO dailyprice VALUES ('insect', 5, 50);
+INSERT INTO dailyprice VALUES ('horse', 1, 10);
+INSERT INTO dailyprice VALUES ('horse', 2, 20);
+INSERT INTO dailyprice VALUES ('horse', 3, 30);
+INSERT INTO dailyprice VALUES ('horse', 4, 40);
+INSERT INTO dailyprice VALUES ('horse', 5, 50);
+INSERT INTO dailyprice VALUES ('duck', 1, 10);
+INSERT INTO dailyprice VALUES ('duck', 2, 20);
+INSERT INTO dailyprice VALUES ('duck', 3, 30);
+INSERT INTO dailyprice VALUES ('duck', 4, 40);
+INSERT INTO dailyprice VALUES ('duck', 5, 50);
+INSERT INTO dailyprice VALUES ('hedgehog', 1, 10);
+INSERT INTO dailyprice VALUES ('hedgehog', 2, 20);
+INSERT INTO dailyprice VALUES ('hedgehog', 3, 30);
+INSERT INTO dailyprice VALUES ('hedgehog', 4, 40);
+INSERT INTO dailyprice VALUES ('hedgehog', 5, 50);
+INSERT INTO dailyprice VALUES ('snake', 1, 10);
+INSERT INTO dailyprice VALUES ('snake', 2, 20);
+INSERT INTO dailyprice VALUES ('snake', 3, 30);
+INSERT INTO dailyprice VALUES ('snake', 4, 40);
+INSERT INTO dailyprice VALUES ('snake', 5, 50);
+INSERT INTO dailyprice VALUES ('guinea pig', 1, 10);
+INSERT INTO dailyprice VALUES ('guinea pig', 2, 20);
+INSERT INTO dailyprice VALUES ('guinea pig', 3, 30);
+INSERT INTO dailyprice VALUES ('guinea pig', 4, 40);
+INSERT INTO dailyprice VALUES ('guinea pig', 5, 50);
 
 CREATE TABLE pets(
     petname VARCHAR NOT NULL,
