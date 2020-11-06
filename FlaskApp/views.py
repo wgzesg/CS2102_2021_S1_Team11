@@ -303,7 +303,7 @@ def render_caretaker_biddings_accept():
         setsuccessQuery = """
             UPDATE biddings 
             SET status = 'success' 
-            WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1
+            WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}'
         """.format(request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
 
         db.session.execute(setsuccessQuery)
