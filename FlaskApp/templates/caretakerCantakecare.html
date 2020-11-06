@@ -28,30 +28,8 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/topbar.css">
     <style>
-        .container {
-            width: 390px;
-        }
-
-        #addButton{
-            display: block;
-            margin: 0 auto;
-        }
-
-        .buttonWrapper {
-            padding-bottom: 32px;
-            padding-top: 30px;
-        }
-
-        #registerButton {
-            display: block;
-            margin: 0 auto;
-        }
-
         .formField {
             padding: 10px 0;
-        }
-        #logout{
-            float: right;
         }
         .wrapper{
             position: relative;
@@ -59,10 +37,9 @@
         .content{
             position: absolute;
             left: 50%;
-            top: 50%;
             width: 900px;
-            height: 200px;
             transform: translate(-28%,100%);
+            margin-top: 50px;
         }
         .table{
             font-size: 14px;
@@ -73,6 +50,29 @@
         }
         h1{
             font-size: 20px;
+        }
+        .pagination {
+            width: 200px;
+            justify-content: center;
+            position: absolute;
+            bottom: -2%;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }
     </style>
 </head>
