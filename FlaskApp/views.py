@@ -285,7 +285,7 @@ def render_caretaker_biddings_accept():
         query = """SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 
             AND ccontact = '{}' AND status = 'success' LIMIT 1""".format(selected, selected, ct)
         count = db.session.execute(query).fetchall()
-        if parttime.isparttime == True and parttime.avgrating < 3:
+        if parttime[0][1] == True and parttime[0][2] < 3:
             if count[0] > 2:
                 flag = False
                 count[0] = 0
