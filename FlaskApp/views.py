@@ -617,7 +617,21 @@ def render_owner_page():
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
-        total = selectedCareTakers.rowcount().fetchall()
+        totalQuery = """
+            SELECT COUNT(*)
+            FROM users
+            WHERE
+                usertype = 'caretaker'
+                AND
+                (:cc is null or contact=:cc)
+                AND
+                (:postal_code is null or postalcode / 1000 = :postal_code / 1000 )
+                AND EXISTS (SELECT 1 FROM pets 
+                         WHERE pcontact = '{}' AND 
+                         category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))
+        """.format(current_user.contact)
+        totalResult = db.session.execute(query, parameters).fetchall()
+        
         if total[0] != None:
             pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
             caretable = ownerHomePage(selectedCareTakers)
