@@ -191,11 +191,11 @@ def render_admin_dailyprice():
 def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
-    price = DailyPrice.query.filter_by(category=cat, rating=rat).first()
+    price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
     if price:
         form = DailyPriceForm(obj=price)
         if request.method == 'POST' and form.validate_on_submit():
-            thisprice = DailyPrice.query.filter_by(category=cat, rating=rat).first()
+            thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
             thisprice.price = int(form.age.data)
             db.session.commit()
             return redirect(url_for('view.render_admin_dailyprice'))
