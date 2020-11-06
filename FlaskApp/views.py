@@ -606,7 +606,10 @@ def render_owner_page():
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
-        caretable = ownerHomePage(selectedCareTakers)
+        total = selectedCareTakers.rowcount().fetchone()
+        if total != None:
+            pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
+            caretable = ownerHomePage(selectedCareTakers)
 
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
