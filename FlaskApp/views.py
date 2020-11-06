@@ -251,7 +251,7 @@ def render_caretaker_page():
     print(results, flush=True)
     table2 = CaretakersBidTable(results)
 
-    query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
+    query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.petday, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     table1 = canparttimeTable(results)
     return render_template('caretaker.html', table1=table1, table2 = table2, username=current_user.username + " caretaker")
