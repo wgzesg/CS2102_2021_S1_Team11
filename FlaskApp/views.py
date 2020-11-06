@@ -362,12 +362,11 @@ def render_caretaker_update_profile():
     if ct:
         form = UserUpdateForm(obj=ct)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = ct
-            profile.username = form.username.data
-            profile.password = form.password.data
-            profile.card = form.credit_card.data
-            profile.isparttime = form.is_part_time.data
-            profile.postalcode = form.postal_code.data
+            update = """UPDATE users
+                    SET username = '{}', password = '{}', card = '{}', postalcode = '{}'
+                    WHERE contact = '{}';""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+                    form.credit_card.data, form.postal_code.data, contact)
+            db.session.execute(update)
             db.session.commit()
             print("Caretaker profile has been updated", flush=True)
             return redirect(url_for('view.render_caretaker_profile'))
