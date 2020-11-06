@@ -273,10 +273,17 @@ def render_caretaker_biddings_accept():
     parttimeQuery = "SELECT * FROM canparttime WHERE ccontact = '{}' LIMIT 1".format(contact)
     parttime = db.session.execute(parttimeQuery).fetchall()
     #parttime = Canparttime.query.filter_by(ccontact=contact).first()
-         
-    bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
-        ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
-        startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
+
+
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
+                                                                                                                                      request.args.get('ccontact'),
+                                                                                                                                      request.args.get('petName'),
+                                                                                                                                      request.args.get('startDay'),
+                                                                                                                                      request.args.get('endDay'))
+    bid = db.session.query(bidQuery).fetchall()
+    #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
+    #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
+    #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
@@ -284,8 +291,8 @@ def render_caretaker_biddings_accept():
     flag = True
     for selected in daterange(datetime.strptime(startday, '%Y-%m-%d'), datetime.strptime(endday, '%Y-%m-%d')):
         query = """SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 
-            AND ccontact = '{}' AND status = 'success'""".format(selected, selected, ct)
-        count = db.session.execute(query).fetchone()
+            AND ccontact = '{}' AND status = 'success' LIMIT 1""".format(selected, selected, ct)
+        count = db.session.execute(query).fetchall()
         if parttime.isparttime == True and parttime.avgrating < 3:
             if count[0] > 2:
                 flag = False
