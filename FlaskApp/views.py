@@ -620,8 +620,8 @@ def render_owner_page():
 @roles_required('petowner')
 def render_owner_summary():
     contact = current_user.contact
-    query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
-    results = db.session.execute(query).fetchone()
+    query = "SELECT * FROM users WHERE contact = '{}' LIMIT 1;".format(contact)
+    results = db.session.execute(query).fetchall()
     return render_template("profile.html", results=results, username=current_user.username + " owner")
 
 
@@ -630,8 +630,8 @@ def render_owner_summary():
 def render_owner_profile():
     form = ProfileForm()
     contact = current_user.contact
-    query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
-    profile = db.session.execute(query).fetchone()
+    query = "SELECT * FROM users WHERE contact = '{}';".format(contact)
+    profile = db.session.execute(query).fetchall()
     return render_template("profileOwner.html", profile=profile, form=form, username=current_user.username + " owner")
 
 
@@ -639,14 +639,14 @@ def render_owner_profile():
 @roles_required('petowner')
 def render_owner_profile_update():
     contact = current_user.contact
-    userQuery = "SELECT * FROM users WHERE contact = '{}'".format(contact)
-    petowner = db.session.execute(userQuery).fetchone()
+    userQuery = "SELECT * FROM users WHERE contact = '{}';".format(contact)
+    petowner = db.session.execute(userQuery).fetchall()
     if petowner:
         form = UserUpdateForm(obj=petowner)
         if request.method == 'POST' and form.validate_on_submit():
             update = """UPDATE users
                     SET username = '{}', password = '{}', card = '{}', postalcode = '{}'
-                    WHERE contact = '{}'""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+                    WHERE contact = '{}';""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
                     form.credit_card.data, form.postal_code.data, contact)
             db.session.execute(update)
             db.session.commit()
@@ -659,7 +659,7 @@ def render_owner_profile_update():
 @roles_required('petowner')
 def render_owner_pet():
     contact = current_user.contact
-    query = "SELECT * FROM pets WHERE pcontact = '{}'".format(contact)
+    query = "SELECT * FROM pets WHERE pcontact = '{}';".format(contact)
     pets = db.session.execute(query)
     print(pets, flush=True)
     table = editPetTable(pets)
@@ -694,7 +694,7 @@ def render_owner_pet_update():
     pc = current_user.contact
     pn = request.args.get('petname')
     petquery = "SELECT * FROM pets WHERE petname = '{}' AND pcontact = '{}'".format(pn, pc)
-    pet = db.session.execute(petquery).fetchone()
+    pet = db.session.execute(petquery).fetchall()
     if pet:
         form = PetUpdateForm(obj=pet)
         if request.method == 'POST' and form.validate_on_submit():
