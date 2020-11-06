@@ -232,7 +232,7 @@ def render_dailyprice_update():
             #thispriceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
             #thisprice = db.session.execute(thispriceQuery).fetchall()
             #thisprice.price = int(form.price.data)
-            update = """UPDATE users
+            update = """UPDATE dailyprice
                     SET price = '{}'
                     WHERE category = '{}' AND rating = '{}';""".format(form.price.data, cat, rat)
             db.session.execute(update)
