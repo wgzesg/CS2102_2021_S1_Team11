@@ -502,7 +502,8 @@ def render_caretaker_cantakecare_new():
 def render_caretaker_cantakecare_delete():
     contact = current_user.contact
     category = request.args.get('category')
-    thispet = Cantakecare.query.filter_by(category=category, ccontact=contact).first()
+    query = "SELECT * FROM cantakecare WHERE category = '{}' AND ccontact = '{}'".format(category, contact)
+    thispet = db.session.execute(query).first()
     if thispet:
         if request.method == 'POST':
             db.session.delete(thispet)
