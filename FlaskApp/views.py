@@ -37,7 +37,7 @@ def render_registration_page():
         user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, postalcode=postal_code, password=hashed_password)
         roleQuery = "SELECT name FROM role WHERE name = '{}' LIMIT 1".format(user_type)
         #role = Role.query.filter_by(name=user_type).first()
-        role = db.session.execute(roleQuery)
+        role = db.session.execute(roleQuery).fetchall()
         user1.roles.append(role)
         db.session.add(user1)
         db.session.commit()
