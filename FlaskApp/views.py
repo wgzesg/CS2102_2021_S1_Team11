@@ -279,9 +279,10 @@ def render_caretaker_biddings_accept():
                                                                                                                                       request.args.get('petName'),
                                                                                                                                       request.args.get('startDay'),
                                                                                                                                       request.args.get('endDay'))
-    bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
-        ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
-        startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
+    bid = db.session.query(bidQuery).fetchall()
+    #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
+    #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
+    #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
