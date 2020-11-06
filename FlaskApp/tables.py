@@ -19,8 +19,8 @@ class editAvailableTable(Table):
     startday = Col('Start Date ')
     endday = Col('End Date ')
     ccontact = Col('Contact')
-    edit = LinkCol('Edit ', 'view.render_caretaker_available_edit', url_kwargs=dict(startday='startday', endday='endday'), column_html_attrs = {'class': 'btn btn-outline-secondary btn-sm'})
-    delete = ButtonCol('Delete', 'view.render_caretaker_available_delete', url_kwargs=dict(startday='startday', endday='endday'), column_html_attrs = {'class': 'btn btn-outline-secondary btn-sm'})
+    edit = LinkCol('Edit ', 'view.render_caretaker_available_edit', url_kwargs=dict(startday='startday', endday='endday'), column_html_attrs = {'class': 'btn button-outline btn-sm'})
+    delete = ButtonCol('Delete', 'view.render_caretaker_available_delete', url_kwargs=dict(startday='startday', endday='endday'), column_html_attrs = {'class': 'btn button-outline-secondary btn-sm'})
 
 class ownerHomePage(Table):
     username = Col('Caretaker Name ')
