@@ -273,7 +273,7 @@ def render_caretaker_biddings_accept():
     parttime = db.session.execute(parttimeQuery).fetchall()
 
 
-    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
                 request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
     bid = db.session.query(bidQuery).fetchall()
     def daterange(startday, endday):
@@ -316,7 +316,7 @@ def render_caretaker_biddings_finish():
     #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
     #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
     #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
-    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(
         request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay')
     )
     bid = db.session.execute(bidQuery).fetchall()
@@ -382,7 +382,7 @@ def render_caretaker_available_edit():
     astart = request.args.get('startday')
     aend = request.args.get('endday')
     #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    availableQuery = "SELECT * FROM available WHERE startday = '{}'AND endday = '{}'AND ccontact = '{}'".format(astart, aend, ac)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         form = AvailableUpdateForm(obj=available)
@@ -390,7 +390,7 @@ def render_caretaker_available_edit():
             updateAvail = """
                 UPDATE available
                 SET startday = '{}', endday = '{}'
-                WHERE startday='{}',endday='{}',ccontact='{}'
+                WHERE startday='{}'AND endday='{}',ccontact='{}'
             """.format(form.startday.data, form.endday.data, astart, aend, ac)
             db.session.execute(updateAvail)
             db.session.commit()
@@ -405,7 +405,7 @@ def render_caretaker_available_delete():
     astart = request.args.get('startday')
     aend = request.args.get('endday')
     #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    availableQuery = "SELECT * FROM available WHERE startday = '{}'AND endday = '{}'AND ccontact = '{}'".format(astart, aend, ac)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         if request.method == 'POST':
@@ -500,9 +500,9 @@ def render_caretaker_available_new():
 @roles_required('caretaker')
 def render_caretaker_cantakecare():
     contact = current_user.contact
-    query = "SELECT * FROM cantakecare WHERE ccontact = '{}'".format(contact)
-    canTakeCare = db.session.execute(query)
-    total = canTakeCare.rowcount().fetchone()
+    countquery = "SELECT COUNT(*) FROM cantakecare WHERE ccontact = '{}'".format(contact)
+    count = db.session.execute(countquery).fetchone()
+    total = count[0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
