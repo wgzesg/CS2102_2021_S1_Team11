@@ -435,8 +435,8 @@ def render_caretaker_available_new():
         startday = form.startday.data
         endday = form.endday.data
         ccontact = contact
-        fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(ccontact)
-        isPartTime = db.session.execute(fullTimeQuery).fetchone()
+        fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}' LIMIT 1".format(ccontact)
+        isPartTime = db.session.execute(fullTimeQuery).fetchall()
         print(isPartTime, flush=True)
         if not isPartTime[0]:
             overlapQuery = """
