@@ -522,7 +522,7 @@ def render_caretaker_cantakecare_delete():
 @view.route("/owner", methods=["GET", "POST"])
 #@login_required
 @roles_required('petowner')
-def render_owner_page(page=1):
+def render_owner_page():
     countquery = """SELECT COUNT(*) FROM users WHERE users.usertype = 'caretaker'
                          AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
@@ -532,7 +532,7 @@ def render_owner_page(page=1):
     total = count[0]
 
     # PER_PAGE = 10 
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
     # start = (page-1)*PER_PAGE
     # end = page * PER_PAGE
     pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
@@ -544,13 +544,13 @@ def render_owner_page(page=1):
                          AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
                          category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
-                         LIMIT '{}' OFFSET '{}'""".format(current_user.contact, page_display, page_offset)
+                         OFFSET '{}' LIMIT '{}' """.format(current_user.contact, page_offset, page_display)
     else:
         pagequery = """SELECT * FROM users u WHERE u.usertype = 'caretaker'
                          AND EXISTS (SELECT 1 FROM pets 
                          WHERE pcontact = '{}' AND 
                          category in (SELECT category FROM cantakecare WHERE ccontact = u.contact))
-                         LIMIT 10 OFFSET '{}'""".format(current_user.contact, page_offset)
+                         OFFSET '{}' LIMIT 10 """.format(current_user.contact, page_offset)
     caretaker_page = db.session.execute(pagequery)
     caretable = ownerHomePage(caretaker_page)
 
