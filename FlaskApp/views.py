@@ -430,7 +430,7 @@ def render_caretaker_available_new():
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}' LIMIT 1".format(ccontact)
         isPartTime = db.session.execute(fullTimeQuery).fetchall()
         print(isPartTime, flush=True)
-        if not isPartTime[0]:
+        if not isPartTime:
             overlapQuery = """
             SELECT 1
             FROM   (SELECT min(st) as st, max(en) as en
@@ -794,8 +794,8 @@ def render_owner_bid_new():
         isValidPeriod = True
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
         isPartTime = db.session.execute(fullTimeQuery).fetchall()
-        print(isPartTime[0], flush=True)
-        if not isPartTime[0][0]:
+        print(isPartTime, flush=True)
+        if not isPartTime:
             overLapQuery = """
             SELECT 1
             FROM   (SELECT min(st) as st, max(en) as en
