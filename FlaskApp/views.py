@@ -506,7 +506,8 @@ def render_caretaker_cantakecare_delete():
     thispet = db.session.execute(query).first()
     if thispet:
         if request.method == 'POST':
-            db.session.delete(thispet)
+            delelte = "DELETE * FROM cantakecare WHERE category = '{}' AND ccontact = '{}'".format(category, contact)
+            db.session.execute(delelte)
             db.session.commit()
         return redirect(url_for('view.render_caretaker_cantakecare'))
 # END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER
