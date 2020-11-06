@@ -178,9 +178,11 @@ def render_admin_update_profile():
             #profile = Users.query.filter_by(contact=contact).first()
             profileQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
             profile = db.session.execute(profileQuery).fetchall()
-            profile.username = form.username.data
+            #profile.username = form.username.data
             profile[0] = form.username.data
-            profile.password = form.password.data
+            #profile.password = form.password.data
+            profile[3] = form.password.data
+            
             db.session.commit()
             print("Admin profile has been updated", flush=True)
             return redirect(url_for('view.render_admin_profile'))
