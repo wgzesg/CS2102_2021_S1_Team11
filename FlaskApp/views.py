@@ -716,7 +716,7 @@ def render_owner_pet_delete():
     pc = current_user.contact
     pn = request.args.get('petname')
     #pet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-    petQuery = "SELECT * FROM pets WHERE petname = '{}', pcontact = '{}' LIMIT 1;".format(pn, pc)
+    petQuery = "SELECT * FROM pets WHERE petname = '{}', pcontact = {} LIMIT 1;".format(pn, pc)
     pet = db.session.execute(petQuery).fetchall()
     if pet:
         form = PetUpdateForm(obj=pet)
