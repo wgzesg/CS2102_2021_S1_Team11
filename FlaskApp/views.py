@@ -135,8 +135,8 @@ def render_admin_page(page=1):
 @roles_required('admin')
 def render_admin_summary_page():
     countquery = """SELECT COUNT(*) FROM canparttime"""
-    count = db.session.execute(countquery).fetchone()
-    total = count[0]
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -191,8 +191,8 @@ def render_admin_update_profile():
 @roles_required('admin')
 def render_admin_dailyprice():
     countquery = """SELECT COUNT(*) FROM dailyprice"""   
-    count = db.session.execute(countquery).fetchone()
-    total = count[0]
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -366,8 +366,8 @@ def render_caretaker_available():
     contact = current_user.contact
     applicationType = "leave"
     ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
-    isPt = db.session.execute(ptquery).fetchone()
-    if isPt == (True,):
+    isPt = db.session.execute(ptquery).fetchall()
+    if isPt[0] == (True,):
         applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
@@ -439,9 +439,9 @@ def render_caretaker_available_new():
                     GROUP BY left_edge) AS f2
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(ccontact, startday, endday)
-            hasOverlap = db.session.execute(overlapQuery).fetchone()
-            print(hasOverlap, flush=True)
-            if(hasOverlap):
+            hasOverlap = db.session.execute(overlapQuery).fetchall()
+            print(hasOverlap[0], flush=True)
+            if(hasOverlap[0]):
                 flash("You have work to do during that period")
                 return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
             
@@ -483,8 +483,8 @@ def render_caretaker_available_new():
             ) AS f2) AS everything
             """
             parameters = dict(cc = ccontact, startday = startday, endday = endday)
-            numberOfperiods = db.session.execute(checkContinuous, parameters).fetchone()
-            if numberOfperiods[0] < 2:
+            numberOfperiods = db.session.execute(checkContinuous, parameters).fetchall()
+            if numberOfperiods[0][0] < 2:
                 flash("You have not worked for 2 continuous 150 days")
                 return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
             
@@ -501,8 +501,8 @@ def render_caretaker_available_new():
 def render_caretaker_cantakecare():
     contact = current_user.contact
     countquery = "SELECT COUNT(*) FROM cantakecare WHERE ccontact = '{}'".format(contact)
-    count = db.session.execute(countquery).fetchone()
-    total = count[0]
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -563,8 +563,8 @@ def render_owner_page():
                          WHERE pcontact = '{}' AND 
                          category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))""".format(current_user.contact)
     
-    count = db.session.execute(countquery).fetchone()
-    total = count[0]
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -613,8 +613,8 @@ def render_owner_page():
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
-        total = selectedCareTakers.rowcount().fetchone()
-        if total != None:
+        total = selectedCareTakers.rowcount().fetchall()
+        if total[0] != None:
             pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
             caretable = ownerHomePage(selectedCareTakers)
 
@@ -771,9 +771,9 @@ def render_owner_bid_new():
         deliverymode = form.deliverymode.data
         isValidPeriod = True
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
-        isPartTime = db.session.execute(fullTimeQuery).fetchone()
-        print(isPartTime, flush=True)
-        if not isPartTime[0]:
+        isPartTime = db.session.execute(fullTimeQuery).fetchall()
+        print(isPartTime[0], flush=True)
+        if not isPartTime[0][0]:
             overLapQuery = """
             SELECT 1
             FROM   (SELECT min(st) as st, max(en) as en
@@ -786,9 +786,9 @@ def render_owner_bid_new():
                     GROUP BY left_edge) AS f2
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(cn, startday, endday)
-            hasOverlap = db.session.execute(overLapQuery).fetchone()
-            print(hasOverlap, flush=True)
-            if(hasOverlap):
+            hasOverlap = db.session.execute(overLapQuery).fetchall()
+            print(hasOverlap[0], flush=True)
+            if(hasOverlap[0]):
                 isValidPeriod = False
         else:
             intersection = """
@@ -803,9 +803,9 @@ def render_owner_bid_new():
                     GROUP BY left_edge) AS f2
             WHERE tsrange('{}', '{}', '[]') * tsrange(f2.st, f2.en, '[]') = tsrange('{}', '{}', '[]');
             """.format(cn, startday, endday, startday, endday)
-            hasFullOverage = db.session.execute(intersection).fetchone()
-            print(hasFullOverage, flush=True)
-            if(not hasFullOverage):
+            hasFullOverage = db.session.execute(intersection).fetchall()
+            print(hasFullOverage[0], flush=True)
+            if(not hasFullOverage[0]):
                 isValidPeriod = False
         if(isValidPeriod == False):
             flash("The caretaker is not available during this period")
@@ -852,8 +852,8 @@ def render_owner_review_update():
     endday = request.args.get('endday')
     reviewQuery = "SELECT * FROM reviews WHERE petname = '{}' AND pcontact = '{}' AND ccontact = '{}' AND startday = '{}' AND endday = '{}'"\
         .format(pn, pc, cc, startday, endday)
-    review = db.session.execute(reviewQuery).fetchone()
-    if review:
+    review = db.session.execute(reviewQuery).fetchall()
+    if review[0]:
         form = ReviewUpdateForm(obj=review)
         if request.method == 'POST' and form.validate_on_submit():
             reivewUpdate = """
