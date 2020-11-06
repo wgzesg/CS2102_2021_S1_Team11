@@ -502,10 +502,12 @@ def render_caretaker_cantakecare_new():
 def render_caretaker_cantakecare_delete():
     contact = current_user.contact
     category = request.args.get('category')
-    thispet = Cantakecare.query.filter_by(category=category, ccontact=contact).first()
+    query = "SELECT * FROM cantakecare WHERE category = '{}' AND ccontact = '{}'".format(category, contact)
+    thispet = db.session.execute(query).first()
     if thispet:
         if request.method == 'POST':
-            db.session.delete(thispet)
+            delelte = "DELETE FROM cantakecare WHERE category = '{}' AND ccontact = '{}'".format(category, contact)
+            db.session.execute(delelte)
             db.session.commit()
         return redirect(url_for('view.render_caretaker_cantakecare'))
 # END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER
@@ -605,15 +607,16 @@ def render_owner_profile():
 @roles_required('petowner')
 def render_owner_profile_update():
     contact = current_user.contact
-    petowner = Users.query.filter_by(contact=contact).first()
+    userQuery = "SELECT * FROM users WHERE contact = '{}'".format(contact)
+    petowner = db.session.execute(userQuery).fetchone()
     if petowner:
         form = UserUpdateForm(obj=petowner)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = Users.query.filter_by(contact=contact).first()
-            profile.username = form.username.data
-            profile.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            profile.card = form.credit_card.data
-            profile.postalcode = form.postal_code.data
+            update = """UPDATE users
+                    SET username = "{}", password = "{}", card = '{}', postalcode = '{}'
+                    WHERE contact = '{}'""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+                    form.credit_card.data, form.postal_code.data, contact)
+            db.session.execute(update)
             db.session.commit()
             print("Owner profile has been updated", flush=True)
             return redirect(url_for('view.render_owner_profile'))
