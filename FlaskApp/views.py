@@ -615,7 +615,7 @@ def render_owner_profile_update():
             update = """UPDATE users
                     SET username = "{}", password = "{}", card = '{}', postalcode = '{}'
                     WHERE contact = '{}'""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
-                    form.credit_card.data, form.postal_code.data)
+                    form.credit_card.data, form.postal_code.data, contact)
             db.session.execute(update)
             db.session.commit()
             print("Owner profile has been updated", flush=True)
