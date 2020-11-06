@@ -72,7 +72,9 @@ def render_login_page():
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
-        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
+        
+        # Don't change. This ORM is linked to how user is verified as login and possess certain roles
+        # This is required by other libraries such as login_manager
         user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
