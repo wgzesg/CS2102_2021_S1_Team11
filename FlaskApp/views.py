@@ -109,7 +109,7 @@ def render_admin_page(page=1):
     print(current_user, flush=True)
     contact = current_user.contact
     countquery = "SELECT COUNT(*) FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
-    count = db.session.execute(countquery).fetchone()
+    count = db.session.execute(countquery).fetchall()
     total = count[0]
 
     # PER_PAGE = 10 
