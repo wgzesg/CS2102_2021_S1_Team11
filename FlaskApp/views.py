@@ -321,10 +321,13 @@ def render_caretaker_biddings_finish():
     endday = request.args.get('endDay')
     ct = request.args.get('ccontact')
          
-    bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
-        ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
-        startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
-    
+    #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
+    #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
+    #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(
+        request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay')
+    )
+    bid = db.session.execute(bidQuery).fetchall()
     if bid:
     #     datetime.strptime(endday, '%Y-%m-%d') < datetime.today():
     #     flash("You are not allowed to terminate the bidding before end date.")
