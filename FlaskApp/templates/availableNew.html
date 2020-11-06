@@ -5,75 +5,34 @@
     <title>New Available Slot</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="static/css/topbar.css" rel="stylesheet" media="all">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="url('https://cs2102project.herokuapp.com/static/images/icons/favicon.ico')" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/bootstrap/css/bootstrap.min.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/animate/animate.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/css-hamburgers/hamburgers.min.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/animsition/css/animsition.min.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/select2/select2.min.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/vendor/daterangepicker/daterangepicker.css')">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/css/login-util.css')">
-    <link rel="stylesheet" type="text/css" href="url('https://cs2102project.herokuapp.com/static/css/login-main.css')">
+    <link rel="stylesheet" type="text/css" href="../static/css/topbar.css">
     <!--===============================================================================================-->
 
     <style>
-        body{
+        body {
             margin: 0;
         }
-        .limiter{
+
+        .limiter {
             position: relative;
         }
-        .container{
+
+        .container {
             position: absolute;
             left: 45%;
             top: 50%;
-            transform: translate(-28%,100%);
-        }       
+            transform: translate(-28%, 100%);
+        }
+
         .buttonWrapper {
             padding-bottom: 32px;
             padding-top: 30px;
         }
-        
-        #registerButton {
-            display: block;
-            margin: 0 auto;
-        }
-        
-        #partTimeOption {
-            display: inline;
-            float: left;
-            padding-left: 60px;
-            padding-right: 40px;
-        }
-        
-        #is_part_time {
-            float: left;
-            height: 20px;
-            width: 20px;
-        }
-        
-        .partTimeWrapper {
-            padding-top: 10px;
-            border-top: 1px solid #e6e6e6;
-        }
-        
+
         .formField {
             padding: 10px 0;
         }
-        
+
         h1 {
             color: #111;
             font-family: 'Open Sans Condensed', sans-serif;
@@ -84,6 +43,30 @@
             padding: 0 30px;
             text-align: center;
             text-transform: uppercase;
+        }
+
+        input[type="date"] {
+            -webkit-align-items: center;
+            display: -webkit-inline-flex;
+            font-family: monospace;
+            overflow: hidden;
+            padding: 0;
+            -webkit-padding-start: 1px;
+        }
+
+        input::-webkit-datetime-edit {
+            -webkit-flex: 1;
+            -webkit-user-modify: read-only !important;
+            display: inline-block;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        input::-webkit-datetime-edit-fields-wrapper {
+            -webkit-user-modify: read-only !important;
+            display: inline-block;
+            padding: 1px 0;
+            white-space: pre;
         }
     </style>
 </head>
