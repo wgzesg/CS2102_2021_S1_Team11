@@ -181,9 +181,9 @@ def render_admin_update_profile():
 @roles_required('admin')
 def render_admin_dailyprice():
     query = "SELECT * FROM dailyprice"
-    dailyprices = db.session.execute(query)
-    print(dailyprices, flush=True)
-    table = DailyPriceTable(dailyprices)
+    price = db.session.execute(query)
+    print(price, flush=True)
+    table = DailyPriceTable(price)
     return render_template("adminDailyPrice.html", table=table, username=current_user.username + " admin")
 
 @view.route("/admin/dailyprice/update", methods=["GET", "POST"])
