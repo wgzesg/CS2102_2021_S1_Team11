@@ -180,8 +180,7 @@ def render_admin_update_profile():
 @view.route("/admin/dailyprice", methods=["GET", "POST"])
 @roles_required('admin')
 def render_admin_dailyprice(page=1):
-    countquery = """SELECT COUNT(*) FROM dailyprice ORDER BY category, rating"""
-    
+    countquery = """SELECT COUNT(*) FROM dailyprice"""   
     count = db.session.execute(countquery).fetchone()
     total = count[0]
 
@@ -195,10 +194,10 @@ def render_admin_dailyprice(page=1):
     if total < page * 10:
         page_display = total % 10
         pagequery = """SELECT * FROM dailyprice ORDER BY category, rating
-                         LIMIT '{}' OFFSET '{}'""".format(page_display, page_offset)
+                         OFFSET '{}' LIMIT '{}' """.format(page_offset, page_display)
     else:
         pagequery = """SELECT * FROM dailyprice ORDER BY category, rating
-                         LIMIT 10 OFFSET '{}'""".format(page_offset)
+                         OFFSET '{}' LIMIT 10 """.format(page_offset)
     dailyprices = db.session.execute(pagequery)
     print(dailyprices, flush=True)
     table = DailyPriceTable(dailyprices)
