@@ -34,8 +34,11 @@ def render_registration_page():
         postal_code = form.postal_code.data
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
+        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
         user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, postalcode=postal_code, password=hashed_password)
-        role = Role.query.filter_by(name=user_type).first()
+        roleQuery = "SELECT name FROM role WHERE name = '{}' LIMIT 1".format(user_type)
+        #role = Role.query.filter_by(name=user_type).first()
+        role = db.session.execute(roleQuery).fetchall()
         user1.roles.append(role)
         db.session.add(user1)
         db.session.commit()
@@ -68,6 +71,7 @@ def render_login_page():
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
+        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
         user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
@@ -326,11 +330,13 @@ def render_caretaker_profile():
 @roles_required('caretaker')
 def render_caretaker_update_profile():
     contact = current_user.contact
+    caretakerQuery = "SELECT * FROM users WHERE contact='{}' LIMIT 1".format(contact)
     caretaker = Users.query.filter_by(contact=contact).first()
-    if caretaker:
-        form = UserUpdateForm(obj=caretaker)
+    ct = db.session.execute(caretakerQuery)
+    if ct:
+        form = UserUpdateForm(obj=ct)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = Users.query.filter_by(contact=contact).first()
+            profile = ct
             profile.username = form.username.data
             profile.password = form.password.data
             profile.card = form.credit_card.data
@@ -500,10 +506,12 @@ def render_caretaker_cantakecare_new():
 def render_caretaker_cantakecare_delete():
     contact = current_user.contact
     category = request.args.get('category')
-    thispet = Cantakecare.query.filter_by(category=category, ccontact=contact).first()
+    query = "SELECT * FROM cantakecare WHERE category = '{}' AND ccontact = '{}'".format(category, contact)
+    thispet = db.session.execute(query).first()
     if thispet:
         if request.method == 'POST':
-            db.session.delete(thispet)
+            delelte = "DELETE FROM cantakecare WHERE category = '{}' AND ccontact = '{}'".format(category, contact)
+            db.session.execute(delelte)
             db.session.commit()
         return redirect(url_for('view.render_caretaker_cantakecare'))
 # END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER END OF CARETAKER
@@ -603,15 +611,16 @@ def render_owner_profile():
 @roles_required('petowner')
 def render_owner_profile_update():
     contact = current_user.contact
-    petowner = Users.query.filter_by(contact=contact).first()
+    userQuery = "SELECT * FROM users WHERE contact = '{}'".format(contact)
+    petowner = db.session.execute(userQuery).fetchone()
     if petowner:
         form = UserUpdateForm(obj=petowner)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = Users.query.filter_by(contact=contact).first()
-            profile.username = form.username.data
-            profile.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            profile.card = form.credit_card.data
-            profile.postalcode = form.postal_code.data
+            update = """UPDATE users
+                    SET username = '{}', password = '{}', card = '{}', postalcode = '{}'
+                    WHERE contact = '{}'""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+                    form.credit_card.data, form.postal_code.data, contact)
+            db.session.execute(update)
             db.session.commit()
             print("Owner profile has been updated", flush=True)
             return redirect(url_for('view.render_owner_profile'))
@@ -656,14 +665,18 @@ def render_owner_pet_new():
 def render_owner_pet_update():
     pc = current_user.contact
     pn = request.args.get('petname')
-    pet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
+    petquery = "SELECT * FROM pets WHERE petname = '{}' AND pcontact = '{}'".format(pn, pc)
+    pet = db.session.execute(petquery).fetchone()
     if pet:
         form = PetUpdateForm(obj=pet)
         if request.method == 'POST' and form.validate_on_submit():
-            thispet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-            thispet.petname = form.petname.data
-            thispet.category = form.category.data
-            thispet.age = int(form.age.data)
+            updateQuery = """
+            UPDATE pets
+            SET petname = '{}', category = '{}', age = '{}'
+            WHERE pcontact = '{}' AND petname = '{}'
+            """.format(form.petname.data, form.category.data, int(form.age.data),
+            pc, pn)
+            db.session.execute(updateQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
         return render_template("pet.html", form=form, username=current_user.username + " owner")
@@ -710,8 +723,6 @@ def render_owner_bid_new():
 
     if request.method == 'POST' and form.validate_on_submit():
         petname = form.petname.data
-        pcategory = Pets.query.filter_by(petname = petname).first()
-        ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
         startday = form.startday.data
         endday = form.endday.data
         paymentmode = form.paymentmode.data
@@ -797,13 +808,18 @@ def render_owner_review_update():
     cc = request.args.get('ccontact')
     startday = request.args.get('startday')
     endday = request.args.get('endday')
-    review = Reviews.query.filter_by(petname=pn, pcontact=pc, ccontact=cc, startday=startday, endday=endday).first()
+    reviewQuery = "SELECT * FROM reviews WHERE petname = '{}' AND pcontact = '{}' AND ccontact = '{}' AND startday = '{}' AND endday = '{}'"\
+        .format(pn, pc, cc, startday, endday)
+    review = db.session.execute(reviewQuery).fetchone()
     if review:
         form = ReviewUpdateForm(obj=review)
         if request.method == 'POST' and form.validate_on_submit():
-            thisreview = Reviews.query.filter_by(petname=pn, pcontact=pc, ccontact=cc, startday=startday, endday=endday).first()
-            thisreview.review = form.review.data
-            thisreview.rating = int(form.rating.data)
+            reivewUpdate = """
+            UPDATE reviews
+            SET review = '{}', rating = '{}'
+            WHERE petname='{}' AND pcontact= '{}' AND ccontact= '{}' AND startday= '{}' AND endday= '{}'
+            """.format(form.review.data, int(form.rating.data), pn, pc, cc, startday, endday)
+            db.session.execute(reivewUpdate)
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
         return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
