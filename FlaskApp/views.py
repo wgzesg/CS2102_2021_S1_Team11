@@ -411,7 +411,7 @@ def render_caretaker_available_delete():
         if request.method == 'POST':
             deleteAvail = """
                 DELETE FROM available
-                WHERE WHERE startday='{}'AND endday='{}' AND ccontact='{}'
+                WHERE startday='{}'AND endday='{}' AND ccontact='{}'
             """.format(astart, aend, ac)
             db.session.execute(deleteAvail)
             db.session.commit()
