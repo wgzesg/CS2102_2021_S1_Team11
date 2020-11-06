@@ -275,7 +275,7 @@ def render_caretaker_biddings_accept():
 
     bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
                 request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
-    bid = db.session.query(bidQuery).fetchall()
+    bid = db.session.execute(bidQuery).fetchall()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
@@ -367,7 +367,7 @@ def render_caretaker_available():
     applicationType = "leave"
     ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
     isPt = db.session.execute(ptquery).fetchall()
-    if isPt[0] == (True,):
+    if isPt:
         applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
@@ -838,22 +838,6 @@ def render_owner_bid_new():
         db.session.commit()
         return redirect(url_for('view.render_owner_bid'))
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
-
-
-@view.route("/owner/bid/update", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_bid_update():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query)
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
-
-
-@view.route("/owner/bid/delete", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_bid_delete():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query)
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
 
 @view.route("/owner/review", methods=["GET", "POST"])
 @roles_required('petowner')
