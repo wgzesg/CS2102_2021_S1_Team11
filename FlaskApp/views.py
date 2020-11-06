@@ -6,7 +6,7 @@ from flask_paginate import Pagination, get_page_parameter
 from __init__ import db, login_manager, bcrypt
 from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm, AvailableForm, CanTakeCareForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm, DailyPriceForm
-from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews, DailyPrice
+from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews, Dailyprice
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, SalaryTable, DailyPriceTable
 from datetime import timedelta, date, datetime
