@@ -222,16 +222,20 @@ def render_admin_dailyprice():
 def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
-    price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
-    #priceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
-    #price = db.session.execute(priceQuery).fetchall()
+    #price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
+    priceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
+    price = db.session.execute(priceQuery).fetchall()
     if price:
         form = DailyPriceForm(obj=price)
         if request.method == 'POST' and form.validate_on_submit():
-            thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
+            #thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
             #thispriceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
             #thisprice = db.session.execute(thispriceQuery).fetchall()
-            thisprice.price = int(form.price.data)
+            #thisprice.price = int(form.price.data)
+            update = """UPDATE users
+                    SET price = '{}'
+                    WHERE category = '{}' AND rating = '{}';""".format(form.price.data, cat, rat)
+            db.session.execute(update)
             db.session.commit()
             return redirect(url_for('view.render_admin_dailyprice'))
         return render_template("dailyPriceUpdate.html", form=form, username=current_user.username + " admin")
@@ -251,7 +255,7 @@ def render_caretaker_page():
     print(results, flush=True)
     table2 = CaretakersBidTable(results)
 
-    query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
+    query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.petday, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     table1 = canparttimeTable(results)
     return render_template('caretaker.html', table1=table1, table2 = table2, username=current_user.username + " caretaker")
@@ -362,12 +366,11 @@ def render_caretaker_update_profile():
     if ct:
         form = UserUpdateForm(obj=ct)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = ct
-            profile.username = form.username.data
-            profile.password = form.password.data
-            profile.card = form.credit_card.data
-            profile.isparttime = form.is_part_time.data
-            profile.postalcode = form.postal_code.data
+            update = """UPDATE users
+                    SET username = '{}', password = '{}', card = '{}', postalcode = '{}'
+                    WHERE contact = '{}';""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+                    form.credit_card.data, form.postal_code.data, contact)
+            db.session.execute(update)
             db.session.commit()
             print("Caretaker profile has been updated", flush=True)
             return redirect(url_for('view.render_caretaker_profile'))
