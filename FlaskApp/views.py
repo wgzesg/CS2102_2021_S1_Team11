@@ -35,7 +35,9 @@ def render_registration_page():
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
         user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, postalcode=postal_code, password=hashed_password)
-        role = Role.query.filter_by(name=user_type).first()
+        roleQuery = "SELECT name FROM role WHERE name = '{}' LIMIT 1".format(user_type)
+        #role = Role.query.filter_by(name=user_type).first()
+        role = db.session.execute(roleQuery)
         user1.roles.append(role)
         db.session.add(user1)
         db.session.commit()
