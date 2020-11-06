@@ -367,7 +367,7 @@ def render_caretaker_available():
     applicationType = "leave"
     ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
     isPt = db.session.execute(ptquery).fetchall()
-    if isPt[0] == (True,):
+    if isPt:
         applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
@@ -535,8 +535,12 @@ def render_caretaker_cantakecare_new():
         category = form.category.data
         query = "INSERT INTO cantakecare(ccontact, category) VALUES ('{}', '{}')" \
         .format(contact, category)
-        db.session.execute(query)
-        db.session.commit()
+        try:
+            db.session.execute(query)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("You already declared that!")
         return redirect(url_for('view.render_caretaker_cantakecare'))
     return render_template('caretakerCantakecareNew.html', form=form, username=current_user.username + " caretaker")
 
