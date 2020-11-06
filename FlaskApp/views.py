@@ -661,14 +661,18 @@ def render_owner_pet_new():
 def render_owner_pet_update():
     pc = current_user.contact
     pn = request.args.get('petname')
-    pet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
+    petquery = "SELECT * FROM pets WHREE petname = '{}' AND pcontact = '{}'".format(pn, pc)
+    pet = db.session.execute(petquery).fetchone()
     if pet:
         form = PetUpdateForm(obj=pet)
         if request.method == 'POST' and form.validate_on_submit():
-            thispet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-            thispet.petname = form.petname.data
-            thispet.category = form.category.data
-            thispet.age = int(form.age.data)
+            updateQuery = """
+            UPDATE pets
+            SET petname = '{}', category = '{}', age = '{}'
+            WHERE pcontact = '{}' AND petname = '{}'
+            """.format(form.petname.data, form.category.data, int(form.age.data),
+            pn, pc)
+            db.session.execute(updateQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
         return render_template("pet.html", form=form, username=current_user.username + " owner")
