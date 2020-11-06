@@ -630,9 +630,9 @@ def render_owner_page():
                          WHERE pcontact = '{}' AND 
                          category in (SELECT category FROM cantakecare WHERE ccontact = users.contact))
         """.format(current_user.contact)
-        totalResult = db.session.execute(query, parameters).fetchall()
+        totalResult = db.session.execute(totalQuery, parameters).fetchall()
         
-        if total[0] != None:
+        if totalResult[0] != None:
             pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
             caretable = ownerHomePage(selectedCareTakers)
 
