@@ -39,6 +39,7 @@ class Canparttime(db.Model):
     ccontact = db.Column(db.Integer, db.ForeignKey('users.contact', ondelete='CASCADE'), primary_key=True)
     isparttime = db.Column(db.Boolean, nullable=False)
     avgrating = db.Column(db.Float, nullable=False, default=5)
+    petday = db.Column(db.Integer, nullable=False, default=0)
     salary = db.Column(db.Integer, nullable=False, default=0)
     dailypricecatr = db.relationship('Dailyprice', backref='type')
     

@@ -70,6 +70,7 @@ class profileTable(Table):
 class canparttimeTable(Table):
     ccontact = Col('Contact')
     avgrating = Col('Overall Rating')
+    petday = Col('Petday')
     salary = Col('Salary of the month')
 
 class CaretakersBidTable(Table):
