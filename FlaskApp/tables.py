@@ -95,4 +95,4 @@ class DailyPriceTable(Table):
     category = Col('catagory')
     rating = Col('rating')
     price = Col('price')
-    edit = LinkCol('Edit ', 'view.render_owner_review_update', url_kwargs=dict(category = 'category', rating = 'rating', price = 'price'))
+    edit = LinkCol('Edit ', 'view.render_dailyprice_update', url_kwargs=dict(category = 'category', rating = 'rating', price = 'price'))
