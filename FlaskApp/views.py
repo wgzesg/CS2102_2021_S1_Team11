@@ -804,7 +804,7 @@ def render_owner_review_update():
     cc = request.args.get('ccontact')
     startday = request.args.get('startday')
     endday = request.args.get('endday')
-    reviewQuery = "SELECT * FROM reviews WHERE petname='{}', pcontact= '{}', ccontact= '{}', startday= '{}', endday= '{}'"\
+    reviewQuery = "SELECT * FROM reviews WHERE petname = '{}' AND pcontact = '{}' AND ccontact = '{}' AND startday = '{}' AND endday = '{}'"\
         .format(pn, pc, cc, startday, endday)
     review = db.session.execute(reviewQuery).fetchone()
     if review:
@@ -813,7 +813,7 @@ def render_owner_review_update():
             reivewUpdate = """
             UPDATE reviews
             SET review = '{}', rating = '{}'
-            WHERE petname='{}', pcontact= '{}', ccontact= '{}', startday= '{}', endday= '{}'
+            WHERE petname='{}' AND pcontact= '{}' AND ccontact= '{}' AND startday= '{}' AND endday= '{}'
             """.format(form.review.data, int(form.rating.data), pn, pc, cc, startday, endday)
             db.session.execute(reivewUpdate)
             db.session.commit()
