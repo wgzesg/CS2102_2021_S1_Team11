@@ -388,9 +388,9 @@ def render_caretaker_available_edit():
     if available:
         form = AvailableUpdateForm(obj=available)
         if request.method == 'POST' and form.validate_on_submit():
-            thisavailable = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-            thisavailable.startday = form.startday.data
-            thisavailable.endday = form.endday.data
+            # thisavailable = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
+            # thisavailable.startday = form.startday.data
+            # thisavailable.endday = form.endday.data
             update = """UPDATE available
                     SET startday = '{}', endday = '{}'
                     WHERE startday = '{}' AND endday = '{}' AND ccontact = '{}';""".format(form.startday.data, form.endday.data, astart, aend, ac)
