@@ -345,10 +345,12 @@ class SearchCaretakerForm(FlaskForm):
         return super(SearchCaretakerForm, self).validate()
             
 class CanTakeCareForm(FlaskForm):
-    category = StringField(	
-        label='Category',	
-        validators=[InputRequired()],	
-        render_kw={'placeholder': 'Category', 'class': 'input100'}	
+    category = SelectField(
+        label='Category',
+        choices=[('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
+                ('turtle', 'Turtle'), ('insect', 'Insect'), ('horse', 'Horse'), ('duck', 'Duck'), ('hedgehog', 'Hedgehog'), ('snake', 'Snake'), ('guinea pig', 'Guinea pig')],
+        validators=[InputRequired()],
+        render_kw={'placeholder': 'Category', 'class': 'input100'}
     )
 
 class DailyPriceForm(FlaskForm):

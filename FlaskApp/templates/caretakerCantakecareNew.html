@@ -67,13 +67,7 @@
                 <form class="registrationForm login100-form">
                     {{ form.hidden_tag() }}
                     <div class="formField wrap-input100 validate-input">
-                        {{ form.category }} {% if form.category.errors %}
-                        <div class="errorMessage">
-                            {% for error in form.category.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
+                        {{ form.category }} 
                     </div>
                     <div class="buttonWrapper">
                         <button id="addButton" class="login100-form-btn" formmethod="post">Add</button>
