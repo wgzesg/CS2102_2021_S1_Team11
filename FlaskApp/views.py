@@ -178,6 +178,9 @@ def render_admin_update_profile():
             #profile = Users.query.filter_by(contact=contact).first()
             profileQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
             profile = db.session.execute(profileQuery).fetchall()
+            print(profile[0], flush=True)
+            print(profile[1], flush=True)
+            print(profile[2], flush=True)
             #profile.username = form.username.data
             profile[0] = form.username.data
             #profile.password = form.password.data
