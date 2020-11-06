@@ -613,7 +613,7 @@ def render_owner_profile_update():
         form = UserUpdateForm(obj=petowner)
         if request.method == 'POST' and form.validate_on_submit():
             update = """UPDATE users
-                    SET username = "{}", password = "{}", password = '{}', postalcode = '{}'
+                    SET username = "{}", password = "{}", card = '{}', postalcode = '{}'
                     WHERE contact = '{}'""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
                     form.credit_card.data, form.postal_code.data)
             db.session.execute(update)
