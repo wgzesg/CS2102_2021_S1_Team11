@@ -70,7 +70,10 @@ def render_login_page():
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
-        user = Users.query.filter_by(contact=form.contact.data).first()
+        userQuery = "SELECT * FROM users WHERE contact = '{}'".format(form.contact.data)
+        user = db.session.execute(userQuery).fetchone()
+        print(user, flush=True)
+        #user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
             next_page = request.args.get('next')
