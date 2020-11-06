@@ -271,7 +271,7 @@ def render_caretaker_biddings_accept():
     parttime = db.session.execute(parttimeQuery).fetchall()
 
 
-    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
                                                                                                                                       request.args.get('ccontact'),
                                                                                                                                       request.args.get('petName'),
                                                                                                                                       request.args.get('startDay'),
@@ -317,7 +317,7 @@ def render_caretaker_biddings_finish():
     #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
     #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
     #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
-    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(
         request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay')
     )
     bid = db.session.execute(bidQuery).fetchall()
@@ -383,7 +383,7 @@ def render_caretaker_available_edit():
     astart = request.args.get('startday')
     aend = request.args.get('endday')
     #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    availableQuery = "SELECT * FROM available WHERE startday = '{}'AND endday = '{}'AND ccontact = '{}'".format(astart, aend, ac)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         form = AvailableUpdateForm(obj=available)
@@ -407,7 +407,7 @@ def render_caretaker_available_delete():
     astart = request.args.get('startday')
     aend = request.args.get('endday')
     #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    availableQuery = "SELECT * FROM available WHERE startday = '{}'AND endday = '{}'AND ccontact = '{}'".format(astart, aend, ac)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         if request.method == 'POST':
