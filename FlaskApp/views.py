@@ -135,8 +135,8 @@ def render_admin_page(page=1):
 @roles_required('admin')
 def render_admin_summary_page():
     countquery = """SELECT COUNT(*) FROM canparttime"""
-    count = db.session.execute(countquery).fetchone()
-    total = count[0]
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
