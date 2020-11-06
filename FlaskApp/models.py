@@ -40,7 +40,7 @@ class Canparttime(db.Model):
     isparttime = db.Column(db.Boolean, nullable=False)
     avgrating = db.Column(db.Float, nullable=False, default=5)
     salary = db.Column(db.Integer, nullable=False, default=0)
-    dailypricecatr = db.relationship('DailyPrice', backref='type')
+    dailypricecatr = db.relationship('Dailyprice', backref='type')
     
 class Role(db.Model):
     
@@ -60,7 +60,7 @@ class categories(db.Model, UserMixin):
     category = db.Column(db.String, primary_key=True, nullable=False)
     petcat = db.relationship('Pets', backref='type')
     cantakecarecat = db.relationship('Cantakecare', backref='type')
-    dailypricecat = db.relationship('DailyPrice', backref='typeFromCat')
+    dailypricecat = db.relationship('Dailyprice', backref='typeFromCat')
     
 class Pets(db.Model, UserMixin):
     petname = db.Column(db.String, primary_key=True, nullable=False)
@@ -145,7 +145,7 @@ class Cantakecare(db.Model, UserMixin):
     def get_key(self):
         return (self.ccontact, self.category)
 
-class DailyPrice(db.Model, UserMixin):
+class Dailyprice(db.Model, UserMixin):
     category = db.Column(db.String, db.ForeignKey('categories.category', ondelete='CASCADE'), primary_key=True, nullable=False)
     rating = db.Column(db.Float, db.ForeignKey('canparttime.avgrating', ondelete='CASCADE'), primary_key=True, nullable=False)
     price = db.Column(db.Integer, nullable=False, default=0)
