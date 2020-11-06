@@ -179,12 +179,30 @@ def render_admin_update_profile():
 
 @view.route("/admin/dailyprice", methods=["GET", "POST"])
 @roles_required('admin')
-def render_admin_dailyprice():
-    query = "SELECT * FROM dailyprice"
-    dailyprices = db.session.execute(query)
+def render_admin_dailyprice(page=1):
+    countquery = """SELECT COUNT(*) FROM dailyprice"""
+    
+    count = db.session.execute(countquery).fetchone()
+    total = count[0]
+
+    # PER_PAGE = 10 
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = """SELECT * FROM dailyprice
+                         LIMIT '{}' OFFSET '{}'""".format(page_display, page_offset)
+    else:
+        pagequery = """SELECT * FROM dailyprice
+                         LIMIT 10 OFFSET '{}'""".format(page_offset)
+    dailyprices = db.session.execute(pagequery)
     print(dailyprices, flush=True)
     table = DailyPriceTable(dailyprices)
-    return render_template("adminDailyPrice.html", table=table, username=current_user.username + " admin")
+    return render_template("adminDailyPrice.html", table=table, pagination=pagination, username=current_user.username + " admin")
 
 @view.route("/admin/dailyprice/update", methods=["GET", "POST"])
 @roles_required('admin')
