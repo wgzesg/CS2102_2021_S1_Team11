@@ -79,8 +79,10 @@ class PetForm(FlaskForm):
         validators=[InputRequired()],
         render_kw={'placeholder': 'Petname', 'class': 'input100'}
     )
-    category = StringField(
+    category = SelectField(
         label='Category',
+        choices=[('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
+                ('turtle', 'Turtle'), ('insect', 'Insect'), ('horse', 'Horse'), ('duck', 'Duck'), ('hedgehog', 'Hedgehog'), ('snake', 'Snake'), ('guinea pig', 'Guinea pig')],
         validators=[InputRequired()],
         render_kw={'placeholder': 'Category', 'class': 'input100'}
     )
@@ -102,10 +104,12 @@ class PetUpdateForm(FlaskForm):
         validators=[InputRequired(), is_valid_contact],
         render_kw={'placeholder': 'Contact', 'class': 'input100'}
     )
-    category = StringField(
+    category = SelectField(
         label='Category',
+        choices=[('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
+                ('turtle', 'Turtle'), ('insect', 'Insect'), ('horse', 'Horse'), ('duck', 'Duck'), ('hedgehog', 'Hedgehog'), ('snake', 'Snake'), ('guinea pig', 'Guinea pig')],
         validators=[InputRequired()],
-        render_kw={'placeholder': 'Credit Card', 'class': 'input100'}
+        render_kw={'placeholder': 'Category', 'class': 'input100'}
     )
     age = IntegerField(
         label='Age',
