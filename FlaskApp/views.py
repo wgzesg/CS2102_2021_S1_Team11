@@ -168,11 +168,15 @@ def render_admin_profile():
 @roles_required('admin')
 def render_admin_update_profile():
     contact = current_user.contact
-    admin = Users.query.filter_by(contact=contact).first()
+    #admin = Users.query.filter_by(contact=contact).first()
+    adminQuery = "SELECT contact FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
+    admin = db.session.execute(adminQuery).fetchall()
     if admin:
         form = UserUpdateForm(obj=admin)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = Users.query.filter_by(contact=contact).first()
+            #profile = Users.query.filter_by(contact=contact).first()
+            profileQuery = "SELECT contact FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
+            profile = db.session.execute(profileQuery).fetchall()
             profile.username = form.username.data
             profile.password = form.password.data
             db.session.commit()
