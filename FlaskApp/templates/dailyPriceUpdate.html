@@ -61,10 +61,10 @@
                 <form class="registrationForm login100-form">
                     {{ form.hidden_tag() }}
                     <div class="formField wrap-input100 validate-input">
-                        {{ form.dailyprice }} {% if form.dailyprice.errors %}
+                        {{ form.price }} {% if form.price.errors %}
                         <span class="focus-input100" data-placeholder="&#xe82a;"></span>
                         <div class="errorMessage">
-                            {% for error in form.dailyprice.errors %}
+                            {% for error in form.price.errors %}
                             <li>{{ error }}</li>
                             {% endfor %}
                         </div>
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="buttonWrapper">
-                        <button id="addButton" class="login100-form-btn" formmethod="post">Add new pet</button>
+                        <button id="addButton" class="login100-form-btn" formmethod="post">Update Daily Price</button>
                     </div>
                 </form>
             </div>

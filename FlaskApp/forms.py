@@ -356,7 +356,7 @@ class CanTakeCareForm(FlaskForm):
 class DailyPriceForm(FlaskForm):
     price = IntegerField(
         label='DailyPrice',
-        validators = [Optional()],
+        validators=[Optional(), NumberRange(min=0, message="Price cannot be negative!")],
         default=None,
         render_kw={'placeholder': 'DailyPrice', 'class': 'input100'}
     )

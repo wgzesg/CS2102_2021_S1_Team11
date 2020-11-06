@@ -179,6 +179,7 @@ def render_admin_update_profile():
 
 @view.route("/admin/dailyprice", methods=["GET", "POST"])
 @roles_required('admin')
+<<<<<<< HEAD
 def render_admin_dailyprice(page=1):
     countquery = """SELECT COUNT(*) FROM dailyprice"""
     
@@ -203,6 +204,14 @@ def render_admin_dailyprice(page=1):
     print(dailyprices, flush=True)
     table = DailyPriceTable(dailyprices)
     return render_template("adminDailyPrice.html", table=table, pagination=pagination, username=current_user.username + " admin")
+=======
+def render_admin_dailyprice():
+    query = "SELECT * FROM dailyprice ORDER BY category, rating"
+    price = db.session.execute(query)
+    print(price, flush=True)
+    table = DailyPriceTable(price)
+    return render_template("adminDailyPrice.html", table=table, username=current_user.username + " admin")
+>>>>>>> e8f6741e46ff646c61b8d2b90584acbd6c03ac5a
 
 @view.route("/admin/dailyprice/update", methods=["GET", "POST"])
 @roles_required('admin')
