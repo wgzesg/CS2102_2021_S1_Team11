@@ -738,7 +738,7 @@ def render_owner_pet_delete():
             deleteQuery = """
             DELETE FROM pets 
             WHERE petname = '{}' AND pcontact = '{}'
-            """.format(pc, pc)
+            """.format(pn, pc)
             db.session.execute(deleteQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
