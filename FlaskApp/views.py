@@ -154,7 +154,7 @@ def render_admin_summary_page(page=1):
 def render_admin_profile():
     print(current_user, flush=True)
     contact = current_user.contact
-    query = "SELECT * FROM users WHERE contact = '{}' ORDER BY category, rating".format(contact)
+    query = "SELECT * FROM users WHERE contact = '{}' ORDER BY category".format(contact)
     results = db.session.execute(query)
     table = profileTable(results)
     return render_template('profileAdmin.html', table=table, username=current_user.username + " admin")
