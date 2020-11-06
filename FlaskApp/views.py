@@ -632,7 +632,7 @@ def render_owner_page():
         """.format(current_user.contact)
         totalResult = db.session.execute(totalQuery, parameters).fetchall()
         
-        if totalResult[0] != None:
+        if totalResult != None:
             pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
             caretable = ownerHomePage(selectedCareTakers)
 
@@ -805,8 +805,8 @@ def render_owner_bid_new():
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(cn, startday, endday)
             hasOverlap = db.session.execute(overLapQuery).fetchall()
-            print(hasOverlap[0], flush=True)
-            if(hasOverlap[0]):
+            print(hasOverlap, flush=True)
+            if(hasOverlap):
                 isValidPeriod = False
         else:
             intersection = """
@@ -822,8 +822,8 @@ def render_owner_bid_new():
             WHERE tsrange('{}', '{}', '[]') * tsrange(f2.st, f2.en, '[]') = tsrange('{}', '{}', '[]');
             """.format(cn, startday, endday, startday, endday)
             hasFullOverage = db.session.execute(intersection).fetchall()
-            print(hasFullOverage[0], flush=True)
-            if(not hasFullOverage[0]):
+            print(hasFullOverage, flush=True)
+            if(not hasFullOverage):
                 isValidPeriod = False
         if(isValidPeriod == False):
             flash("The caretaker is not available during this period")
