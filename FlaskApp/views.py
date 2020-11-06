@@ -288,14 +288,14 @@ def render_caretaker_biddings_accept():
         print(parttime, flush=True)
         print(count, flush=True)
         if parttime[0][1] == (True, ) and int(parttime[0][2]) < (3, ):
-            if count[0] > (2,):
+            if count[0] >= (2,):
                 flag = False
-                count[0] = (0,)
+                count = [(0,)]
                 break
         else:
-            if count[0] > (5,):
+            if count[0] >= (5,):
                 flag = False
-                count[0] = (0,)
+                count = [(0,)]
                 break
     
     if flag == False:
