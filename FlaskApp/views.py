@@ -72,7 +72,9 @@ def render_login_page():
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
-        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
+        
+        # Don't change. This ORM is linked to how user is verified as login and possess certain roles
+        # This is required by other libraries such as login_manager
         user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
@@ -169,17 +171,11 @@ def render_admin_profile():
 @roles_required('admin')
 def render_admin_update_profile():
     contact = current_user.contact
-    #admin = Users.query.filter_by(contact=contact).first()
     adminQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
     admin = db.session.execute(adminQuery).fetchall()
     if admin:
         form = UserUpdateForm(obj=admin)
         if request.method == 'POST' and form.validate_on_submit():
-            # profile = Users.query.filter_by(contact=contact).first()
-            # profileQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
-            # profile = db.session.execute(profileQuery).fetchall()
-            # profile.username = form.username.data
-            # profile.password = form.password.data
             update = """UPDATE users
                     SET username = '{}', password = '{}', card = '{}', postalcode = '{}'
                     WHERE contact = '{}';""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
@@ -222,17 +218,12 @@ def render_admin_dailyprice():
 def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
-    #price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
     priceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
     price = db.session.execute(priceQuery).fetchall()
     if price:
         form = DailyPriceForm(obj=price)
         if request.method == 'POST' and form.validate_on_submit():
-            #thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
-            #thispriceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
-            #thisprice = db.session.execute(thispriceQuery).fetchall()
-            #thisprice.price = int(form.price.data)
-            update = """UPDATE users
+            update = """UPDATE dailyprice
                     SET price = '{}'
                     WHERE category = '{}' AND rating = '{}';""".format(form.price.data, cat, rat)
             db.session.execute(update)
@@ -280,18 +271,11 @@ def render_caretaker_biddings_accept():
     ct = request.args.get('ccontact')
     parttimeQuery = "SELECT * FROM canparttime WHERE ccontact = '{}' LIMIT 1".format(contact)
     parttime = db.session.execute(parttimeQuery).fetchall()
-    #parttime = Canparttime.query.filter_by(ccontact=contact).first()
 
 
     bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
-                                                                                                                                      request.args.get('ccontact'),
-                                                                                                                                      request.args.get('petName'),
-                                                                                                                                      request.args.get('startDay'),
-                                                                                                                                      request.args.get('endDay'))
+                request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
     bid = db.session.query(bidQuery).fetchall()
-    #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
-    #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
-    #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
@@ -361,7 +345,6 @@ def render_caretaker_profile():
 def render_caretaker_update_profile():
     contact = current_user.contact
     caretakerQuery = "SELECT * FROM users WHERE contact='{}' LIMIT 1".format(contact)
-    #caretaker = Users.query.filter_by(contact=contact).first()
     ct = db.session.execute(caretakerQuery).fetchall()
     if ct:
         form = UserUpdateForm(obj=ct)
@@ -404,9 +387,12 @@ def render_caretaker_available_edit():
     if available:
         form = AvailableUpdateForm(obj=available)
         if request.method == 'POST' and form.validate_on_submit():
-            thisavailable = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-            thisavailable.startday = form.startday.data
-            thisavailable.endday = form.endday.data
+            updateAvail = """
+                UPDATE available
+                SET startday = '{}', endday = '{}'
+                WHERE startday='{}',endday='{}',ccontact='{}'
+            """.format(form.startday.data, form.endday.data, astart, aend, ac)
+            db.session.execute(updateAvail)
             db.session.commit()
             return redirect(url_for('view.render_caretaker_available'))
     return render_template('availableNew.html', form=form, username=current_user.username + " caretaker")
@@ -745,9 +731,11 @@ def render_owner_pet_delete():
     if pet:
         form = PetUpdateForm(obj=pet)
         if request.method == 'POST' and form.validate_on_submit():
-            petname = form.petname
-            thispet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-            db.session.delete(thispet)
+            deleteQuery = """
+            DELETE FROM pets 
+            WHERE petname = '{}' AND pcontact = '{}'
+            """.format(pc, pc)
+            db.session.execute(deleteQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
         return render_template("pet.html", form=form, username=current_user.username + " owner")
