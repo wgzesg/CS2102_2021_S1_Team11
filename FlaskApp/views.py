@@ -343,7 +343,6 @@ def render_caretaker_profile():
 def render_caretaker_update_profile():
     contact = current_user.contact
     caretakerQuery = "SELECT * FROM users WHERE contact='{}' LIMIT 1".format(contact)
-    #caretaker = Users.query.filter_by(contact=contact).first()
     ct = db.session.execute(caretakerQuery).fetchall()
     if ct:
         form = UserUpdateForm(obj=ct)
