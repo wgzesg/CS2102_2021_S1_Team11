@@ -347,7 +347,7 @@ class SearchCaretakerForm(FlaskForm):
 class CanTakeCareForm(FlaskForm):
     category = SelectField(
         label='Category',
-        choices=[('','Select one category')('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
+        choices=[('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
                 ('turtle', 'Turtle'), ('insect', 'Insect'), ('horse', 'Horse'), ('duck', 'Duck'), ('hedgehog', 'Hedgehog'), ('snake', 'Snake'), ('guinea pig', 'Guinea pig')],
         validators=[InputRequired()],
         render_kw={'placeholder': 'Category', 'class': 'input100'}
