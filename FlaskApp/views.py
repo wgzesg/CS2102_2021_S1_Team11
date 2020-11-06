@@ -326,9 +326,11 @@ def render_caretaker_profile():
 @roles_required('caretaker')
 def render_caretaker_update_profile():
     contact = current_user.contact
+    caretakerQuery = "SELECT * FROM users WHERE contact='{}' LIMIT 1".format(contact)
     caretaker = Users.query.filter_by(contact=contact).first()
-    if caretaker:
-        form = UserUpdateForm(obj=caretaker)
+    ct = db.session.execute(caretakerQuery)
+    if ct:
+        form = UserUpdateForm(obj=ct)
         if request.method == 'POST' and form.validate_on_submit():
             profile = Users.query.filter_by(contact=contact).first()
             profile.username = form.username.data
