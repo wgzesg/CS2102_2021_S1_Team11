@@ -390,7 +390,7 @@ def render_caretaker_available_edit():
             updateAvail = """
                 UPDATE available
                 SET startday = '{}', endday = '{}'
-                WHERE startday='{}'AND endday='{}',ccontact='{}'
+                WHERE startday='{}'AND endday='{}' AND ccontact='{}'
             """.format(form.startday.data, form.endday.data, astart, aend, ac)
             db.session.execute(updateAvail)
             db.session.commit()
