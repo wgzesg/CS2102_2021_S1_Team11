@@ -170,13 +170,13 @@ def render_admin_profile():
 def render_admin_update_profile():
     contact = current_user.contact
     #admin = Users.query.filter_by(contact=contact).first()
-    adminQuery = "SELECT contact FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
+    adminQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
     admin = db.session.execute(adminQuery).fetchall()
     if admin:
         form = UserUpdateForm(obj=admin)
         if request.method == 'POST' and form.validate_on_submit():
             #profile = Users.query.filter_by(contact=contact).first()
-            profileQuery = "SELECT contact FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
+            profileQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
             profile = db.session.execute(profileQuery).fetchall()
             profile.username = form.username.data
             profile.password = form.password.data
@@ -218,13 +218,13 @@ def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
     #price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
-    priceQuery = "SELECT price FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
+    priceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
     price = db.session.execute(priceQuery).fetchall()
     if price:
         form = DailyPriceForm(obj=price)
         if request.method == 'POST' and form.validate_on_submit():
             #thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
-            thispriceQuery = "SELECT price FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
+            thispriceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
             thisprice = db.session.execute(thispriceQuery).fetchall()
             thisprice.price = int(form.price.data)
             db.session.commit()
