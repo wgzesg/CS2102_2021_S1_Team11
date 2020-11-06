@@ -661,7 +661,7 @@ def render_owner_pet_new():
 def render_owner_pet_update():
     pc = current_user.contact
     pn = request.args.get('petname')
-    petquery = "SELECT * FROM pets WHERtypE petname = '{}' AND pcontact = '{}'".format(pn, pc)
+    petquery = "SELECT * FROM pets WHERE petname = '{}' AND pcontact = '{}'".format(pn, pc)
     pet = db.session.execute(petquery).fetchone()
     if pet:
         form = PetUpdateForm(obj=pet)
