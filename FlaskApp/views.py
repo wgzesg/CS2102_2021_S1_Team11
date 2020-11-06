@@ -300,7 +300,13 @@ def render_caretaker_biddings_accept():
         flash("You are not allowed to take more than five pets at the same time.")
         return redirect(url_for('view.render_caretaker_biddings'))
     if bid:
-        bid.status = "success"
+        setsuccessQuery = """
+            UPDATE biddings 
+            SET status = 'success' 
+            WHERE WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1
+        """.format(request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
+
+        db.session.execute(setsuccessQuery)
         db.session.commit()
 
     return redirect(url_for('view.render_caretaker_biddings'))
