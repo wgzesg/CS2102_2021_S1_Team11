@@ -804,13 +804,18 @@ def render_owner_review_update():
     cc = request.args.get('ccontact')
     startday = request.args.get('startday')
     endday = request.args.get('endday')
-    review = Reviews.query.filter_by(petname=pn, pcontact=pc, ccontact=cc, startday=startday, endday=endday).first()
+    reviewQuery = "SELECT * FROM reviews WHERE petname='{}', pcontact= '{}', ccontact= '{}', startday= '{}', endday= '{}'"\
+        .format(pn, pc, cc, startday, endday)
+    review = db.session.execute(reviewQuery).fetchone()
     if review:
         form = ReviewUpdateForm(obj=review)
         if request.method == 'POST' and form.validate_on_submit():
-            thisreview = Reviews.query.filter_by(petname=pn, pcontact=pc, ccontact=cc, startday=startday, endday=endday).first()
-            thisreview.review = form.review.data
-            thisreview.rating = int(form.rating.data)
+            reivewUpdate = """
+            UPDATE reviews
+            SET review = '{}', rating = '{}'
+            WHERE petname='{}', pcontact= '{}', ccontact= '{}', startday= '{}', endday= '{}'
+            """.format(form.review.data, int(form.rating.data), pn, pc, cc, startday, endday)
+            db.session.execute(reivewUpdate)
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
         return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
