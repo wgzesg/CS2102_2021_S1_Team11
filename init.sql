@@ -7,7 +7,7 @@ CREATE TABLE categories (
 INSERT INTO categories VALUES ('bird');
 INSERT INTO categories VALUES ('cat');
 INSERT INTO categories VALUES ('dog');
-INSERT INTO categories VALUES ('hamster');
+/*INSERT INTO categories VALUES ('hamster');
 INSERT INTO categories VALUES ('shark');
 INSERT INTO categories VALUES ('fish');
 INSERT INTO categories VALUES ('rabbit');
@@ -18,7 +18,7 @@ INSERT INTO categories VALUES ('horse');
 INSERT INTO categories VALUES ('duck');
 INSERT INTO categories VALUES ('hedgehog');
 INSERT INTO categories VALUES ('snake');
-INSERT INTO categories VALUES ('guinea pig');
+INSERT INTO categories VALUES ('guinea pig');*/
 
 CREATE TABLE users (
     username VARCHAR NOT NULL,

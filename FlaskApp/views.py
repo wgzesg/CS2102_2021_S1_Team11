@@ -72,7 +72,9 @@ def render_login_page():
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
-        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
+        
+        # Don't change. This ORM is linked to how user is verified as login and possess certain roles
+        # This is required by other libraries such as login_manager
         user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
@@ -107,8 +109,8 @@ def render_admin_page(page=1):
     print(current_user, flush=True)
     contact = current_user.contact
     countquery = "SELECT COUNT(*) FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
-    count = db.session.execute(countquery).fetchone()
-    total = count[0]
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
 
     # PER_PAGE = 10 
     # page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -271,11 +273,8 @@ def render_caretaker_biddings_accept():
     parttime = db.session.execute(parttimeQuery).fetchall()
 
 
-    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
-                                                                                                                                      request.args.get('ccontact'),
-                                                                                                                                      request.args.get('petName'),
-                                                                                                                                      request.args.get('startDay'),
-                                                                                                                                      request.args.get('endDay'))
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
+                request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
     bid = db.session.query(bidQuery).fetchall()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
@@ -317,7 +316,7 @@ def render_caretaker_biddings_finish():
     #bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'),
     #    ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
     #    startday=request.args.get('startDay'), endday=request.args.get('endDay')).first()
-    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}', ccontact = '{}', petname = '{}', startday = '{}', endday = '{}' LIMIT 1".format(
+    bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(
         request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay')
     )
     bid = db.session.execute(bidQuery).fetchall()
@@ -383,18 +382,17 @@ def render_caretaker_available_edit():
     astart = request.args.get('startday')
     aend = request.args.get('endday')
     #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    availableQuery = "SELECT * FROM available WHERE startday = '{}'AND endday = '{}'AND ccontact = '{}'".format(astart, aend, ac)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         form = AvailableUpdateForm(obj=available)
         if request.method == 'POST' and form.validate_on_submit():
-            # thisavailable = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-            # thisavailable.startday = form.startday.data
-            # thisavailable.endday = form.endday.data
-            update = """UPDATE available
-                    SET startday = '{}', endday = '{}'
-                    WHERE startday = '{}' AND endday = '{}' AND ccontact = '{}';""".format(form.startday.data, form.endday.data, astart, aend, ac)
-            db.session.execute(update)
+            updateAvail = """
+                UPDATE available
+                SET startday = '{}', endday = '{}'
+                WHERE startday='{}'AND endday='{}' AND ccontact='{}'
+            """.format(form.startday.data, form.endday.data, astart, aend, ac)
+            db.session.execute(updateAvail)
             db.session.commit()
             return redirect(url_for('view.render_caretaker_available'))
     return render_template('availableNew.html', form=form, username=current_user.username + " caretaker")
@@ -407,11 +405,15 @@ def render_caretaker_available_delete():
     astart = request.args.get('startday')
     aend = request.args.get('endday')
     #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    availableQuery = "SELECT * FROM available WHERE startday = '{}'AND endday = '{}'AND ccontact = '{}'".format(astart, aend, ac)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         if request.method == 'POST':
-            db.session.delete(available)
+            deleteAvail = """
+                DELETE available
+                WHERE WHERE startday='{}'AND endday='{}' AND ccontact='{}'
+            """.format(astart, aend, ac)
+            db.session.execute(deleteAvail)
             db.session.commit()
     return redirect(url_for('view.render_caretaker_available'))
 
@@ -502,9 +504,9 @@ def render_caretaker_available_new():
 @roles_required('caretaker')
 def render_caretaker_cantakecare():
     contact = current_user.contact
-    query = "SELECT * FROM cantakecare WHERE ccontact = '{}'".format(contact)
-    canTakeCare = db.session.execute(query)
-    total = canTakeCare.rowcount().fetchone()
+    countquery = "SELECT COUNT(*) FROM cantakecare WHERE ccontact = '{}'".format(contact)
+    count = db.session.execute(countquery).fetchone()
+    total = count[0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -733,9 +735,11 @@ def render_owner_pet_delete():
     if pet:
         form = PetUpdateForm(obj=pet)
         if request.method == 'POST' and form.validate_on_submit():
-            petname = form.petname
-            thispet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-            db.session.delete(thispet)
+            deleteQuery = """
+            DELETE FROM pets 
+            WHERE petname = '{}' AND pcontact = '{}'
+            """.format(pc, pc)
+            db.session.execute(deleteQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
         return render_template("pet.html", form=form, username=current_user.username + " owner")

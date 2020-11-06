@@ -2,6 +2,9 @@ from __init__ import db, login_manager
 from flask_user import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
+
+# Don't change. This ORM is linked to how user is verified as login and possess certain roles
+# This is required by other libraries such as login_manager
 @login_manager.user_loader
 def load_user(contact):
     us = Users.query.filter_by(contact=contact).first()
