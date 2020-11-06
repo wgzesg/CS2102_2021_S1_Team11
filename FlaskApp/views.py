@@ -352,7 +352,7 @@ def render_caretaker_profile():
 def render_caretaker_update_profile():
     contact = current_user.contact
     caretakerQuery = "SELECT * FROM users WHERE contact='{}' LIMIT 1".format(contact)
-    caretaker = Users.query.filter_by(contact=contact).first()
+    #caretaker = Users.query.filter_by(contact=contact).first()
     ct = db.session.execute(caretakerQuery)
     if ct:
         form = UserUpdateForm(obj=ct)
@@ -390,8 +390,9 @@ def render_caretaker_available_edit():
     ac = current_user.contact
     astart = request.args.get('startday')
     aend = request.args.get('endday')
-    available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
-    availableQuery = "SELECT * FROM available"
+    #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
+    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    available = db.session.execute(availableQuery).fetchall()
     if available:
         form = AvailableUpdateForm(obj=available)
         if request.method == 'POST' and form.validate_on_submit():
