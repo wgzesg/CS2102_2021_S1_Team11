@@ -154,7 +154,7 @@ def render_admin_summary_page(page=1):
 def render_admin_profile():
     print(current_user, flush=True)
     contact = current_user.contact
-    query = "SELECT * FROM users WHERE contact = '{}' ORDER BY category".format(contact)
+    query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
     results = db.session.execute(query)
     table = profileTable(results)
     return render_template('profileAdmin.html', table=table, username=current_user.username + " admin")
@@ -180,7 +180,7 @@ def render_admin_update_profile():
 @view.route("/admin/dailyprice", methods=["GET", "POST"])
 @roles_required('admin')
 def render_admin_dailyprice():
-    query = "SELECT * FROM dailyprice"
+    query = "SELECT * FROM dailyprice ORDER BY category, rating"
     price = db.session.execute(query)
     print(price, flush=True)
     table = DailyPriceTable(price)
