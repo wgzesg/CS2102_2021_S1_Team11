@@ -34,6 +34,7 @@ def render_registration_page():
         postal_code = form.postal_code.data
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
+        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
         user1 = Users(username=username, usertype=user_type, contact=contact, card=credit_card, postalcode=postal_code, password=hashed_password)
         roleQuery = "SELECT name FROM role WHERE name = '{}' LIMIT 1".format(user_type)
         #role = Role.query.filter_by(name=user_type).first()
@@ -70,10 +71,8 @@ def render_login_page():
     form = LoginForm()
     if form.validate_on_submit():
         print("submited", flush=True)
-        userQuery = "SELECT * FROM users WHERE contact = '{}'".format(form.contact.data)
-        user = db.session.execute(userQuery).fetchone()
-        print(user, flush=True)
-        #user = Users.query.filter_by(contact=form.contact.data).first()
+        # DON"T CHANGE THIS. linked to other flask librarys like login_manager
+        user = Users.query.filter_by(contact=form.contact.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
             next_page = request.args.get('next')
