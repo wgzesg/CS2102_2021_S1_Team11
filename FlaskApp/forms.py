@@ -126,9 +126,9 @@ class UserUpdateForm(FlaskForm):
         label='Is Part Time',
         render_kw={'placeholder': 'Is Part Time'}
     )
-    postal_code = StringField(
+    postal_code = IntegerField(
         label='Postal Code',
-        validators=[NumberRange(min=100000, max=999999)],
+        validators=[NumberRange(100000, 999999, "Postal code has to be 6 digits long!")],
         render_kw={'placeholder': 'Postal Code', 'class': 'input100'}
     )
     password = PasswordField(
@@ -347,7 +347,7 @@ class SearchCaretakerForm(FlaskForm):
 class CanTakeCareForm(FlaskForm):
     category = SelectField(
         label='Category',
-        choices=[('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
+        choices=[('','Select one category')('bird', 'Bird'), ('cat', 'Cat'), ('dog', 'Dog'), ('hamster', 'Hamster'), ('shark', 'Shark'), ('fish', 'Fish'), ('rabbit', 'Rabbit'), ('spider', 'Spider'),
                 ('turtle', 'Turtle'), ('insect', 'Insect'), ('horse', 'Horse'), ('duck', 'Duck'), ('hedgehog', 'Hedgehog'), ('snake', 'Snake'), ('guinea pig', 'Guinea pig')],
         validators=[InputRequired()],
         render_kw={'placeholder': 'Category', 'class': 'input100'}
