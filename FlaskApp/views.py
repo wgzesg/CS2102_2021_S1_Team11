@@ -535,8 +535,12 @@ def render_caretaker_cantakecare_new():
         category = form.category.data
         query = "INSERT INTO cantakecare(ccontact, category) VALUES ('{}', '{}')" \
         .format(contact, category)
-        db.session.execute(query)
-        db.session.commit()
+        try:
+            db.session.execute(query)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("You already declared that!")
         return redirect(url_for('view.render_caretaker_cantakecare'))
     return render_template('caretakerCantakecareNew.html', form=form, username=current_user.username + " caretaker")
 
