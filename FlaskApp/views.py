@@ -275,7 +275,7 @@ def render_caretaker_biddings_accept():
 
     bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
                 request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
-    bid = db.session.query(bidQuery).fetchall()
+    bid = db.session.execute(bidQuery).fetchall()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
