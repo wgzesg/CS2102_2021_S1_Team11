@@ -352,7 +352,7 @@ class CanTakeCareForm(FlaskForm):
     )
 
 class DailyPriceForm(FlaskForm):
-    dailyprice = IntegerField(
+    price = IntegerField(
         label='DailyPrice',
         validators = [Optional()],
         default=None,
