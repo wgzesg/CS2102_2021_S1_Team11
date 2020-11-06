@@ -332,7 +332,7 @@ def render_caretaker_update_profile():
     if ct:
         form = UserUpdateForm(obj=ct)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = Users.query.filter_by(contact=contact).first()
+            profile = ct
             profile.username = form.username.data
             profile.password = form.password.data
             profile.card = form.credit_card.data
