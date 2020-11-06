@@ -717,7 +717,7 @@ def render_owner_pet_delete():
     pc = current_user.contact
     pn = request.args.get('petname')
     #pet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-    petQuery = "SELECT * FROM pets WHERE petname = '{}', pcontact = {}".format(pn, pc)
+    petQuery = "SELECT * FROM pets WHERE petname = '{}' AND pcontact = {}".format(pn, pc)
     pet = db.session.execute(petQuery).fetchall()
     if pet:
         form = PetUpdateForm(obj=pet)
@@ -733,7 +733,7 @@ def render_owner_pet_delete():
 @roles_required('petowner')
 def render_owner_bid():
     contact = current_user.contact
-    query = "SELECT * FROM biddings WHERE pcontact= '{}'".format(contact)
+    query = "SELECT * FROM biddings WHERE pcontact = '{}'".format(contact)
     bidding = db.session.execute(query).fetchall()
     table = biddingTable(bidding)
     return render_template("ownerBid.html", table=table, username=current_user.username + " owner")
