@@ -444,8 +444,8 @@ def render_caretaker_available_new():
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(ccontact, startday, endday)
             hasOverlap = db.session.execute(overlapQuery).fetchall()
-            print(hasOverlap[0], flush=True)
-            if(hasOverlap[0]):
+            print(hasOverlap, flush=True)
+            if(hasOverlap):
                 flash("You have work to do during that period")
                 return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
             
