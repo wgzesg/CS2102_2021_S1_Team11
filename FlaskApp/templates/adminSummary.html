@@ -28,13 +28,16 @@
 	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-util.css">
 	<link rel="stylesheet" type="text/css" href="https://cs2102project.herokuapp.com/static/css/login-main.css">
     <style>
+        body{
+            margin: 0px;
+        }
         .content{
-            position: absolute;
+            position: relative;
             left: 50%;
-            top: 50%;
-            width: 900px;
-            height: 200px;
-            transform: translate(-28%,100%);
+            top: 75%;
+            width: 800px;
+            height: 20px;
+            transform: translate(-28%,120%);
         }
         
         .table {
@@ -64,9 +67,10 @@
         }
 
         .pagination {
-            display: flex;
             justify-content: center;
             margin-bottom: 40px;
+            position: absolute;
+            margin-top: 20px;
         }
 
         .pagination a {

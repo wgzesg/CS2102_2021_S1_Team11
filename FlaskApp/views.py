@@ -126,13 +126,13 @@ def render_admin_page(page=1):
 
 @view.route("/admin/summary", methods=["GET"])
 @roles_required('admin')
-def render_admin_summary_page(page=1):
+def render_admin_summary_page():
     countquery = """SELECT COUNT(*) FROM canparttime"""
     count = db.session.execute(countquery).fetchone()
     total = count[0]
 
     # PER_PAGE = 10 
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
     # start = (page-1)*PER_PAGE
     # end = page * PER_PAGE
     pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='canparttime')
@@ -141,10 +141,10 @@ def render_admin_summary_page(page=1):
     if total < page * 10:
         page_display = total % 10
         pagequery = """SELECT ccontact, salary FROM canparttime
-                         LIMIT '{}' OFFSET '{}'""".format(page_display, page_offset)
+                         OFFSET '{}' LIMIT '{}'""".format(page_offset, page_display)
     else:
         pagequery = """SELECT ccontact, salary FROM canparttime
-                         LIMIT 10 OFFSET '{}'""".format(page_offset)
+                         OFFSET '{}' LIMIT 10 """.format(page_offset)
     result_salary = db.session.execute(pagequery)
     salaryTable = SalaryTable(result_salary)
     return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username + " owner")
