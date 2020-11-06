@@ -513,8 +513,24 @@ def render_caretaker_cantakecare():
     contact = current_user.contact
     query = "SELECT * FROM cantakecare WHERE ccontact = '{}'".format(contact)
     canTakeCare = db.session.execute(query)
+    total = canTakeCare.rowcount().fetchone()
+
+    # PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='cantakecares')
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = "SELECT * FROM cantakecare WHERE ccontact = '{}' OFFSET '{}' LIMIT '{}' ".format(contact, page_offset, page_display)
+    else:
+        pagequery = "SELECT * FROM cantakecare WHERE ccontact = '{}' OFFSET '{}' LIMIT 10 ".format(contact, page_offset)
+
+    canTakeCare = db.session.execute(pagequery)
     table = caretakerCantakecare(canTakeCare)
-    return render_template('caretakerCantakecare.html', table=table, username=current_user.username + " caretaker")
+    return render_template('caretakerCantakecare.html', table=table, pagination=pagination, username=current_user.username + " caretaker")
 
 @view.route("/caretaker/cantakecare/new", methods=["GET", "POST"])
 @roles_required('caretaker')
