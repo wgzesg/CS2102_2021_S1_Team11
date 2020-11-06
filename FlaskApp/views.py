@@ -222,16 +222,20 @@ def render_admin_dailyprice():
 def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
-    price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
-    #priceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
-    #price = db.session.execute(priceQuery).fetchall()
+    #price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
+    priceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
+    price = db.session.execute(priceQuery).fetchall()
     if price:
         form = DailyPriceForm(obj=price)
         if request.method == 'POST' and form.validate_on_submit():
-            thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
+            #thisprice = Dailyprice.query.filter_by(category=cat, rating=rat).first()
             #thispriceQuery = "SELECT * FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
             #thisprice = db.session.execute(thispriceQuery).fetchall()
-            thisprice.price = int(form.price.data)
+            #thisprice.price = int(form.price.data)
+            update = """UPDATE users
+                    SET price = '{}'
+                    WHERE category = '{}' AND rating = '{}';""".format(form.price.data, cat, rat)
+            db.session.execute(update)
             db.session.commit()
             return redirect(url_for('view.render_admin_dailyprice'))
         return render_template("dailyPriceUpdate.html", form=form, username=current_user.username + " admin")
