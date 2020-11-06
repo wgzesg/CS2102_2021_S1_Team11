@@ -413,7 +413,9 @@ def render_caretaker_available_delete():
     ac = current_user.contact
     astart = request.args.get('startday')
     aend = request.args.get('endday')
-    available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
+    #available = Available.query.filter_by(startday=astart,endday=aend,ccontact=ac).first()
+    availableQuery = "SELECT * FROM available WHERE startday = '{}', endday = '{}', ccontact = '{}'".format(astart, aend, ac)
+    available = db.session.execute(availableQuery).fetchall()
     if available:
         if request.method == 'POST':
             db.session.delete(available)
