@@ -604,7 +604,10 @@ def render_owner_page():
         """.format(current_user.contact)
         parameters = dict(cc = cc, postal_code = postal_code)
         selectedCareTakers = db.session.execute(query, parameters)
-        caretable = ownerHomePage(selectedCareTakers)
+        total = selectedCareTakers.rowcount().fetchone()
+        if total != None:
+            pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
+            caretable = ownerHomePage(selectedCareTakers)
 
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
@@ -714,7 +717,7 @@ def render_owner_pet_delete():
     pc = current_user.contact
     pn = request.args.get('petname')
     #pet = Pets.query.filter_by(petname=pn, pcontact=pc).first()
-    petQuery = "SELECT * FROM pets WHERE petname = '{}', pcontact = '{}' LIMIT 1;".format(pn, pc)
+    petQuery = "SELECT * FROM pets WHERE petname = '{}', pcontact = {} LIMIT 1;".format(pn, pc)
     pet = db.session.execute(petQuery).fetchall()
     if pet:
         form = PetUpdateForm(obj=pet)
