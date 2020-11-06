@@ -58,7 +58,7 @@ class biddingCaretakerTable(Table):
 
 class caretakerCantakecare(Table):
     category = Col('Category')
-    delete = ButtonCol('Delete', 'view.render_caretaker_cantakecare_delete', url_kwargs=dict(category='category'))
+    delete = ButtonCol('Delete', 'view.render_caretaker_cantakecare_delete', url_kwargs=dict(category='category'), column_html_attrs = {'class': 'delete-button'})
 
 class profileTable(Table):
     username = Col('Username')
