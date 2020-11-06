@@ -835,22 +835,6 @@ def render_owner_bid_new():
         return redirect(url_for('view.render_owner_bid'))
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
 
-
-@view.route("/owner/bid/update", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_bid_update():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query)
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
-
-
-@view.route("/owner/bid/delete", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_bid_delete():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query)
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
-
 @view.route("/owner/review", methods=["GET", "POST"])
 @roles_required('petowner')
 def render_owner_review():
