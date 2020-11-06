@@ -110,7 +110,7 @@ def render_admin_page(page=1):
     contact = current_user.contact
     countquery = "SELECT COUNT(*) FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
     count = db.session.execute(countquery).fetchall()
-    total = count[0]
+    total = count[0][0]
 
     # PER_PAGE = 10 
     # page = request.args.get(get_page_parameter(), type=int, default=1)
