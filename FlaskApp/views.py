@@ -719,8 +719,6 @@ def render_owner_bid_new():
 
     if request.method == 'POST' and form.validate_on_submit():
         petname = form.petname.data
-        pcategory = Pets.query.filter_by(petname = petname).first()
-        ccategories = Cantakecare.query.filter_by(ccontact = cn).all()
         startday = form.startday.data
         endday = form.endday.data
         paymentmode = form.paymentmode.data
