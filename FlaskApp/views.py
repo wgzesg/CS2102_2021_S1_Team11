@@ -269,7 +269,9 @@ def render_caretaker_biddings_accept():
     startday = request.args.get('startDay')
     endday = request.args.get('endDay')
     ct = request.args.get('ccontact')
-    parttime = Canparttime.query.filter_by(ccontact=contact).first()
+    parttimeQuery = "SELECT * FROM canparttime WHERE ccontact = '{}' LIMIT 1".format(contact)
+    parttime = db.session.execute(parttimeQuery).fetchall()
+    #parttime = Canparttime.query.filter_by(ccontact=contact).first()
          
     bid = Biddings.query.filter_by(pcontact=request.args.get('ownerContact'), 
         ccontact=request.args.get('ccontact'),  petname=request.args.get('petName'),
