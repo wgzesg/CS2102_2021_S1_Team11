@@ -169,18 +169,22 @@ def render_admin_profile():
 @roles_required('admin')
 def render_admin_update_profile():
     contact = current_user.contact
-    admin = Users.query.filter_by(contact=contact).first()
-    #adminQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
-    #admin = db.session.execute(adminQuery).fetchall()
+    #admin = Users.query.filter_by(contact=contact).first()
+    adminQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
+    admin = db.session.execute(adminQuery).fetchall()
     if admin:
         form = UserUpdateForm(obj=admin)
         if request.method == 'POST' and form.validate_on_submit():
-            profile = Users.query.filter_by(contact=contact).first()
-            #profileQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
-            #profile = db.session.execute(profileQuery).fetchall()
-            profile.username = form.username.data
-            profile.password = form.password.data
-            
+            # profile = Users.query.filter_by(contact=contact).first()
+            # profileQuery = "SELECT * FROM Users WHERE contact = '{}' LIMIT 1".format(contact)
+            # profile = db.session.execute(profileQuery).fetchall()
+            # profile.username = form.username.data
+            # profile.password = form.password.data
+            update = """UPDATE users
+                    SET username = '{}', password = '{}', card = '{}', postalcode = '{}'
+                    WHERE contact = '{}';""".format(form.username.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+                    form.credit_card.data, form.postal_code.data, contact)
+            db.session.execute(update)
             db.session.commit()
             print("Admin profile has been updated", flush=True)
             return redirect(url_for('view.render_admin_profile'))
