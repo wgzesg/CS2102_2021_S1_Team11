@@ -216,7 +216,9 @@ def render_admin_dailyprice():
 def render_dailyprice_update():
     cat = request.args.get('category')
     rat= request.args.get('rating')
-    price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
+    #price = Dailyprice.query.filter_by(category=cat, rating=rat).first()
+    priceQuery = "SELECT price FROM Dailyprice WHERE category = '{}' AND rating = '{}'LIMIT 1".format(cat, rat)
+    price = db.session.execute(priceQuery).fetchall()
     if price:
         form = DailyPriceForm(obj=price)
         if request.method == 'POST' and form.validate_on_submit():
