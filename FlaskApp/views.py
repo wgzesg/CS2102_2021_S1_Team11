@@ -500,9 +500,9 @@ def render_caretaker_available_new():
 @roles_required('caretaker')
 def render_caretaker_cantakecare():
     contact = current_user.contact
-    query = "SELECT * FROM cantakecare WHERE ccontact = '{}'".format(contact)
-    canTakeCare = db.session.execute(query)
-    total = canTakeCare.rowcount().fetchone()
+    countquery = "SELECT COUNT(*) FROM cantakecare WHERE ccontact = '{}'".format(contact)
+    count = db.session.execute(countquery).fetchone()
+    total = count[0]
 
     # PER_PAGE = 10 
     page = request.args.get(get_page_parameter(), type=int, default=1)
