@@ -671,7 +671,7 @@ def render_owner_pet_update():
             SET petname = '{}', category = '{}', age = '{}'
             WHERE pcontact = '{}' AND petname = '{}'
             """.format(form.petname.data, form.category.data, int(form.age.data),
-            pn, pc)
+            pc, pn)
             db.session.execute(updateQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
