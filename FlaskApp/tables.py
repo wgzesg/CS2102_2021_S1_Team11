@@ -104,4 +104,4 @@ class DeleteProfileTable(Table):
     username = Col('username')
     contact = Col('contact')
     usertype = Col('user type')
-    delete = LinkCol('Delete ', 'view.render_delete', url_kwargs=dict(username = 'username', contact = 'contact', usertype = 'usertype'))
+    delete = ButtonCol('Delete ', 'view.render_delete', url_kwargs=dict(username = 'username', contact = 'contact', usertype = 'usertype'))
