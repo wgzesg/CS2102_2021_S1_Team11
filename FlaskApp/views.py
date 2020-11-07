@@ -718,7 +718,8 @@ def render_owner_profile():
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}';".format(contact)
     profile = db.session.execute(query).fetchall()
-    return render_template("profileOwner.html", profile=profile, form=form, username=current_user.username + " owner")
+    table = profileTable(results)
+    return render_template("profileOwner.html", profile=profile, form=form, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/profile/update", methods=["GET", "POST"])
