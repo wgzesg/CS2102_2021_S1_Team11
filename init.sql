@@ -50,7 +50,7 @@ CREATE TABLE canparttime (
 );
 
 CREATE TABLE dailyprice (
-    category VARCHAR NOT NULL REFERENCES public.categories(category),
+    category VARCHAR NOT NULL REFERENCES public.categories(category) ON DELETE CASCADE,
     rating INTEGER NOT NULL,
     price INTEGER NOT NULL,
     PRIMARY KEY (category, rating)
@@ -66,6 +66,7 @@ INSERT INTO dailyprice VALUES ('cat', 2, 22);
 INSERT INTO dailyprice VALUES ('cat', 3, 33);
 INSERT INTO dailyprice VALUES ('cat', 4, 44);
 INSERT INTO dailyprice VALUES ('cat', 5, 55);
+
 INSERT INTO dailyprice VALUES ('bird', 1, 12);
 INSERT INTO dailyprice VALUES ('bird', 2, 24);
 INSERT INTO dailyprice VALUES ('bird', 3, 36);
@@ -76,6 +77,7 @@ INSERT INTO dailyprice VALUES ('shark', 2, 20);
 INSERT INTO dailyprice VALUES ('shark', 3, 30);
 INSERT INTO dailyprice VALUES ('shark', 4, 40);
 INSERT INTO dailyprice VALUES ('shark', 5, 50);
+
 INSERT INTO dailyprice VALUES ('hamster', 1, 10);
 INSERT INTO dailyprice VALUES ('hamster', 2, 20);
 INSERT INTO dailyprice VALUES ('hamster', 3, 30);
@@ -86,6 +88,7 @@ INSERT INTO dailyprice VALUES ('fish', 2, 20);
 INSERT INTO dailyprice VALUES ('fish', 3, 30);
 INSERT INTO dailyprice VALUES ('fish', 4, 40);
 INSERT INTO dailyprice VALUES ('fish', 5, 50);
+
 INSERT INTO dailyprice VALUES ('rabbit', 1, 10);
 INSERT INTO dailyprice VALUES ('rabbit', 2, 20);
 INSERT INTO dailyprice VALUES ('rabbit', 3, 30);
@@ -96,6 +99,7 @@ INSERT INTO dailyprice VALUES ('spider', 2, 20);
 INSERT INTO dailyprice VALUES ('spider', 3, 30);
 INSERT INTO dailyprice VALUES ('spider', 4, 40);
 INSERT INTO dailyprice VALUES ('spider', 5, 50);
+
 INSERT INTO dailyprice VALUES ('turtle', 1, 10);
 INSERT INTO dailyprice VALUES ('turtle', 2, 20);
 INSERT INTO dailyprice VALUES ('turtle', 3, 30);
@@ -106,6 +110,7 @@ INSERT INTO dailyprice VALUES ('insect', 2, 20);
 INSERT INTO dailyprice VALUES ('insect', 3, 30);
 INSERT INTO dailyprice VALUES ('insect', 4, 40);
 INSERT INTO dailyprice VALUES ('insect', 5, 50);
+
 INSERT INTO dailyprice VALUES ('horse', 1, 10);
 INSERT INTO dailyprice VALUES ('horse', 2, 20);
 INSERT INTO dailyprice VALUES ('horse', 3, 30);
@@ -116,6 +121,7 @@ INSERT INTO dailyprice VALUES ('duck', 2, 20);
 INSERT INTO dailyprice VALUES ('duck', 3, 30);
 INSERT INTO dailyprice VALUES ('duck', 4, 40);
 INSERT INTO dailyprice VALUES ('duck', 5, 50);
+
 INSERT INTO dailyprice VALUES ('hedgehog', 1, 10);
 INSERT INTO dailyprice VALUES ('hedgehog', 2, 20);
 INSERT INTO dailyprice VALUES ('hedgehog', 3, 30);
@@ -126,6 +132,7 @@ INSERT INTO dailyprice VALUES ('snake', 2, 20);
 INSERT INTO dailyprice VALUES ('snake', 3, 30);
 INSERT INTO dailyprice VALUES ('snake', 4, 40);
 INSERT INTO dailyprice VALUES ('snake', 5, 50);
+
 INSERT INTO dailyprice VALUES ('guinea pig', 1, 10);
 INSERT INTO dailyprice VALUES ('guinea pig', 2, 20);
 INSERT INTO dailyprice VALUES ('guinea pig', 3, 30);
@@ -134,7 +141,7 @@ INSERT INTO dailyprice VALUES ('guinea pig', 5, 50);
 
 CREATE TABLE pets(
     petname VARCHAR NOT NULL,
-    pcontact BIGINT NOT NULL REFERENCES public.users(contact),
+    pcontact BIGINT NOT NULL REFERENCES public.users(contact) ON DELETE CASCADE,
     category VARCHAR NOT NULL REFERENCES public.categories(category),
     age INTEGER NOT NULL,
     PRIMARY KEY (petName, pcontact)
@@ -143,19 +150,19 @@ CREATE TABLE pets(
 CREATE TABLE available (
     startday DATE NOT NULL,
     endday DATE NOT NULL CHECK(endday - startday >= 0),
-    ccontact BIGINT NOT NULL REFERENCES public.users(contact),
+    ccontact BIGINT NOT NULL REFERENCES public.users(contact) ON DELETE CASCADE,
     PRIMARY KEY (ccontact, startday, endday)
 );
 
 CREATE TABLE cantakecare (
-    ccontact BIGINT NOT NULL REFERENCES public.users(contact),
+    ccontact BIGINT NOT NULL REFERENCES public.users(contact) ON DELETE CASCADE,
     category VARCHAR REFERENCES public.categories(category), 
     PRIMARY KEY (ccontact, category)
 );
 
 CREATE TABLE biddings(
   pcontact BIGINT NOT NULL,
-  ccontact BIGINT NOT NULL REFERENCES public.users(contact),
+  ccontact BIGINT NOT NULL REFERENCES public.users(contact) ON DELETE CASCADE,
   petname VARCHAR NOT NULL,
 
   startday DATE NOT NULL,
@@ -170,7 +177,7 @@ CREATE TABLE biddings(
   status VARCHAR NOT NULL,
 
   PRIMARY KEY (pcontact, ccontact, petname, startday, endday),
-  FOREIGN KEY (pcontact, petname) REFERENCES public.pets(pcontact, petname)
+  FOREIGN KEY (pcontact, petname) REFERENCES public.pets(pcontact, petname) ON DELETE CASCADE
 );
 
 CREATE TABLE reviews(
