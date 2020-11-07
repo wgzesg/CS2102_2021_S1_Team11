@@ -38,15 +38,14 @@
             position: relative;
         }
         .content{
+            left: 40%;
+            top: 100px;
+            width: 500px;
             position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 900px;
-            height: 200px;
-            transform: translate(-28%,100%);
         }
         h1{
             font-size: 20px;
+            margin-bottom: 20px;
         }
 
         td .table-button {
@@ -59,6 +58,29 @@
             background-color: transparent;
             background-image: none;
             border-color: #868e96;
+        }
+        .pagination {
+            width: 200px;
+            justify-content: center;
+            position: absolute;
+            left: 100px;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -78,6 +100,7 @@
                 Add {{applicationType}} slot <a href="https://cs2102project.herokuapp.com/caretaker/available/new" class="btn btn-outline-secondary btn-sm">HERE</a>
             </h1>
             <div class="table">{{table}}</div>
+            {{ pagination.links }}
         </div>
     </div>
 

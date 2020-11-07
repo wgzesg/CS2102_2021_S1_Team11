@@ -128,7 +128,7 @@ def render_admin_page(page=1):
                          LIMIT 10 OFFSET '{}'""".format(contact, page_offset)
 
     results = profileTable(db.session.execute(pagequery))
-    return render_template('adminSummary.html', results=results, pagination=pagination, username=current_user.username + " admin")
+    return render_template('admin.html', results=results, pagination=pagination, username=current_user.username + " admin")
 
 
 @view.route("/admin/summary", methods=["GET"])
@@ -154,7 +154,7 @@ def render_admin_summary_page():
                          OFFSET '{}' LIMIT 10 """.format(page_offset)
     result_salary = db.session.execute(pagequery)
     salaryTable = SalaryTable(result_salary)
-    return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username + " owner")
+    return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username + " admin")
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
@@ -240,16 +240,37 @@ def render_dailyprice_update():
 def render_caretaker_page():
     contact = current_user.contact
     #insert query to show this caretaker's total working hours and this month's pay.
-    query = "SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
+
+    countquery = "SELECT COUNT(*) FROM biddings INNER JOIN Pets ON\
         Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'".format(contact)
-    results = db.session.execute(query)
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
+
+    # PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=6, record_name='admin')
+
+    page_offset = (page - 1) * 6
+    if total < page * 6:
+        page_display = total % 6
+        pagequery = """SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
+                    Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'
+                         LIMIT '{}' OFFSET '{}'""".format(contact, page_display, page_offset)
+    else:
+        pagequery = """SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
+                    Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'
+                         LIMIT 6 OFFSET '{}'""".format(contact, page_offset)
+
+    results = db.session.execute(pagequery)
     print(results, flush=True)
     table2 = CaretakersBidTable(results)
 
     query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.petday, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     table1 = canparttimeTable(results)
-    return render_template('caretaker.html', table1=table1, table2 = table2, username=current_user.username + " caretaker")
+    return render_template('caretaker.html', table1=table1, table2 = table2, pagination=pagination, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/biddings", methods=["GET", "POST"])
@@ -383,10 +404,29 @@ def render_caretaker_available():
     isPt = db.session.execute(ptquery).fetchall()
     if isPt[0][0] == True:
         applicationType = "availability"
-    query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
-    availables = db.session.execute(query)
+
+    countquery = "SELECT COUNT(*) FROM available WHERE ccontact = '{}'".format(contact)
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
+
+    # PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='admin')
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = """SELECT * FROM available WHERE ccontact = '{}'
+                         LIMIT '{}' OFFSET '{}'""".format(contact, page_display, page_offset)
+    else:
+        pagequery = """SELECT * FROM available WHERE ccontact = '{}'
+                         LIMIT 10 OFFSET '{}'""".format(contact, page_offset)
+                    
+    availables = db.session.execute(pagequery)
     table = editAvailableTable(availables)
-    return render_template('availableWithEdit.html', table=table, applicationType=applicationType, username=current_user.username + " caretaker")
+    return render_template('availableWithEdit.html', table=table, pagination=pagination, applicationType=applicationType, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/available/edit", methods=["GET", "POST"])
@@ -678,7 +718,8 @@ def render_owner_profile():
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}';".format(contact)
     profile = db.session.execute(query).fetchall()
-    return render_template("profileOwner.html", profile=profile, form=form, username=current_user.username + " owner")
+    table = profileTable(profile)
+    return render_template("profileOwner.html", profile=profile, form=form, table=table, username=current_user.username + " owner")
 
 
 @view.route("/owner/profile/update", methods=["GET", "POST"])
