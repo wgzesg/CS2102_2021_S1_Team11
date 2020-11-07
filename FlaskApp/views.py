@@ -128,7 +128,7 @@ def render_admin_page(page=1):
                          LIMIT 10 OFFSET '{}'""".format(contact, page_offset)
 
     results = profileTable(db.session.execute(pagequery))
-    return render_template('adminSummary.html', results=results, pagination=pagination, username=current_user.username + " admin")
+    return render_template('admin.html', results=results, pagination=pagination, username=current_user.username + " admin")
 
 
 @view.route("/admin/summary", methods=["GET"])
@@ -154,7 +154,7 @@ def render_admin_summary_page():
                          OFFSET '{}' LIMIT 10 """.format(page_offset)
     result_salary = db.session.execute(pagequery)
     salaryTable = SalaryTable(result_salary)
-    return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username + " owner")
+    return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username + " admin")
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
