@@ -718,7 +718,7 @@ def render_owner_profile():
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}';".format(contact)
     profile = db.session.execute(query).fetchall()
-    table = profileTable(results)
+    table = profileTable(profile)
     return render_template("profileOwner.html", profile=profile, form=form, table=table, username=current_user.username + " owner")
 
 
