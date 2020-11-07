@@ -24,7 +24,6 @@ def render_dummy_page():
 def render_registration_page():
     form = RegistrationForm()
     if form.validate_on_submit():
-        print("sumitted", flush=True)
         username = form.username.data
         password = form.password.data
         user_type = form.usertype.data
@@ -48,10 +47,8 @@ def render_registration_page():
             canparttime1 = Canparttime(ccontact=contact, isparttime=is_part_time, avgrating=5.0, petday= 0, salary=salery)
             db.session.add(canparttime1)
             db.session.commit()
-        print("commited", flush=True)
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect("/login")
-    print("rendered", flush=True)
     return render_template("registration.html", title='Registration', form=form)
 
 
@@ -71,7 +68,6 @@ def render_login_page():
             return redirect("/profile")
     form = LoginForm()
     if form.validate_on_submit():
-        print("submited", flush=True)
         
         # Don't change. This ORM is linked to how user is verified as login and possess certain roles
         # This is required by other libraries such as login_manager
@@ -106,7 +102,6 @@ def logout():
 @view.route("/admin", methods=["GET"])
 @roles_required('admin')
 def render_admin_page(page=1):
-    print(current_user, flush=True)
     contact = current_user.contact
     countquery = "SELECT COUNT(*) FROM users WHERE contact = '{}' AND usertype = 'admin'".format(contact)
     count = db.session.execute(countquery).fetchall()
@@ -159,7 +154,6 @@ def render_admin_summary_page():
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
 def render_admin_profile():
-    print(current_user, flush=True)
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
     results = db.session.execute(query)
@@ -182,7 +176,6 @@ def render_admin_update_profile():
                     form.credit_card.data, form.postal_code.data, contact)
             db.session.execute(update)
             db.session.commit()
-            print("Admin profile has been updated", flush=True)
             return redirect(url_for('view.render_admin_profile'))
         return render_template("update.html", form=form, username=current_user.username + " admin")
 
@@ -209,7 +202,6 @@ def render_admin_dailyprice():
         pagequery = """SELECT * FROM dailyprice ORDER BY category, rating
                          OFFSET '{}' LIMIT 10 """.format(page_offset)
     dailyprices = db.session.execute(pagequery)
-    print(dailyprices, flush=True)
     table = DailyPriceTable(dailyprices)
     return render_template("adminDailyPrice.html", table=table, pagination=pagination, username=current_user.username + " admin")
 
@@ -264,7 +256,6 @@ def render_caretaker_page():
                          LIMIT 6 OFFSET '{}'""".format(contact, page_offset)
 
     results = db.session.execute(pagequery)
-    print(results, flush=True)
     table2 = CaretakersBidTable(results)
 
     query = "SELECT canparttime.ccontact, canparttime.isparttime, canparttime.avgrating, canparttime.petday, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
@@ -306,8 +297,6 @@ def render_caretaker_biddings_accept():
         query = """SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 
             AND ccontact = '{}' AND status = 'success' LIMIT 1""".format(selected, selected, ct)
         count = db.session.execute(query).fetchall()
-        print(parttime, flush=True)
-        print(count, flush=True)
         if parttime[0][1] == (True, ) and int(parttime[0][2]) < (3, ):
             if count[0] >= (2,):
                 flag = False
@@ -369,7 +358,6 @@ def render_caretaker_biddings_finish():
 @view.route("/caretaker/profile", methods=["GET"])
 @roles_required('caretaker')
 def render_caretaker_profile():
-    print(current_user, flush=True)
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
     results = db.session.execute(query)
@@ -392,7 +380,6 @@ def render_caretaker_update_profile():
                     form.credit_card.data, form.postal_code.data, contact)
             db.session.execute(update)
             db.session.commit()
-            print("Caretaker profile has been updated", flush=True)
             return redirect(url_for('view.render_caretaker_profile'))
         return render_template("update.html", form=form, username=current_user.username + " caretaker")
 
@@ -485,7 +472,6 @@ def render_caretaker_available_new():
         ccontact = contact
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}' LIMIT 1".format(ccontact)
         isPartTime = db.session.execute(fullTimeQuery).fetchall()
-        print(isPartTime[0], flush=True)
         if not isPartTime[0][0]:
             overlapQuery = """
             SELECT 1
@@ -500,7 +486,6 @@ def render_caretaker_available_new():
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(ccontact, startday, endday)
             hasOverlap = db.session.execute(overlapQuery).fetchall()
-            print(hasOverlap, flush=True)
             if(hasOverlap):
                 flash("You have work to do during that period")
                 return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
@@ -739,7 +724,6 @@ def render_owner_profile_update():
                     form.credit_card.data, form.postal_code.data, contact)
             db.session.execute(update)
             db.session.commit()
-            print("Owner profile has been updated", flush=True)
             return redirect(url_for('view.render_owner_profile'))
         return render_template("update.html", form=form, username=current_user.username + " owner")
 
@@ -750,7 +734,6 @@ def render_owner_pet():
     contact = current_user.contact
     query = "SELECT * FROM pets WHERE pcontact = '{}';".format(contact)
     pets = db.session.execute(query)
-    print(pets, flush=True)
     table = editPetTable(pets)
     return render_template("ownerPetWithEdit.html", table=table, pets=pets, username=current_user.username + " owner")
 
@@ -851,7 +834,6 @@ def render_owner_bid_new():
         isValidPeriod = True
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}'".format(cn)
         isPartTime = db.session.execute(fullTimeQuery).fetchall()
-        print(isPartTime[0], flush=True)
         if not isPartTime[0][0]:
             overLapQuery = """
             SELECT 1
@@ -866,7 +848,6 @@ def render_owner_bid_new():
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(cn, startday, endday)
             hasOverlap = db.session.execute(overLapQuery).fetchall()
-            print(hasOverlap, flush=True)
             if(hasOverlap):
                 isValidPeriod = False
         else:
@@ -883,7 +864,6 @@ def render_owner_bid_new():
             WHERE tsrange('{}', '{}', '[]') * tsrange(f2.st, f2.en, '[]') = tsrange('{}', '{}', '[]');
             """.format(cn, startday, endday, startday, endday)
             hasFullOverage = db.session.execute(intersection).fetchall()
-            print(hasFullOverage, flush=True)
             if(not hasFullOverage):
                 isValidPeriod = False
         if(isValidPeriod == False):
