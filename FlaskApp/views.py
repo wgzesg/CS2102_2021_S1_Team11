@@ -241,7 +241,7 @@ def render_caretaker_page():
     contact = current_user.contact
     #insert query to show this caretaker's total working hours and this month's pay.
     query = "SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
-        Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}'".format(contact)
+        Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'".format(contact)
     results = db.session.execute(query)
     print(results, flush=True)
     table2 = CaretakersBidTable(results)
