@@ -21,6 +21,29 @@
         .table1{
             width: 526px;
         }
+        .pagination {
+            width: 200px;
+            justify-content: center;
+            position: absolute;
+            bottom: -2%;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
     </style>
 </head>
 
@@ -44,6 +67,7 @@
                 <p>Here is the list of all your accepted biddings!</p>
                 <div class="table2 pure-table pure-table-bordered">
                     {{ table2 }}
+                    {{ pagination.links }}
                 </div>
             </div>
         </div>

@@ -240,16 +240,37 @@ def render_dailyprice_update():
 def render_caretaker_page():
     contact = current_user.contact
     #insert query to show this caretaker's total working hours and this month's pay.
-    query = "SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
+
+    countquery = "SELECT COUNT(*) FROM biddings INNER JOIN Pets ON\
         Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'".format(contact)
-    results = db.session.execute(query)
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
+
+    # PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=6, record_name='admin')
+
+    page_offset = (page - 1) * 6
+    if total < page * 6:
+        page_display = total % 6
+        pagequery = """SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
+                    Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'
+                         LIMIT '{}' OFFSET '{}'""".format(contact, page_display, page_offset)
+    else:
+        pagequery = """SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
+                    Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'
+                         LIMIT 6 OFFSET '{}'""".format(contact, page_offset)
+
+    results = db.session.execute(pagequery)
     print(results, flush=True)
     table2 = CaretakersBidTable(results)
 
     query = "SELECT canparttime.ccontact, canparttime.avgrating, canparttime.petday, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     table1 = canparttimeTable(results)
-    return render_template('caretaker.html', table1=table1, table2 = table2, username=current_user.username + " caretaker")
+    return render_template('caretaker.html', table1=table1, table2 = table2, pagination=pagination, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/biddings", methods=["GET", "POST"])
