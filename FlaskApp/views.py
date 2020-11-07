@@ -404,10 +404,29 @@ def render_caretaker_available():
     isPt = db.session.execute(ptquery).fetchall()
     if isPt[0][0] == True:
         applicationType = "availability"
-    query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
-    availables = db.session.execute(query)
+
+    countquery = "SELECT COUNT(*) FROM available WHERE ccontact = '{}'".format(contact)
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
+
+    # PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='admin')
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = """SELECT * FROM available WHERE ccontact = '{}'
+                         LIMIT '{}' OFFSET '{}'""".format(contact, page_display, page_offset)
+    else:
+        pagequery = """SELECT * FROM available WHERE ccontact = '{}'
+                         LIMIT 10 OFFSET '{}'""".format(contact, page_offset)
+                    
+    availables = db.session.execute(pagequery)
     table = editAvailableTable(availables)
-    return render_template('availableWithEdit.html', table=table, applicationType=applicationType, username=current_user.username + " caretaker")
+    return render_template('availableWithEdit.html', table=table, pagination=pagination, applicationType=applicationType, username=current_user.username + " caretaker")
 
 
 @view.route("/caretaker/available/edit", methods=["GET", "POST"])
