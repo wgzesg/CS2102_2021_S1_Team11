@@ -312,11 +312,13 @@ def render_caretaker_biddings_accept():
             if count[0] >= (2,):
                 flag = False
                 count = [(0,)]
+                print("enter parttime", flush=True)
                 break
         else:
             if count[0] >= (5,):
                 flag = False
                 count = [(0,)]
+                print("enter fulltime", flush=True)
                 break
     
     if flag == False:
