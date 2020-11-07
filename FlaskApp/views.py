@@ -288,14 +288,14 @@ def render_caretaker_biddings_accept():
         print(parttime, flush=True)
         print(count, flush=True)
         if parttime[0][1] == (True, ) and int(parttime[0][2]) < (3, ):
-            if count[0] > (2,):
+            if count[0] >= (2,):
                 flag = False
-                count[0] = (0,)
+                count = [(0,)]
                 break
         else:
-            if count[0] > (5,):
+            if count[0] >= (5,):
                 flag = False
-                count[0] = (0,)
+                count = [(0,)]
                 break
     
     if flag == False:
@@ -332,7 +332,13 @@ def render_caretaker_biddings_finish():
     #     datetime.strptime(endday, '%Y-%m-%d') < datetime.today():
     #     flash("You are not allowed to terminate the bidding before end date.")
     # elif bid:
-        bid.status = "end"
+        setendQuery = """
+            UPDATE biddings 
+            SET status = 'end' 
+            WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}'
+        """.format(request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
+
+        db.session.execute(setendQuery)
         db.session.commit()
 
     return redirect(url_for('view.render_caretaker_biddings'))
