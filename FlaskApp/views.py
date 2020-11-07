@@ -232,7 +232,7 @@ def render_allprofiles():
     query = """SELECT * FROM users;"""
     result = db.session.execute(query)
     table = DeleteProfileTable(result)
-    return render_template("adminDeleteAccount", table=table, username=current_user.username + " admin")
+    return render_template("adminDeleteAccount.html", table=table, username=current_user.username + " admin")
 
 @view.route("/admin/delete", methods=["GET", "POST"])
 @roles_required('admin')
