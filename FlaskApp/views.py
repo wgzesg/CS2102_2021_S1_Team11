@@ -238,7 +238,7 @@ def render_allprofiles():
 @roles_required('admin')
 def render_delete():
     username = request.args.get('username')
-    contacts = request.args.get('contacts')
+    contact = request.args.get('contact')
     availableQuery = "SELECT * FROM users WHERE contact = '{}'".format(contacts)
     available = db.session.execute(availableQuery).fetchall()
     if available:
@@ -246,7 +246,7 @@ def render_delete():
             deleteAvail = """
                 DELETE FROM users
                 WHERE contact='{}'
-            """.format(contacts)
+            """.format(contact)
             db.session.execute(deleteAvail)
             db.session.commit()
     return redirect(url_for('view.render_allprofiles'))
