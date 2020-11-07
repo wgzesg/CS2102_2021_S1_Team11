@@ -69,6 +69,7 @@ class profileTable(Table):
 
 class canparttimeTable(Table):
     ccontact = Col('Contact')
+    isparttime = Col('Part-time caretaker?')
     avgrating = Col('Overall Rating')
     petday = Col('Petday')
     salary = Col('Salary of the month')
