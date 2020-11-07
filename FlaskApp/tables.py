@@ -74,11 +74,11 @@ class canparttimeTable(Table):
     salary = Col('Salary of the month')
 
 class CaretakersBidTable(Table):
-    pcontact = Col('pcontact')
+    pcontact = Col('petowner contact')
     petname = Col('petname')
     category = Col('category')
     startday = Col('startday')
-    endday = Col('enddays')
+    endday = Col('endday')
 
 class ReviewTable(Table):
     ccontact = Col('pcontact')
