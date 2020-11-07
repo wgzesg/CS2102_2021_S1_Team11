@@ -105,3 +105,8 @@ class DeleteProfileTable(Table):
     contact = Col('contact')
     usertype = Col('user type')
     delete = ButtonCol('Delete ', 'view.render_delete', url_kwargs=dict(username = 'username', contact = 'contact', usertype = 'usertype'))
+
+class ShowReviewTable(Table):
+    username = Col('username')
+    ccontact = Col('contact')
+    review = Col('review')
