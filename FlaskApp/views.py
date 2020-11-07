@@ -936,3 +936,11 @@ def render_owner_review_update():
         return render_template("ownerReviewUpdate.html", form=form, username=current_user.username )
     return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
+
+
+@view.route("/reviews", methods=["GET"])
+@roles_required(['petowner', 'admin', 'caretaker'])
+def render_all_reviews():
+    query = "SELECT * FROM reviews"
+    resutl = db.session.execute(query).fetchall
+    table = 
