@@ -99,3 +99,9 @@ class DailyPriceTable(Table):
     rating = Col('rating level x (x-1≤average rating<x)')
     price = Col('price')
     edit = LinkCol('Edit ', 'view.render_dailyprice_update', url_kwargs=dict(category = 'category', rating = 'rating', price = 'price'))
+
+class DeleteProfileTable(Table):
+    username = Col('username')
+    contact = Col('contact')
+    usertype = Col('user type')
+    delete = LinkCol('Delete ', 'view.render_delete', url_kwargs=dict(username = 'username', contact = 'contact', usertype = 'usertype'))

@@ -8,7 +8,8 @@ from forms import LoginForm, RegistrationForm, BiddingForm, PetForm, ProfileForm
 from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, SearchCaretakerForm, ReviewUpdateForm, DailyPriceForm
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews, Dailyprice
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
-    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, SalaryTable, DailyPriceTable
+    caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, \
+    SalaryTable, DailyPriceTable, DeleteProfileTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
@@ -224,6 +225,31 @@ def render_dailyprice_update():
         return render_template("dailyPriceUpdate.html", form=form, username=current_user.username + " admin")
 
 
+@view.route("admin/allprofiles", methods=["GET", "POST"])
+@roles_required('admin')
+def render_allprofiles():
+    ac = current_user.contact
+    query = """SELECT * FROM users;"""
+    result = db.session.execute(query)
+    table = DeleteProfileTable(result)
+    return render_template("adminDeleteAccount", table=table, username=current_user.username + " admin")
+
+@view.route("admin/delete", methods=["GET", "POST"])
+@roles_required('admin')
+def render_delete():
+    username = request.args.get('username')
+    contacts = request.args.get('contacts')
+    availableQuery = "SELECT * FROM users WHERE contact = '{}'".format(contacts)
+    available = db.session.execute(availableQuery).fetchall()
+    if available:
+        if request.method == 'POST':
+            deleteAvail = """
+                DELETE FROM users
+                WHERE contact='{}'
+            """.format(contacts)
+            db.session.execute(deleteAvail)
+            db.session.commit()
+    return redirect(url_for('view.render_allprofiles'))
 
 
 @view.route("/caretaker", methods=["GET"])
