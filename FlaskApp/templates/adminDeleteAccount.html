@@ -8,54 +8,106 @@
     <link rel="stylesheet" type="text/css" href="../static/css/login-util.css">
     <link rel="stylesheet" type="text/css" href="../static/css/login-main.css">
     <style>
-        .content {
-            display: flex;
-            justify-content: center;
-            display: -webkit-flex;
-            align-items: center;
-            margin: auto auto;
+        .container {
+            width: 1000px;
             text-align: center;
         }
 
-        .table {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            
+        #addButton{
+            display: block;
+            margin: 0 auto;
         }
 
-        body {
-            color: #222;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 24px;
-            margin: 0 0 14px;
+        .buttonWrapper {
+            padding-bottom: 32px;
+            padding-top: 30px;
         }
 
-        h1 {
-            color: #222;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 24px;
-            margin: 0 0 14px;
+        #registerButton {
+            display: block;
+            margin: 0 auto;
         }
-        
-        a.more-link {
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 3px 10px;
-            background-color: #ff6600;
-            border-radius: 5px;
+
+        .formField {
+            padding: 10px 0;
+        }
+
+        #logout {
             float: right;
         }
-        a.more-link:hover {
+
+        .button_wrapper{
+            display: block;
+            width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            left: 0;
+            right: 0;
+            top: 30vh;
+            margin-left: 60px;
+        }
+        h3{
+            padding-top: 20px;
+        }
+        .result-row{
+            padding: 10px 0;
+        }
+
+        .edit{
+            display: inline;
+            opacity: 1; 
+            width: 70px;
+            height: 35px;
+            margin-left: 20px;
+        }
+        .container-login100{
+            min-height: 94vh;
+        }
+
+        h1{
+            font-size: 20px;
+        }
+        .table{
+            font-size: 14px;
+            position: absolute;
+            margin-top: 30px;
+        }
+        .content{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 500px;
+            height: 200px;
+            transform: translate(-24%,50%);
+        }
+        .wrapper {
+            position: relative;
+        }
+        .pagination {
+            justify-content: center;
+            margin-bottom: 40px;
+            display: block;
+            position: absolute;
+            width: 300px;
+            bottom: -480px;
+            left: 40px;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
             text-decoration: none;
-            background-color: #666;
-            border-radius: 0px;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -73,7 +125,11 @@
     <div class="content">
         <div class="table">
             <div>
-                
+                <h1>
+                    <p>Here are a list of accounts.</p>
+                </h1>
+                <div class="table">{{table}}</div>
+                {{ pagination.links }}
             </div>
         </div>
     </div>
