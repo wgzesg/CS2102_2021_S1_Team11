@@ -95,8 +95,8 @@ class SalaryTable(Table):
     salary = Col('salary')
 
 class DailyPriceTable(Table):
-    category = Col('category')
-    rating = Col('rating')
+    category = Col('catagory')
+    rating = Col('rating level x (x-1≤average rating<x)')
     price = Col('price')
     edit = LinkCol('Edit ', 'view.render_dailyprice_update', url_kwargs=dict(category = 'category', rating = 'rating', price = 'price'))
 
