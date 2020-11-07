@@ -957,7 +957,6 @@ def render_owner_review_update():
 
 
 @view.route("/reviews", methods=["GET"])
-@roles_required(['petowner', 'admin', 'caretaker'])
 def render_all_reviews():
     query = "SELECT * FROM reviews INNER JOIN users ON ccontact = contact"
     results = db.session.execute(query)
