@@ -20,8 +20,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96e361de-2dde-42f5-adcd-7f6b7e854353" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/review.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/adminDailyPrice.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/adminDailyPrice.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/adminDeleteAccount.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/adminDeleteAccount.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/adminSummary.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/adminSummary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/available.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/available.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/availableNew.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/availableNew.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/availableWithEdit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/availableWithEdit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/caretaker.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/caretaker.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/caretakerBid.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/caretakerBid.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/caretakerCantakecare.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/caretakerCantakecare.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/caretakerCantakecareNew.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/caretakerCantakecareNew.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/owner.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/owner.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ownerBid.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ownerBid.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ownerPet.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ownerPet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ownerPetWithEdit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ownerPetWithEdit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ownerReview.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ownerReview.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profileAdmin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profileAdmin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profileCaretaker.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profileCaretaker.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profileOwner.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profileOwner.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/review.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/welcome.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
