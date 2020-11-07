@@ -257,7 +257,7 @@ def render_allprofiles():
 def render_delete():
     username = request.args.get('username')
     contact = request.args.get('contact')
-    availableQuery = "SELECT * FROM users WHERE contact = '{}'".format(contact)
+    availableQuery = "SELECT * FROM users WHERE contact = {}".format(contact)
     available = db.session.execute(availableQuery).fetchall()
     if available:
         if request.method == 'POST':

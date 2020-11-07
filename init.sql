@@ -37,12 +37,12 @@ INSERT INTO role VALUES ('petowner');
 INSERT INTO role VALUES ('caretaker');
 
 CREATE TABLE user_roles (
-    contact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact),
+    contact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact) ON DELETE CASCADE,
     usertype VARCHAR NOT NULL REFERENCES public.role(name)
 );
 
 CREATE TABLE canparttime (
-    ccontact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact),
+    ccontact BIGINT PRIMARY KEY NOT NULL REFERENCES public.users(contact) ON DELETE CASCADE,
     isparttime BOOLEAN NOT NULL,
     avgrating FLOAT NOT NULL,
     petday INT NOT NULL,
