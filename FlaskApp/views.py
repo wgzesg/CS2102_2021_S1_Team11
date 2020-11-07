@@ -9,7 +9,7 @@ from forms import AvailableUpdateForm, PetUpdateForm, UserUpdateForm, Bid, Searc
 from models import Users, Role, Pets, Available, Biddings, Cantakecare, Canparttime, Reviews, Dailyprice
 from tables import userInfoTable, editPetTable, ownerHomePage, biddingCaretakerTable, biddingTable, \
     caretakerCantakecare, editAvailableTable, profileTable, CaretakersBidTable, ReviewTable, canparttimeTable, \
-    SalaryTable, DailyPriceTable, DeleteProfileTable
+    SalaryTable, DailyPriceTable, DeleteProfileTable, ShowReviewTable
 from datetime import timedelta, date, datetime
 from sqlalchemy import exc
 import sys
@@ -960,5 +960,6 @@ def render_owner_review_update():
 @roles_required(['petowner', 'admin', 'caretaker'])
 def render_all_reviews():
     query = "SELECT * FROM reviews"
-    resutl = db.session.execute(query).fetchall
-    table = 
+    results = db.session.execute(query).fetchall
+    table = ShowReviewTable(results)
+    return render_template("review.html", table=table)
