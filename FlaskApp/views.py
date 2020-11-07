@@ -229,10 +229,28 @@ def render_dailyprice_update():
 @roles_required('admin')
 def render_allprofiles():
     ac = current_user.contact
-    query = """SELECT * FROM users;"""
-    result = db.session.execute(query)
+    countquery = """SELECT COUNT(*) FROM users"""
+    count = db.session.execute(countquery).fetchall()
+    total = count[0][0]
+
+    # PER_PAGE = 10 
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # start = (page-1)*PER_PAGE
+    # end = page * PER_PAGE
+    pagination = Pagination(bs_version=3, page=page, total=total, per_page=10)
+
+    page_offset = (page - 1) * 10
+    if total < page * 10:
+        page_display = total % 10
+        pagequery = """SELECT * FROM users
+                         OFFSET '{}' LIMIT '{}' """.format(page_offset, page_display)
+    else:
+        pagequery = """SELECT * FROM users
+                         OFFSET '{}' LIMIT 10 """.format(page_offset)
+
+    result = db.session.execute(pagequery)
     table = DeleteProfileTable(result)
-    return render_template("adminDeleteAccount.html", table=table, username=current_user.username)
+    return render_template("adminDeleteAccount.html", table=table, pagination=pagination, username=current_user.username)
 
 @view.route("/admin/delete", methods=["GET", "POST"])
 @roles_required('admin')
@@ -936,3 +954,11 @@ def render_owner_review_update():
         return render_template("ownerReviewUpdate.html", form=form, username=current_user.username )
     return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
+
+
+@view.route("/reviews", methods=["GET"])
+@roles_required(['petowner', 'admin', 'caretaker'])
+def render_all_reviews():
+    query = "SELECT * FROM reviews"
+    resutl = db.session.execute(query).fetchall
+    table = 
