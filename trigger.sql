@@ -60,6 +60,7 @@ CREATE OR REPLACE FUNCTION addSalary()
 RETURNS TRIGGER AS $$
 BEGIN 
   UPDATE canparttime cp SET petday = petday + NEW.endday - NEW.startday
+  WHERE NEW.ccontact = cp.ccontact;
 
   UPDATE canparttime cp SET salary = salary + (
   (
