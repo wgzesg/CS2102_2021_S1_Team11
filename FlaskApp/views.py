@@ -960,6 +960,6 @@ def render_owner_review_update():
 @roles_required(['petowner', 'admin', 'caretaker'])
 def render_all_reviews():
     query = "SELECT * FROM reviews"
-    results = db.session.execute(query).fetchal()
+    results = db.session.execute(query)
     table = ShowReviewTable(results)
     return render_template("review.html", table=table)
