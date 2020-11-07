@@ -124,7 +124,7 @@ def render_admin_page(page=1):
                          LIMIT 10 OFFSET '{}'""".format(contact, page_offset)
 
     results = profileTable(db.session.execute(pagequery))
-    return render_template('admin.html', results=results, pagination=pagination, username=current_user.username + " admin")
+    return render_template('admin.html', results=results, pagination=pagination, username=current_user.username)
 
 
 @view.route("/admin/summary", methods=["GET"])
@@ -150,7 +150,7 @@ def render_admin_summary_page():
                          OFFSET '{}' LIMIT 10 """.format(page_offset)
     result_salary = db.session.execute(pagequery)
     salaryTable = SalaryTable(result_salary)
-    return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username + " admin")
+    return render_template("adminSummary.html", salaryTable=salaryTable, pagination=pagination, username=current_user.username)
 
 @view.route("/admin/profile", methods=["GET"])
 @roles_required('admin')
@@ -159,7 +159,7 @@ def render_admin_profile():
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
     results = db.session.execute(query)
     table = profileTable(results)
-    return render_template('profileAdmin.html', table=table, username=current_user.username + " admin")
+    return render_template('profileAdmin.html', table=table, username=current_user.username)
 
 
 @view.route("/admin/profile/update", methods=["GET", "POST"])
@@ -178,7 +178,7 @@ def render_admin_update_profile():
             db.session.execute(update)
             db.session.commit()
             return redirect(url_for('view.render_admin_profile'))
-        return render_template("update.html", form=form, username=current_user.username + " admin")
+        return render_template("update.html", form=form, username=current_user.username)
 
 
 @view.route("/admin/dailyprice", methods=["GET", "POST"])
@@ -204,7 +204,7 @@ def render_admin_dailyprice():
                          OFFSET '{}' LIMIT 10 """.format(page_offset)
     dailyprices = db.session.execute(pagequery)
     table = DailyPriceTable(dailyprices)
-    return render_template("adminDailyPrice.html", table=table, pagination=pagination, username=current_user.username + " admin")
+    return render_template("adminDailyPrice.html", table=table, pagination=pagination, username=current_user.username)
 
 @view.route("/admin/dailyprice/update", methods=["GET", "POST"])
 @roles_required('admin')
@@ -222,7 +222,7 @@ def render_dailyprice_update():
             db.session.execute(update)
             db.session.commit()
             return redirect(url_for('view.render_admin_dailyprice'))
-        return render_template("dailyPriceUpdate.html", form=form, username=current_user.username + " admin")
+        return render_template("dailyPriceUpdate.html", form=form, username=current_user.username)
 
 
 @view.route("/admin/allprofiles", methods=["GET", "POST"])
@@ -232,7 +232,7 @@ def render_allprofiles():
     query = """SELECT * FROM users;"""
     result = db.session.execute(query)
     table = DeleteProfileTable(result)
-    return render_template("adminDeleteAccount.html", table=table, username=current_user.username + " admin")
+    return render_template("adminDeleteAccount.html", table=table, username=current_user.username)
 
 @view.route("/admin/delete", methods=["GET", "POST"])
 @roles_required('admin')
@@ -287,7 +287,7 @@ def render_caretaker_page():
     query = "SELECT canparttime.ccontact, canparttime.isparttime, canparttime.avgrating, canparttime.petday, canparttime.salary FROM canparttime WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query)
     table1 = canparttimeTable(results)
-    return render_template('caretaker.html', table1=table1, table2 = table2, pagination=pagination, username=current_user.username + " caretaker")
+    return render_template('caretaker.html', table1=table1, table2 = table2, pagination=pagination, username=current_user.username)
 
 
 @view.route("/caretaker/biddings", methods=["GET", "POST"])
@@ -298,7 +298,7 @@ def render_caretaker_biddings():
     query = "SELECT * FROM biddings WHERE ccontact = '{}'".format(contact)
     results = db.session.execute(query).fetchall()
     table = biddingCaretakerTable(results)
-    return render_template("caretakerBid.html", table=table, username=current_user.username + " caretaker")
+    return render_template("caretakerBid.html", table=table, username=current_user.username)
 
 @view.route("/caretaker/biddings/accept", methods=["POST"])
 @roles_required('caretaker')
@@ -388,7 +388,7 @@ def render_caretaker_profile():
     query = "SELECT * FROM users WHERE contact = '{}'".format(contact)
     results = db.session.execute(query)
     table = profileTable(results)
-    return render_template('profileCaretaker.html', table=table, username=current_user.username + " caretaker")
+    return render_template('profileCaretaker.html', table=table, username=current_user.username)
 
 
 @view.route("/caretaker/profile/update", methods=["GET", "POST"])
@@ -407,7 +407,7 @@ def render_caretaker_update_profile():
             db.session.execute(update)
             db.session.commit()
             return redirect(url_for('view.render_caretaker_profile'))
-        return render_template("update.html", form=form, username=current_user.username + " caretaker")
+        return render_template("update.html", form=form, username=current_user.username)
 
 
 @view.route("/caretaker/available", methods=["GET", "POST"])
@@ -441,7 +441,7 @@ def render_caretaker_available():
                     
     availables = db.session.execute(pagequery)
     table = editAvailableTable(availables)
-    return render_template('availableWithEdit.html', table=table, pagination=pagination, applicationType=applicationType, username=current_user.username + " caretaker")
+    return render_template('availableWithEdit.html', table=table, pagination=pagination, applicationType=applicationType, username=current_user.username)
 
 
 @view.route("/caretaker/available/edit", methods=["GET", "POST"])
@@ -464,7 +464,7 @@ def render_caretaker_available_edit():
             db.session.execute(updateAvail)
             db.session.commit()
             return redirect(url_for('view.render_caretaker_available'))
-    return render_template('availableNew.html', form=form, username=current_user.username + " caretaker")
+    return render_template('availableNew.html', form=form, username=current_user.username)
 
 
 @view.route("/caretaker/available/delete", methods=["POST"])
@@ -514,7 +514,7 @@ def render_caretaker_available_new():
             hasOverlap = db.session.execute(overlapQuery).fetchall()
             if(hasOverlap):
                 flash("You have work to do during that period")
-                return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
+                return render_template('availableNew.html', form = form, username=current_user.username)
             
             checkContinuous = """
             SELECT SUM(diff)
@@ -557,14 +557,14 @@ def render_caretaker_available_new():
             numberOfperiods = db.session.execute(checkContinuous, parameters).fetchall()
             if numberOfperiods[0][0] < 2:
                 flash("You have not worked for 2 continuous 150 days")
-                return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
+                return render_template('availableNew.html', form = form, username=current_user.username)
             
         query = "INSERT INTO available(startday, endday, ccontact) VALUES ('{}', '{}', '{}')" \
         .format(startday, endday, ccontact)
         db.session.execute(query)
         db.session.commit()
         return redirect(url_for('view.render_caretaker_available'))
-    return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
+    return render_template('availableNew.html', form = form, username=current_user.username)
 
 
 @view.route("/caretaker/cantakecare", methods=["GET", "POST"])
@@ -590,7 +590,7 @@ def render_caretaker_cantakecare():
 
     canTakeCare = db.session.execute(pagequery)
     table = caretakerCantakecare(canTakeCare)
-    return render_template('caretakerCantakecare.html', table=table, pagination=pagination, username=current_user.username + " caretaker")
+    return render_template('caretakerCantakecare.html', table=table, pagination=pagination, username=current_user.username)
 
 @view.route("/caretaker/cantakecare/new", methods=["GET", "POST"])
 @roles_required('caretaker')
@@ -609,7 +609,7 @@ def render_caretaker_cantakecare_new():
             db.session.rollback()
             flash("You already declared that!")
         return redirect(url_for('view.render_caretaker_cantakecare'))
-    return render_template('caretakerCantakecareNew.html', form=form, username=current_user.username + " caretaker")
+    return render_template('caretakerCantakecareNew.html', form=form, username=current_user.username)
 
 @view.route("/caretaker/cantakecare/delete", methods=["POST"])
 @roles_required('caretaker')
@@ -712,7 +712,7 @@ def render_owner_page():
     profile = db.session.execute(query)
     usertable = userInfoTable(profile)
 
-    return render_template("owner.html", form=form, profile=profile, caretable=caretable, usertable=usertable, pagination=pagination, username=current_user.username + " owner")
+    return render_template("owner.html", form=form, profile=profile, caretable=caretable, usertable=usertable, pagination=pagination, username=current_user.username)
 
 
 @view.route("/owner/summary", methods=["GET", "POST"])
@@ -721,7 +721,7 @@ def render_owner_summary():
     contact = current_user.contact
     query = "SELECT * FROM users WHERE contact = '{}' LIMIT 1;".format(contact)
     results = db.session.execute(query).fetchall()
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
+    return render_template("profile.html", results=results, username=current_user.username )
 
 
 @view.route("/owner/profile", methods=["GET", "POST"])
@@ -732,7 +732,7 @@ def render_owner_profile():
     query = "SELECT * FROM users WHERE contact = '{}';".format(contact)
     profile = db.session.execute(query).fetchall()
     table = profileTable(profile)
-    return render_template("profileOwner.html", profile=profile, form=form, table=table, username=current_user.username + " owner")
+    return render_template("profileOwner.html", profile=profile, form=form, table=table, username=current_user.username )
 
 
 @view.route("/owner/profile/update", methods=["GET", "POST"])
@@ -751,7 +751,7 @@ def render_owner_profile_update():
             db.session.execute(update)
             db.session.commit()
             return redirect(url_for('view.render_owner_profile'))
-        return render_template("update.html", form=form, username=current_user.username + " owner")
+        return render_template("update.html", form=form, username=current_user.username )
 
 
 @view.route("/owner/pet", methods=["GET", "POST"])
@@ -761,7 +761,7 @@ def render_owner_pet():
     query = "SELECT * FROM pets WHERE pcontact = '{}';".format(contact)
     pets = db.session.execute(query)
     table = editPetTable(pets)
-    return render_template("ownerPetWithEdit.html", table=table, pets=pets, username=current_user.username + " owner")
+    return render_template("ownerPetWithEdit.html", table=table, pets=pets, username=current_user.username )
 
 
 @view.route("/owner/pet/new", methods=["GET", "POST"])
@@ -783,7 +783,7 @@ def render_owner_pet_new():
         except exc.IntegrityError:
             db.session.rollback()
             flash("You already have a pet with the same name!")
-    return render_template("petNew.html", form=form, username=current_user.username + " owner")
+    return render_template("petNew.html", form=form, username=current_user.username )
 
 
 @view.route("/owner/pet/update", methods=["GET", "POST"])
@@ -805,7 +805,7 @@ def render_owner_pet_update():
             db.session.execute(updateQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
-        return render_template("pet.html", form=form, username=current_user.username + " owner")
+        return render_template("pet.html", form=form, username=current_user.username )
 
 
 @view.route("/owner/pet/delete", methods=["GET","POST"])
@@ -826,7 +826,7 @@ def render_owner_pet_delete():
             db.session.execute(deleteQuery)
             db.session.commit()
             return redirect(url_for('view.render_owner_pet'))
-        return render_template("pet.html", form=form, username=current_user.username + " owner")
+        return render_template("pet.html", form=form, username=current_user.username )
 
 @view.route("/owner/bid", methods=["GET", "POST"])
 @roles_required('petowner')
@@ -835,7 +835,7 @@ def render_owner_bid():
     query = "SELECT * FROM biddings WHERE pcontact = '{}'".format(contact)
     bidding = db.session.execute(query).fetchall()
     table = biddingTable(bidding)
-    return render_template("ownerBid.html", table=table, username=current_user.username + " owner")
+    return render_template("ownerBid.html", table=table, username=current_user.username )
 
 
 @view.route("/owner/bid/new", methods=["GET", "POST"])
@@ -894,13 +894,13 @@ def render_owner_bid_new():
                 isValidPeriod = False
         if(isValidPeriod == False):
             flash("The caretaker is not available during this period")
-            return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
+            return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username )
         query = "INSERT INTO biddings(pcontact, ccontact, petname, startday, endday, paymentmode, deliverymode, status) VALUES ('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}')" \
         .format(contact, cn, petname, startday, endday, paymentmode, deliverymode, "pending")
         db.session.execute(query)
         db.session.commit()
         return redirect(url_for('view.render_owner_bid'))
-    return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
+    return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username )
 
 @view.route("/owner/review", methods=["GET", "POST"])
 @roles_required('petowner')
@@ -909,7 +909,7 @@ def render_owner_review():
     query = "SELECT * FROM Reviews WHERE pcontact = {}".format(pcontact)
     results = db.session.execute(query)
     reviewTable = ReviewTable(results)
-    return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username + " owner")
+    return render_template("ownerReview.html", reviewTable=reviewTable, username=current_user.username )
    
 @view.route("/owner/review/update", methods=["GET", "POST"])
 @roles_required('petowner')
@@ -933,6 +933,6 @@ def render_owner_review_update():
             db.session.execute(reivewUpdate)
             db.session.commit()
             return redirect(url_for('view.render_owner_review'))
-        return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
+        return render_template("ownerReviewUpdate.html", form=form, username=current_user.username )
     return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
