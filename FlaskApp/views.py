@@ -225,7 +225,7 @@ def render_dailyprice_update():
         return render_template("dailyPriceUpdate.html", form=form, username=current_user.username + " admin")
 
 
-@view.route("admin/allprofiles", methods=["GET", "POST"])
+@view.route("/admin/allprofiles", methods=["GET", "POST"])
 @roles_required('admin')
 def render_allprofiles():
     ac = current_user.contact
@@ -234,7 +234,7 @@ def render_allprofiles():
     table = DeleteProfileTable(result)
     return render_template("adminDeleteAccount", table=table, username=current_user.username + " admin")
 
-@view.route("admin/delete", methods=["GET", "POST"])
+@view.route("/admin/delete", methods=["GET", "POST"])
 @roles_required('admin')
 def render_delete():
     username = request.args.get('username')
