@@ -245,7 +245,7 @@ def render_delete():
         if request.method == 'POST':
             deleteAvail = """
                 DELETE FROM users
-                WHERE ccontact='{}'
+                WHERE contact='{}'
             """.format(contacts)
             db.session.execute(deleteAvail)
             db.session.commit()
