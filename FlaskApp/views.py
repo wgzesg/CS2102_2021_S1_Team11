@@ -241,7 +241,7 @@ def render_caretaker_page():
     contact = current_user.contact
     #insert query to show this caretaker's total working hours and this month's pay.
     query = "SELECT biddings.pcontact, biddings.petname, Pets.category, startday, endday FROM biddings INNER JOIN Pets ON\
-        Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}'".format(contact)
+        Pets.petname = biddings.petname and Pets.pcontact = biddings.pcontact WHERE ccontact = '{}' AND status = 'success'".format(contact)
     results = db.session.execute(query)
     print(results, flush=True)
     table2 = CaretakersBidTable(results)
@@ -275,7 +275,7 @@ def render_caretaker_biddings_accept():
 
     bidQuery = "SELECT * FROM biddings WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}' LIMIT 1".format(request.args.get('ownerContact'),
                 request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
-    bid = db.session.query(bidQuery).fetchall()
+    bid = db.session.execute(bidQuery).fetchall()
     def daterange(startday, endday):
         for n in range(int((endday - startday).days)):
             yield startday + timedelta(n)
@@ -285,22 +285,30 @@ def render_caretaker_biddings_accept():
         query = """SELECT COUNT (*) FROM biddings WHERE '{}' - startday >= 0 AND endday - '{}' >= 0 
             AND ccontact = '{}' AND status = 'success' LIMIT 1""".format(selected, selected, ct)
         count = db.session.execute(query).fetchall()
-        if parttime.isparttime == True and parttime.avgrating < 3:
-            if count[0] > 2:
+        print(parttime, flush=True)
+        print(count, flush=True)
+        if parttime[0][1] == (True, ) and int(parttime[0][2]) < (3, ):
+            if count[0] >= (2,):
                 flag = False
-                count[0] = 0
+                count = [(0,)]
                 break
         else:
-            if count[0] > 5:
+            if count[0] >= (5,):
                 flag = False
-                count[0] = 0
+                count = [(0,)]
                 break
     
     if flag == False:
         flash("You are not allowed to take more than five pets at the same time.")
         return redirect(url_for('view.render_caretaker_biddings'))
     if bid:
-        bid.status = "success"
+        setsuccessQuery = """
+            UPDATE biddings 
+            SET status = 'success' 
+            WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}'
+        """.format(request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
+
+        db.session.execute(setsuccessQuery)
         db.session.commit()
 
     return redirect(url_for('view.render_caretaker_biddings'))
@@ -324,7 +332,13 @@ def render_caretaker_biddings_finish():
     #     datetime.strptime(endday, '%Y-%m-%d') < datetime.today():
     #     flash("You are not allowed to terminate the bidding before end date.")
     # elif bid:
-        bid.status = "end"
+        setendQuery = """
+            UPDATE biddings 
+            SET status = 'end' 
+            WHERE pcontact = '{}' AND ccontact = '{}' AND petname = '{}' AND startday = '{}' AND endday = '{}'
+        """.format(request.args.get('ownerContact'), request.args.get('ccontact'), request.args.get('petName'), request.args.get('startDay'), request.args.get('endDay'))
+
+        db.session.execute(setendQuery)
         db.session.commit()
 
     return redirect(url_for('view.render_caretaker_biddings'))
@@ -367,7 +381,7 @@ def render_caretaker_available():
     applicationType = "leave"
     ptquery = "SELECT isparttime FROM canparttime WHERE ccontact = '{}'".format(contact)
     isPt = db.session.execute(ptquery).fetchall()
-    if isPt[0] == (True,):
+    if isPt[0][0] == True:
         applicationType = "availability"
     query = "SELECT * FROM available WHERE ccontact = '{}'".format(contact)
     availables = db.session.execute(query)
@@ -429,8 +443,8 @@ def render_caretaker_available_new():
         ccontact = contact
         fullTimeQuery = "SELECT isparttime FROM Canparttime WHERE ccontact = '{}' LIMIT 1".format(ccontact)
         isPartTime = db.session.execute(fullTimeQuery).fetchall()
-        print(isPartTime, flush=True)
-        if not isPartTime[0]:
+        print(isPartTime[0], flush=True)
+        if not isPartTime[0][0]:
             overlapQuery = """
             SELECT 1
             FROM   (SELECT min(st) as st, max(en) as en
@@ -444,8 +458,8 @@ def render_caretaker_available_new():
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(ccontact, startday, endday)
             hasOverlap = db.session.execute(overlapQuery).fetchall()
-            print(hasOverlap[0], flush=True)
-            if(hasOverlap[0]):
+            print(hasOverlap, flush=True)
+            if(hasOverlap):
                 flash("You have work to do during that period")
                 return render_template('availableNew.html', form = form, username=current_user.username + " caretaker")
             
@@ -535,8 +549,12 @@ def render_caretaker_cantakecare_new():
         category = form.category.data
         query = "INSERT INTO cantakecare(ccontact, category) VALUES ('{}', '{}')" \
         .format(contact, category)
-        db.session.execute(query)
-        db.session.commit()
+        try:
+            db.session.execute(query)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("You already declared that!")
         return redirect(url_for('view.render_caretaker_cantakecare'))
     return render_template('caretakerCantakecareNew.html', form=form, username=current_user.username + " caretaker")
 
@@ -632,7 +650,7 @@ def render_owner_page():
         """.format(current_user.contact)
         totalResult = db.session.execute(totalQuery, parameters).fetchall()
         
-        if totalResult[0] != None:
+        if totalResult != None:
             pagination = Pagination(bs_version=3, page=page, total=total, per_page=10, record_name='caretakers')
             caretable = ownerHomePage(selectedCareTakers)
 
@@ -805,8 +823,8 @@ def render_owner_bid_new():
             WHERE tsrange('{}', '{}', '[]') && tsrange(f2.st, f2.en, '[]');
             """.format(cn, startday, endday)
             hasOverlap = db.session.execute(overLapQuery).fetchall()
-            print(hasOverlap[0], flush=True)
-            if(hasOverlap[0]):
+            print(hasOverlap, flush=True)
+            if(hasOverlap):
                 isValidPeriod = False
         else:
             intersection = """
@@ -822,8 +840,8 @@ def render_owner_bid_new():
             WHERE tsrange('{}', '{}', '[]') * tsrange(f2.st, f2.en, '[]') = tsrange('{}', '{}', '[]');
             """.format(cn, startday, endday, startday, endday)
             hasFullOverage = db.session.execute(intersection).fetchall()
-            print(hasFullOverage[0], flush=True)
-            if(not hasFullOverage[0]):
+            print(hasFullOverage, flush=True)
+            if(not hasFullOverage):
                 isValidPeriod = False
         if(isValidPeriod == False):
             flash("The caretaker is not available during this period")
@@ -834,22 +852,6 @@ def render_owner_bid_new():
         db.session.commit()
         return redirect(url_for('view.render_owner_bid'))
     return render_template("ownerBidNew.html", target=cn, form=form, username=current_user.username + " owner")
-
-
-@view.route("/owner/bid/update", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_bid_update():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query)
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
-
-
-@view.route("/owner/bid/delete", methods=["GET", "POST"])
-@roles_required('petowner')
-def render_owner_bid_delete():
-    query = "SELECT * FROM users WHERE usertype = 'caretaker'"
-    results = db.session.execute(query)
-    return render_template("profile.html", results=results, username=current_user.username + " owner")
 
 @view.route("/owner/review", methods=["GET", "POST"])
 @roles_required('petowner')
@@ -885,9 +887,3 @@ def render_owner_review_update():
         return render_template("ownerReviewUpdate.html", form=form, username=current_user.username + " owner")
     return redirect(url_for('view.render_owner_review'))
 # END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER END OF PETOWNER
-
-
-@view.route("/profile")
-@login_required
-def render_profile_page():
-    return render_template('profile.html', username=current_user.username + "profile")
