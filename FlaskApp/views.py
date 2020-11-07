@@ -311,7 +311,7 @@ def render_caretaker_biddings_accept():
                 break
     
     if flag == False:
-        flash("You are not allowed to take more than five pets at the same time.")
+        flash("You have exceeded the maximum number of pets you can take care of.")
         return redirect(url_for('view.render_caretaker_biddings'))
     if bid:
         setsuccessQuery = """

@@ -95,7 +95,13 @@ class SalaryTable(Table):
     salary = Col('salary')
 
 class DailyPriceTable(Table):
-    category = Col('catagory')
+    category = Col('category')
     rating = Col('rating')
     price = Col('price')
     edit = LinkCol('Edit ', 'view.render_dailyprice_update', url_kwargs=dict(category = 'category', rating = 'rating', price = 'price'))
+
+class DeleteProfileTable(Table):
+    username = Col('username')
+    contact = Col('contact')
+    usertype = Col('user type')
+    delete = LinkCol('Delete ', 'view.render_dailyprice_update', url_kwargs=dict(username = 'username', contact = 'contact', usertype = 'usertype'))
